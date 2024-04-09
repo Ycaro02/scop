@@ -1,5 +1,5 @@
-# include "libft.h"
-# include "vector.h"
+# include "../libft.h"
+# include "vec2.h"
 
 /* @brief display vector list */
 void display_lst_vec(t_list *lst)

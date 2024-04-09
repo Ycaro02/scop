@@ -43,14 +43,14 @@ SRC =	ft_memset.c \
 		printf_fd/ft_intfunction.c \
 		printf_fd/ft_printf.c \
 		printf_fd/ft_put_and_count.c \
-		vector.c \
-		basic_maths.c\
 		str_is_digit.c \
 		parse_flag/parse_flag.c \
 		parse_flag/handle_flag.c \
 		parse_flag/parse_cmd_line.c \
 		parse_flag/handle_option.c \
 		stack_string/stack_string.c \
+		math/vec2.c \
+		math/basic_maths.c\
 
 
 OBJ = $(SRC:.c=.o)

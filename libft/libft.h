@@ -6,7 +6,7 @@
 /*   By: ycaro <ycaro@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/01 15:40:12 by nfour             #+#    #+#             */
-/*   Updated: 2024/03/24 16:41:35 by ycaro            ###   ########.fr       */
+/*   Updated: 2024/04/09 15:36:02 by ycaro            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 # include <stdint.h>
 # include "printf_fd/ft_printf.h"
 # include "list/linked_list.h"
-# include "vector.h"
+# include "math/vec2.h"
 # include "limits.h"
 
 # define OUT_OF_UINT32 (uint64_t)(UINT32_MAX + 1)
