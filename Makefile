@@ -15,7 +15,7 @@ lib:
 	${MAKE_LIBFT}
 
 fclean:
-	rm scop
+	rm -rf scop
 
 re: fclean all
 
