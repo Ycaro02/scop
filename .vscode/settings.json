@@ -1,0 +1,7 @@
+{
+	"files.associations": {
+		"*.def": "source.def",
+		"compare": "c",
+		"type_traits": "c"
+	}
+}

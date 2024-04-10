@@ -49,8 +49,8 @@ SRC =	ft_memset.c \
 		parse_flag/parse_cmd_line.c \
 		parse_flag/handle_option.c \
 		stack_string/stack_string.c \
-		math/vec2.c \
 		math/basic_maths.c\
+# math/vec2.c \
 
 
 OBJ = $(SRC:.c=.o)
