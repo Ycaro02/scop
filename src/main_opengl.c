@@ -9,7 +9,6 @@ GLFWwindow *init_glfw()
         return (NULL);
     win = glfwCreateWindow(640, 480, "OpenGL Window", NULL, NULL);
     if (!win) {
-        glfwTerminate();
         return (NULL);
     }
     glfwMakeContextCurrent(win);
@@ -35,8 +34,10 @@ int main(int argc, char **argv)
     win = init_glfw();
     if (!win) {
         ft_printf_fd(2, "Error: Failed to init glfw\n");
+        glfwTerminate();
         return (1);
     }
     main_loop(win);
+	glfwDestroyWindow(win);
     glfwTerminate();
 }
