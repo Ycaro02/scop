@@ -89,11 +89,11 @@ DEFINE_VEC2_STRUCT(float)
         __builtin_types_compatible_p(type, u16) || \
         __builtin_types_compatible_p(type, u32) || \
         __builtin_types_compatible_p(type, u64)) { \
-        ft_printf_fd(1, "Unsigned Vec2 x: %u, y: %u\n", ((t_vec2_##type)vec).x, ((t_vec2_##type)vec).y); \
+        ft_printf_fd(1, "Unsigned Vec2 x: %u, y: %u\n", vec.x, vec.y); \
     } else if (__builtin_types_compatible_p(type, float)) { \
-        ft_printf_fd(1, "Float/Double Vec2 x: %f, y: %f\n", ((t_vec2_##type)vec).x, ((t_vec2_##type)vec).y); \
+        ft_printf_fd(1, "Float/Double Vec2 x: %f, y: %f\n", vec.x, vec.y); \
     } else { \
-        ft_printf_fd(1, "Signed Vec2 x: %d, y: %d\n", ((t_vec2_##type)vec).x, ((t_vec2_##type)vec).y); \
+        ft_printf_fd(1, "Signed Vec2 x: %d, y: %d\n", vec.x, vec.y); \
     } \
 }
 
