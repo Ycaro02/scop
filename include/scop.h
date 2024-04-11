@@ -46,7 +46,7 @@ typedef struct s_obj_file {
 	t_list	*vt;			/* The texture coordinates associated with a vertex, list of vec2/vec3 float */
 	t_list	*vn;			/* The coordinates of the normal vector associated with a vertex, list of t_vec3_float */
 	t_list	*f;				/* The indices of the vertices composing a face, list of intenger array (need to count/alloc every line) */
-	u8		s;				/* The smoothing group state. 'on' to activate, 'off' to deactivate. 1 for true, otherwise 0*/
+	u8		smooth;			/* The smoothing group state. 'on' to activate, 'off' to deactivate. 1 for true, otherwise 0*/
 } t_obj_file;
 
 

@@ -83,22 +83,27 @@ static u8 str_is_float(char *str)
 
 float ft_atof(char *str)
 {
+	/* Create result and neg var */
 	double res = 0, neg = 1;
+	/* decimal var for decimal parts compute */
+	double dec = 0.1;
 
 	if (!str) {
 		return (0);
-	} else if (*str == '-') {
+	} else if (*str == '-') { /* if first is '-' neg = -1 and skip it */
 		neg = -1;
 		str++;
 	}
 
+	/* like atoi just add digit ony by one with * 10 */
 	while (*str >= '0' && *str <= '9') {
 		res = res * 10 + *str - '0';
 		str++;
 	}
-	if (*str && *str == '.') {
-		str++;
-		double dec = 0.1;
+	/* check for decimal parts */
+	if (*str && *str == '.') { 
+		str++; /* skip dot */
+		/* same logic than atoi, but /10 each iterate instead of *10 */
 		while (*str && *str >= '0' && *str <= '9') {
 			res += (*str - '0') * dec;
 			dec *= 0.1;
@@ -136,8 +141,21 @@ static u8 add_vertex_node(t_list **list, char **line)
 	return (TRUE);
 }
 
-static s8 handle_line_by_token(t_obj_file *file, char **line, u16 token)
+u8 handle_smooth_str(char *str)
 {
+	if (ft_strncmp(str, "on", ft_strlen("on")) == 0) {
+		return (TRUE);
+	} else if (ft_strncmp(str, "off", ft_strlen("off")) == 0) {
+		return (FALSE);
+	} else { /* error need to be catch */
+		return (2);
+	}
+}
+
+static u8 handle_line_by_token(t_obj_file *file, char **line, u16 token)
+{
+	char *tmp = NULL;
+
 	switch (token) {
 		case ENUM_COMMENT:
 			break;
@@ -148,6 +166,11 @@ static s8 handle_line_by_token(t_obj_file *file, char **line, u16 token)
 			ft_printf_fd(1, PINK"\nObject name: %s"RESET, file->o);
 			break;
 		case ENUM_SMOOTH:
+			if (!get_str_after_token(&tmp, &line[1])) {
+				return (FALSE);
+			}
+			file->smooth = handle_smooth_str(tmp);
+			ft_printf_fd(1, PINK"\nSmooth name: %s, val %u"RESET, tmp, file->smooth);
 			break;
 		case ENUM_VERTEX:
 			if (!add_vertex_node(&file->v, &line[1])) {
@@ -175,9 +198,9 @@ static s8 handle_line_by_token(t_obj_file *file, char **line, u16 token)
 		default:
 			ft_printf_fd(2, RED"Error: Invalid token %s\n"RESET, line[0]);
 			// display_double_char(line);
-			return (0);
+			return (FALSE);
 	}
-	return (1);
+	return (TRUE);
 }
 
 
