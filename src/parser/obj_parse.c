@@ -114,29 +114,37 @@ float ft_atof(char *str)
 }
 
 
-static u8 add_vertex_node(t_list **list, char **line)
+static t_vec3_float *line_to_vertex(char **line)
 {
 	t_vec3_float *vertex = NULL;
 	if (double_char_size(line) != 3) {
 		ft_printf_fd(2, RED"Error: Invalid vertex\n"RESET);
 		display_double_char(line);
-		return (FALSE);
+		return (NULL);
 	}
 	
 	if (!str_is_float(line[0]) || !str_is_float(line[1]) || !str_is_float(line[2])) {
 		ft_printf_fd(2, RED"Error: Invalid vertex\n"RESET);
 		display_double_char(line);
-		return (FALSE);
+		return (NULL);
 	}
 
 	if ((vertex = (t_vec3_float *)malloc(sizeof(t_vec3_float))) == NULL) {
 		ft_printf_fd(2, RED"Error: Malloc failed\n"RESET);
-		return (FALSE);
+		return (NULL);
 	}
 	vertex->x = ft_atof(line[0]);
 	vertex->y = ft_atof(line[1]);
 	vertex->z = ft_atof(line[2]);
-	// printf(GREEN"\nVertex: |%s = %f| |%s = %f| |%s = %f|"RESET, line[0], vertex->x, line[1], vertex->y, line[2], vertex->z);
+	return (vertex);
+}
+
+static u8 add_vertex_node(t_list **list, char **line)
+{
+	t_vec3_float *vertex = line_to_vertex(line);
+	if (!vertex) {
+		return (FALSE);
+	}
 	ft_lstadd_back(list, ft_lstnew(vertex));
 	return (TRUE);
 }
