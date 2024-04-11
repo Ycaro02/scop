@@ -137,8 +137,15 @@ t_vec3_u32 line_to_vec3_u32(char **line, u32 *other_val)
 	return (vec);
 }
 
+void free_face_node(void *node)
+{
+	if (((t_face_node *)node)->other) {
+		free(((t_face_node *)node)->other);
+	}
+	free(node);
+}
 
-u8 line_to_face(char **line)
+u8 line_to_face(t_obj_file *file, char **line)
 {
 	t_face_node *face;
 	u32			other_val = 0;
@@ -159,7 +166,7 @@ u8 line_to_face(char **line)
 		}
 	}
 	face->vec = CREATE_VEC3(u32, vec.x, vec.y, vec.z);
-
+	ft_lstadd_back(&file->face, ft_lstnew(face));
 	// ft_printf_fd(1, CYAN"\nFace: ");
 	// DISPLAY_VEC3(u32, face->vec);
 	// ft_printf_fd(1, RESET);
@@ -233,6 +240,7 @@ static u8 handle_line_by_token(t_obj_file *file, char **line, u16 token)
 			}
 			file->smooth = handle_smooth_str(tmp);
 			ft_printf_fd(1, PINK"\nSmooth name: %s, val %u\n"RESET, tmp, file->smooth);
+			free(tmp);
 			break;
 		case ENUM_VERTEX:
 			if (!add_vertex_node(&file->vertex, &line[1])) {
@@ -256,7 +264,7 @@ static u8 handle_line_by_token(t_obj_file *file, char **line, u16 token)
 			ft_printf_fd(1, ORANGE"\nUsemtl name: %s"RESET, file->usemtl);
 			break;
 		case ENUM_F:
-			line_to_face(&line[1]);
+			line_to_face(file, &line[1]);
 			break;
 		default:
 			ft_printf_fd(2, RED"Error: Invalid token %s\n"RESET, line[0]);
@@ -288,6 +296,12 @@ void free_obj_file(t_obj_file *obj)
 	if (obj->usemtl) {
 		free(obj->usemtl);
 	}
+	if (obj->vertex) {
+		ft_lstclear(&obj->vertex, free);
+	}
+	if (obj->face) {
+		ft_lstclear(&obj->face, free_face_node);
+	}
 	lst_clear(&obj->vertex, free);
 }
 
@@ -296,6 +310,8 @@ static int8_t parse_obj_file(char *path)
 	t_obj_file obj;
 	char **file = NULL;
 	uint16_t token = 0;
+
+	ft_bzero(&obj, sizeof(t_obj_file));
 	if ((file = load_file(path)) == NULL) {
 		return (0);
 	}
