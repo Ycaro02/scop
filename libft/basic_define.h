@@ -11,25 +11,24 @@
 # define    TRUE 	1
 /* pointer size */
 # define    PTR_SIZE	    sizeof(void *)
-/* LS linux color */
 
-# define    RED     "\x1b[31m"
-# define    GREEN   "\x1b[32m"
-# define    YELLOW  "\x1b[33m"
-# define    BLUE    "\x1b[34m"
-# define    PURPLE  "\x1b[35m"
-# define    CYAN    "\x1b[36m"
-# define    PINK    "\x1b[38;5;200m"
-# define    ORANGE  "\x1b[38;5;208m"
-# define    RESET   "\x1b[0m"
-
+/* ANSI COLOR */
+# define    RED     		"\x1b[31m"
+# define    GREEN   		"\x1b[32m"
+# define    YELLOW  		"\x1b[33m"
+# define    BLUE    		"\x1b[34m"
+# define    PURPLE  		"\x1b[35m"
+# define    CYAN    		"\x1b[36m"
+# define    PINK    		"\x1b[38;5;200m"
+# define    ORANGE  		"\x1b[38;5;208m"
+# define    RESET   		"\x1b[0m"
 
 # define    FILL_GREEN      "\033[7;32m"
 # define    FILL_YELLOW     "\033[7;33m"
 # define    FILL_RED        "\033[7;31m"
 # define    FILL_YELBLACK   "\033[40;33m"
 
-
+/* Typedef for integet type */
 typedef uint8_t	 u8;
 typedef uint16_t u16;
 typedef uint32_t u32;
@@ -38,6 +37,16 @@ typedef int8_t	 s8;
 typedef int16_t	 s16;
 typedef int32_t	 s32;
 typedef int64_t	 s64;
+
+/* Macro for min max */
+#define GET_MAX(a, b) ((a) >= (b) ? (a) : (b))
+#define GET_MIN(a, b) ((a) <= (b) ? (a) : (b))
+
+/* Macro for ABS diff */
+
+#define MINUS_IN_S64(a, b) ((s64)((s64)(a) - (s64)(b)))
+
+#define INT_ABS_DIFF(a, b) (MINUS_IN_S64(a, b) < 0 ? MINUS_IN_S64(a, b) * -1 : MINUS_IN_S64(a, b))
 
 
  # endif /* BASIC_DEF_TYPE_HEADER */
