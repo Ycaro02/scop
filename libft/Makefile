@@ -1,77 +1,50 @@
-NAME = libft.a
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: nfour <nfour@student.42angouleme.fr>       +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2024/04/11 16:07:03 by nfour             #+#    #+#              #
+#    Updated: 2024/04/11 16:53:24 by nfour            ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
 
-SRC =	ft_memset.c \
-		ft_atoi.c \
-		ft_bzero.c \
-		ft_calloc.c \
-		ft_memchr.c \
-		ft_memcmp.c \
-		ft_memcpy.c \
-		ft_memmove.c \
-		ft_split.c \
-		ft_strchr.c \
-		ft_strjoin.c \
-		ft_strlcat.c \
-		ft_strlcpy.c \
-		ft_strlen.c \
-		ft_strncmp.c \
-		ft_strnstr.c \
-		ft_strrchr.c \
-		ft_strtrim.c \
-		ft_substr.c \
-		ft_tolower.c \
-		ft_toupper.c \
-		ft_isalpha.c \
-		ft_isdigit.c \
-		ft_isalnum.c \
-		ft_isascii.c \
-		ft_isprint.c \
-		ft_strdup.c \
-		ft_itoa.c \
-		ft_putchar_fd.c \
-		ft_putstr_fd.c \
-		ft_putendl_fd.c \
-		ft_putnbr_fd.c \
-		ft_strmapi.c \
-		ft_striteri.c \
-		ft_ltoa.c \
-		ft_free_tab.c \
-		ft_strjoin_free.c \
-		ft_lower_strcmp.c \
-		ft_strcmp.c \
-		ft_strcpy.c\
-		printf_fd/ft_intfunction.c \
-		printf_fd/ft_printf.c \
-		printf_fd/ft_put_and_count.c \
-		str_is_digit.c \
-		parse_flag/parse_flag.c \
-		parse_flag/handle_flag.c \
-		parse_flag/parse_cmd_line.c \
-		parse_flag/handle_option.c \
-		stack_string/stack_string.c \
-		math/basic_maths.c\
-# math/vec2.c \
+include rsc/mk/source.mk
+include rsc/mk/color.mk
 
 
-OBJ = $(SRC:.c=.o)
-
-CC = gcc
-
-CFLAGS = -Wall -Wextra -Werror -g
+CREATE_LIB	= ar rcs
+NAME		= libft.a
+CC			= gcc
+CFLAGS		= -Wall -Wextra -Werror -g
 
 all : $(NAME)
 
-%.o : %.c
-	$(CC) ${CFLAGS} -c $< -o $@
+$(NAME): $(OBJ_DIR) $(OBJ)
+	@printf "$(MAGENTA)"
+	${CREATE_LIB} -o $(NAME) $(OBJ)
+	@printf "$(RESET)$(GREEN)$(NAME) created$(RESET)\n"
 
-$(NAME): $(OBJ)
-	ar rcs -o $(NAME) $(OBJ)
+$(OBJ_DIR):
+	@mkdir -p ${ALL_OBJ_DIR} 
+
+$(OBJ_DIR)/%.o: $(SRC)%.c
+	@printf "$(YELLOW)$<$(RESET) $(BRIGHT_BLACK)-->$(RESET) $(BRIGHT_BLUE)$@$(RESET)\n"
+	@$(CC) -o $@ -c $< $(CFLAGS)
 
 clean :
-	rm -f $(OBJ)
+ifeq ($(shell [ -d ${OBJ_DIR} ] && echo 0 || echo 1), 0)
+	@${RM} $(OBJ_DIR)
+	@printf "$(RED)$(OBJ_DIR) deleted$(RESET)\n"
+endif
 
 fclean : clean
-	rm -f $(NAME)
+ifeq ($(shell [ -f ${NAME} ] && echo 0 || echo 1), 0)
+	@${RM} $(NAME)
+	@${RM} ${OBJ_DIR}
+	@printf "$(RED)$(NAME) deleted$(RESET)\n"
+endif
 
 re : fclean all
 
