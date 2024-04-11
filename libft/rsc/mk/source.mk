@@ -6,7 +6,7 @@
 #    By: nfour <nfour@student.42angouleme.fr>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/11 16:54:20 by nfour             #+#    #+#              #
-#    Updated: 2024/04/11 18:53:35 by nfour            ###   ########.fr        #
+#    Updated: 2024/04/11 15:47:52 by nfour            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -57,6 +57,7 @@ LIBFT_SRC 	=	ft_memset.c \
 				ft_strcmp.c \
 				ft_strcpy.c\
 				get_next_line.c \
+				str_is_digit.c\
 
 PRINTF_FD_DIR	=	printf_fd
 

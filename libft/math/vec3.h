@@ -6,7 +6,7 @@
 /*   By: nfour <nfour@student.42angouleme.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 15:43:13 by nfour             #+#    #+#             */
-/*   Updated: 2024/04/11 14:44:24 by nfour            ###   ########.fr       */
+/*   Updated: 2024/04/11 15:46:01 by nfour            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #define DEFINE_VECTOR3_HEADER
 
 #include <sys/types.h>
-#include <stdio.h>
+// #include <stdio.h>
 
 /*
  *	This header file provides macros and structures for handling 3D vectors of various data types.
@@ -105,7 +105,7 @@ DEFINE_VEC3_STRUCT(double)
         __builtin_types_compatible_p(type, u64)) { \
         ft_printf_fd(1, "Unsigned Vec3 x: %u, y: %u, z: %u\n", vec.x, vec.y, vec.z); \
     } else if (__builtin_types_compatible_p(type, float)) { \
-        printf("Float/Double Vec3 x: %f, y: %f, z: %f\n", vec.x, vec.y, vec.z); \
+        ft_printf_fd(1, "Float/Double Vec3 x: %f, y: %f, z: %f\n", vec.x, vec.y, vec.z); \
     } else { \
         ft_printf_fd(1, "Signed Vec3 x: %d, y: %d, z: %d\n", vec.x, vec.y, vec.z); \
     } \

@@ -31,7 +31,7 @@ static u16 is_valid_token(char *to_check)
 		TOKEN_VN,
 		TOKEN_MTLLIB,
 		TOKEN_USEMT,
-		TOKEN_F,
+		TOKEN_FACE,
 		NULL
 	};
 	for (u32 i = 0; tokens[i]; ++i) {
@@ -113,6 +113,53 @@ float ft_atof(char *str)
 	return ((res * neg));
 }
 
+t_vec3_u32 line_to_vec3_u32(char **line, u32 *other_val)
+{
+	t_vec3_u32 vec = {0, 0, 0};
+	u32 size;
+	if ((size = double_char_size(line)) < 3) {
+		ft_printf_fd(2, RED"Error: Invalid f option\n"RESET);
+		display_double_char(line);
+		return (vec);
+	} else if (size > 3) {
+		*other_val = size - 3;
+	}
+	
+	if (!str_is_digit(line[0]) || !str_is_digit(line[1]) || !str_is_digit(line[2])) {
+		ft_printf_fd(2, RED"Error: Invalid vertex\n"RESET);
+		display_double_char(line);
+		return (vec);
+	}
+	/* need to check value, maybe count number of vertex/vertice */
+	vec.x = array_to_uint32(line[0]);
+	vec.y = array_to_uint32(line[1]);
+	vec.z = array_to_uint32(line[2]);
+	return (vec);
+}
+
+
+u8 line_to_face(char **line)
+{
+	// t_face_node *face;
+
+	u32 other_val = 0;
+	t_vec3_u32 vec = line_to_vec3_u32(line, &other_val);
+	if (other_val) {
+		ft_printf_fd(2, ORANGE" Other val detected [%u]"RESET, other_val);
+		for (u32 i = 0; i < other_val; i++ ) {
+			ft_printf_fd(2, PURPLE" idx: |%u| val: |%s|"RESET, i, line[i + 3]);
+		}
+
+		// display_double_char(line);
+		// return (FALSE);
+	}
+	ft_printf_fd(1, CYAN"\nFace: ");
+	DISPLAY_VEC3(u32, vec);
+	ft_printf_fd(1, RESET);
+	return (TRUE);
+
+}
+
 
 static t_vec3_float *line_to_vertex(char **line)
 {
@@ -181,7 +228,7 @@ static u8 handle_line_by_token(t_obj_file *file, char **line, u16 token)
 			ft_printf_fd(1, PINK"\nSmooth name: %s, val %u"RESET, tmp, file->smooth);
 			break;
 		case ENUM_VERTEX:
-			if (!add_vertex_node(&file->v, &line[1])) {
+			if (!add_vertex_node(&file->vertex, &line[1])) {
 				return (FALSE) ;
 			}
 			break;
@@ -202,6 +249,7 @@ static u8 handle_line_by_token(t_obj_file *file, char **line, u16 token)
 			ft_printf_fd(1, ORANGE"\nUsemtl name: %s"RESET, file->usemtl);
 			break;
 		case ENUM_F:
+			line_to_face(&line[1]);
 			break;
 		default:
 			ft_printf_fd(2, RED"Error: Invalid token %s\n"RESET, line[0]);
@@ -233,7 +281,7 @@ void free_obj_file(t_obj_file *obj)
 	if (obj->usemtl) {
 		free(obj->usemtl);
 	}
-	lst_clear(&obj->v, free);
+	lst_clear(&obj->vertex, free);
 }
 
 static int8_t parse_obj_file(char *path)
@@ -260,7 +308,7 @@ static int8_t parse_obj_file(char *path)
 		// display_double_char(trim);
 	}
 	// display_double_char(file);
-	display_vertex_lst(obj.v);
+	display_vertex_lst(obj.vertex);
 	free_obj_file(&obj);
 	free_double_char(file);
 	return (1);
