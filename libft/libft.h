@@ -3,25 +3,26 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ycaro <ycaro@student.42.fr>                +#+  +:+       +#+        */
+/*   By: nfour <nfour@student.42angouleme.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/10/01 15:40:12 by nfour             #+#    #+#             */
-/*   Updated: 2024/04/09 15:36:02 by ycaro            ###   ########.fr       */
+/*   Created: 2024/04/11 15:43:41 by nfour             #+#    #+#             */
+/*   Updated: 2024/04/11 15:43:51 by nfour            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LIBFT_H
-# define LIBFT_H
+#define LIBFT_H
 
-# include <stdlib.h>
-# include <unistd.h>
-# include <stdint.h>
-# include "printf_fd/ft_printf.h"
-# include "list/linked_list.h"
-# include "math/vec2.h"
-# include "limits.h"
+#include <stdlib.h>
+#include <unistd.h>
+#include <stdint.h>
+#include "printf_fd/ft_printf.h"
+#include "list/linked_list.h"
+#include "math/vec2.h"
+#include "math/vec3.h"
+#include "limits.h"
 
-# define OUT_OF_UINT32 (uint64_t)(UINT32_MAX + 1)
+#define OUT_OF_UINT32 (uint64_t)(UINT32_MAX + 1)
 
 uint32_t abs_diff(uint32_t a, uint32_t b);
 uint32_t max_uint32(uint32_t a, uint32_t b);

@@ -1,7 +1,19 @@
-#ifndef DEFINE_VECTOR_HEADER
-# define DEFINE_VECTOR_HEADER
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   vec2.h                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: nfour <nfour@student.42angouleme.fr>       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/04/11 15:43:26 by nfour             #+#    #+#             */
+/*   Updated: 2024/04/11 15:52:10 by nfour            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-# include <sys/types.h>
+#ifndef DEFINE_VECTOR2_HEADER
+#define DEFINE_VECTOR2_HEADER
+
+#include <sys/types.h>
 
 /*
  *	This header file provides macros and structures for handling 2D vectors of various data types.
@@ -65,7 +77,7 @@ DEFINE_VEC2_STRUCT(float)
 */
 
 /* Macro for create vector */
-#define CREATE_VEC2(type, y_val, x_val) ((t_vec2_##type){ .x = x_val, .y = y_val })
+#define CREATE_VEC2(type, x_val, y_val) ((t_vec2_##type){ .x = x_val, .y = y_val })
 
 /* Macro for add vector */
 #define ADD_VEC2(type, a, b) ((t_vec2_##type){ .x = a.x + b.x, .y = a.y + b.y })
@@ -80,7 +92,7 @@ DEFINE_VEC2_STRUCT(float)
 #define DIV_VEC2(type, a, b) ((t_vec2_##type){ .x = a.x / b.x, .y = a.y / b.y })
 
 /* Macro for compare two vectors */
-#define CMP_VEC2(type, a, b) (a.y == b.y && a.x == b.x)
+#define CMP_VEC2(a, b) (a.y == b.y && a.x == b.x)
 
 /* Macro for display vector */
 #define DISPLAY_VEC2(type, vec) \
@@ -97,4 +109,4 @@ DEFINE_VEC2_STRUCT(float)
     } \
 }
 
-# endif /* DEFINE_VECTOR_HEADER */
+# endif /* DEFINE_VECTOR2_HEADER */

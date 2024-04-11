@@ -3,5 +3,7 @@
 		"*.def": "source.def",
 		"compare": "c",
 		"type_traits": "c"
-	}
+	},
+	"42header.email": "nfour@student.42angouleme.fr",
+	"42header.username": "nfour"
 }
