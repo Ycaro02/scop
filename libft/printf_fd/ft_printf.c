@@ -25,6 +25,38 @@ static void ft_check_p(unsigned long nbr, int *count, int fd)
 	}
 }
 
+static void ft_put_float_double_nbr(double nbr, int *count, int fd) {
+    int		int_part = 0;
+	double	decimal_part = (double)0;
+
+	if (nbr < 0) {
+        nbr = -nbr;
+        *count += ft_putchar_fd('-', fd);
+    }
+
+    int_part = (int)nbr;
+    decimal_part = nbr - int_part;
+
+    // Affichage de la partie entière
+    if (int_part >= 10) {
+        ft_put_float_double_nbr(int_part / 10, count, fd);
+    }
+    *count += ft_putchar_fd(int_part % 10 + '0', fd);
+
+    // Affichage de la virgule si nécessaire
+    if (decimal_part > 0 && *count > 0) {
+        *count += ft_putchar_fd('.', fd);
+    }
+
+    // Affichage de la partie décimale
+    if (decimal_part > 0 && *count > 0) {
+        for (int i = 0; i < 6; ++i) { // Afficher jusqu'à 6 décimales
+            decimal_part *= 10;
+            *count += ft_putchar_fd((int)decimal_part + '0', fd);
+            decimal_part -= (int)decimal_part;
+        }
+    }
+}
 static int ft_continue_display(const char *s, int i, va_list params, int fd)
 {
 	int nb;
@@ -34,6 +66,8 @@ static int ft_continue_display(const char *s, int i, va_list params, int fd)
 		ft_put_lx_nbr(va_arg(params, unsigned int), &nb, fd);
 	else if (s[i] == 'X')
 		ft_put_bigx_nbr(va_arg(params, unsigned int), &nb, fd);
+	else if (s[i] == 'f')
+		ft_put_float_double_nbr(va_arg(params, double), &nb, fd);
 	else if (s[i] == 'p')
 		ft_check_p(va_arg(params, unsigned long), &nb, fd);
 	else
