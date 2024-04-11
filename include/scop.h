@@ -38,6 +38,14 @@ enum e_obj_token {
 */
 #define TOKEN_F	"f"
 
+typedef struct s_idxvertice_node {
+	t_vec3_u32 	vec;				/* vec3 uint32 for 3 first val */
+	u32			*other;				/* uin32_t int array aloc for other value if needed */
+} t_idxvertice_node;
+
+
+typedef t_idxvertice_node t_fnode;
+
 typedef struct s_obj_file {
 	char	*o;				/* The name of the object */
 	char	*mtllib;		/* The name of the material file associated with the object */
@@ -45,7 +53,7 @@ typedef struct s_obj_file {
 	t_list	*v;				/* The coordinates of a 3D vertex, list of t_vec3_float */
 	t_list	*vt;			/* The texture coordinates associated with a vertex, list of vec2/vec3 float */
 	t_list	*vn;			/* The coordinates of the normal vector associated with a vertex, list of t_vec3_float */
-	t_list	*f;				/* The indices of the vertices composing a face, list of intenger array (need to count/alloc every line) */
+	t_list	*f;				/* The indices of the vertices composing a face, list t_fnode */
 	u8		smooth;			/* The smoothing group state. 'on' to activate, 'off' to deactivate. 1 for true, otherwise 0*/
 } t_obj_file;
 
