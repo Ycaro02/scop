@@ -6,7 +6,7 @@
 /*   By: nfour <nfour@student.42angouleme.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 15:43:26 by nfour             #+#    #+#             */
-/*   Updated: 2024/04/11 15:52:10 by nfour            ###   ########.fr       */
+/*   Updated: 2024/04/11 17:05:34 by nfour            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,8 +56,9 @@ DEFINE_VEC2_STRUCT(s16)
 DEFINE_VEC2_STRUCT(s32)
 DEFINE_VEC2_STRUCT(s64)
 
-/* Define float structure */
+/* Define float/double structure */
 DEFINE_VEC2_STRUCT(float)
+DEFINE_VEC2_STRUCT(double)
 
 
  /********************************************************************

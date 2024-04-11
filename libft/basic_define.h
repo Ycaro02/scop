@@ -1,32 +1,44 @@
-#ifndef BASIC_DEF_TYPE_HEADER
-# define BASIC_DEF_TYPE_HEADER
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   basic_define.h                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: nfour <nfour@student.42angouleme.fr>       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/04/11 17:03:53 by nfour             #+#    #+#             */
+/*   Updated: 2024/04/11 17:03:54 by nfour            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-# include <sys/types.h>
+#ifndef BASIC_DEF_TYPE_HEADER
+#define BASIC_DEF_TYPE_HEADER
+
+#include <sys/types.h>
 
 /********************************************************************
  *                        DEFINE		                            *
  ********************************************************************/
 /* bool */
-# define    FALSE   0
-# define    TRUE 	1
+#define    FALSE   0
+#define    TRUE 	1
 /* pointer size */
-# define    PTR_SIZE	    sizeof(void *)
+#define    PTR_SIZE	    sizeof(void *)
 
 /* ANSI COLOR */
-# define    RED     		"\x1b[31m"
-# define    GREEN   		"\x1b[32m"
-# define    YELLOW  		"\x1b[33m"
-# define    BLUE    		"\x1b[34m"
-# define    PURPLE  		"\x1b[35m"
-# define    CYAN    		"\x1b[36m"
-# define    PINK    		"\x1b[38;5;200m"
-# define    ORANGE  		"\x1b[38;5;208m"
-# define    RESET   		"\x1b[0m"
+#define    RED     		"\x1b[31m"
+#define    GREEN   		"\x1b[32m"
+#define    YELLOW  		"\x1b[33m"
+#define    BLUE    		"\x1b[34m"
+#define    PURPLE  		"\x1b[35m"
+#define    CYAN    		"\x1b[36m"
+#define    PINK    		"\x1b[38;5;200m"
+#define    ORANGE  		"\x1b[38;5;208m"
+#define    RESET   		"\x1b[0m"
 
-# define    FILL_GREEN      "\033[7;32m"
-# define    FILL_YELLOW     "\033[7;33m"
-# define    FILL_RED        "\033[7;31m"
-# define    FILL_YELBLACK   "\033[40;33m"
+#define    FILL_GREEN      "\033[7;32m"
+#define    FILL_YELLOW     "\033[7;33m"
+#define    FILL_RED        "\033[7;31m"
+#define    FILL_YELBLACK   "\033[40;33m"
 
 /* Typedef for integet type */
 typedef uint8_t	 u8;
@@ -49,4 +61,4 @@ typedef int64_t	 s64;
 #define INT_ABS_DIFF(a, b) (MINUS_IN_S64(a, b) < 0 ? MINUS_IN_S64(a, b) * -1 : MINUS_IN_S64(a, b))
 
 
- # endif /* BASIC_DEF_TYPE_HEADER */
+ #endif /* BASIC_DEF_TYPE_HEADER */

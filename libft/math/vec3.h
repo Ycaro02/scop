@@ -6,7 +6,7 @@
 /*   By: nfour <nfour@student.42angouleme.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 15:43:13 by nfour             #+#    #+#             */
-/*   Updated: 2024/04/11 16:01:46 by nfour            ###   ########.fr       */
+/*   Updated: 2024/04/11 17:05:16 by nfour            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,9 +57,9 @@ DEFINE_VEC3_STRUCT(s16)
 DEFINE_VEC3_STRUCT(s32)
 DEFINE_VEC3_STRUCT(s64)
 
-/* Define float structure */
+/* Define float/double structure */
 DEFINE_VEC3_STRUCT(float)
-
+DEFINE_VEC3_STRUCT(double)
 
  /********************************************************************
  *                        MACRO FUNCTION	                         *
