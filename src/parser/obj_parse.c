@@ -140,22 +140,29 @@ t_vec3_u32 line_to_vec3_u32(char **line, u32 *other_val)
 
 u8 line_to_face(char **line)
 {
-	// t_face_node *face;
-
-	u32 other_val = 0;
-	t_vec3_u32 vec = line_to_vec3_u32(line, &other_val);
-	if (other_val) {
-		ft_printf_fd(2, ORANGE" Other val detected [%u]"RESET, other_val);
-		for (u32 i = 0; i < other_val; i++ ) {
-			ft_printf_fd(2, PURPLE" idx: |%u| val: |%s|"RESET, i, line[i + 3]);
-		}
-
-		// display_double_char(line);
-		// return (FALSE);
+	t_face_node *face;
+	u32			other_val = 0;
+	t_vec3_u32	vec = line_to_vec3_u32(line, &other_val);
+	
+	face = ft_calloc(1, sizeof(t_face_node));
+	if (!face) {
+		ft_printf_fd(2, RED"Error: Malloc failed\n"RESET);
+		return (FALSE);
 	}
-	ft_printf_fd(1, CYAN"\nFace: ");
-	DISPLAY_VEC3(u32, vec);
-	ft_printf_fd(1, RESET);
+
+	if (other_val) {
+		// ft_printf_fd(2, ORANGE" Other val detected [%u]"RESET, other_val);
+		face->other = ft_calloc(sizeof(u32), other_val);
+		for (u32 i = 0; i < other_val; i++ ) {
+			face->other[i] = array_to_uint32(line[i + 3]); /* need to parse val */
+			// ft_printf_fd(2, PURPLE" idx: |%u| val: |%u|"RESET, i, face->other[i]);
+		}
+	}
+	face->vec = CREATE_VEC3(u32, vec.x, vec.y, vec.z);
+
+	// ft_printf_fd(1, CYAN"\nFace: ");
+	// DISPLAY_VEC3(u32, face->vec);
+	// ft_printf_fd(1, RESET);
 	return (TRUE);
 
 }
@@ -225,7 +232,7 @@ static u8 handle_line_by_token(t_obj_file *file, char **line, u16 token)
 				return (FALSE);
 			}
 			file->smooth = handle_smooth_str(tmp);
-			ft_printf_fd(1, PINK"\nSmooth name: %s, val %u"RESET, tmp, file->smooth);
+			ft_printf_fd(1, PINK"\nSmooth name: %s, val %u\n"RESET, tmp, file->smooth);
 			break;
 		case ENUM_VERTEX:
 			if (!add_vertex_node(&file->vertex, &line[1])) {
@@ -294,7 +301,7 @@ static int8_t parse_obj_file(char *path)
 	}
 
 	for (u32 i = 0; file[i]; ++i) {
-		ft_printf_fd(1, YELLOW"\nLine %d:"RESET" "BLUE"|%s|"RESET, i, file[i]);
+		// ft_printf_fd(1, YELLOW"\nLine %d:"RESET" "BLUE"|%s|"RESET, i, file[i]);
 		char **trim = ft_split_trim(file[i], ' ');
 		if (trim != NULL)  {
 			if ((token = is_valid_token(trim[0])) == 0) {
@@ -308,7 +315,7 @@ static int8_t parse_obj_file(char *path)
 		// display_double_char(trim);
 	}
 	// display_double_char(file);
-	display_vertex_lst(obj.vertex);
+	// display_vertex_lst(obj.vertex);
 	free_obj_file(&obj);
 	free_double_char(file);
 	return (1);
