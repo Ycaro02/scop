@@ -10,23 +10,13 @@ static void display_double_char(char **str)
 	}
 }
 
-static u32 get_double_char_size(char **str)
-{
-	u32 i = 0;
-	while (str[i] != NULL) {
-		i++;
-	}
-	return (i);
-}
-
 static int8_t parse_obj_file(char *path)
 {
-	t_obj_file *obj = NULL;
+	// t_obj_file *obj = NULL;
 	char **file = NULL;
 	if ((file = load_file(path)) == NULL) {
 		return (0);
 	}
-
 	display_double_char(file);
 	free_double_char(file);
 	return (1);
