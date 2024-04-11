@@ -14,7 +14,7 @@ all:		$(NAME)
 %.o : %.c
 	@$(CC) $(CFLAGS) -c $< -o $@
 
-$(NAME):	$(OBJ_DIR) $(OBJS) $(DISPLAY_NAME) $(LIST) $(LIBFT)
+$(NAME):	$(LIBFT) $(LIST) $(OBJ_DIR) $(OBJS) $(DISPLAY_NAME)
 	@printf "$(CYAN)Compiling ${NAME} ...$(RESET)\n"
 	@$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(LIBFT) $(LIST) -lm
 	@printf "$(GREEN)Compiling $(NAME) done$(RESET)\n"
@@ -35,7 +35,7 @@ endif
 
 $(OBJ_DIR):
 	@mkdir $(ALL_DIR)
-	@$(ASCII_ART) $(ASCII_NAME)
+# @$(ASCII_ART) $(ASCII_NAME)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	@printf "$(YELLOW)Compile $<$(RESET)\n"

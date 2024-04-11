@@ -6,7 +6,7 @@
 /*   By: nfour <nfour@student.42angouleme.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 15:43:41 by nfour             #+#    #+#             */
-/*   Updated: 2024/04/11 18:54:31 by nfour            ###   ########.fr       */
+/*   Updated: 2024/04/11 19:08:50 by nfour            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 #include <fcntl.h>
 #include <errno.h>
 
+#include "basic_define.h"
 #include "printf_fd/ft_printf.h"
 #include "list/linked_list.h"
 #include "math/vec2.h"
