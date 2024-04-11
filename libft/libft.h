@@ -6,7 +6,7 @@
 /*   By: nfour <nfour@student.42angouleme.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 15:43:41 by nfour             #+#    #+#             */
-/*   Updated: 2024/04/11 15:43:51 by nfour            ###   ########.fr       */
+/*   Updated: 2024/04/11 18:54:31 by nfour            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,18 +16,22 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <stdint.h>
+#include "limits.h"
+#include <fcntl.h>
+#include <errno.h>
+
 #include "printf_fd/ft_printf.h"
 #include "list/linked_list.h"
 #include "math/vec2.h"
 #include "math/vec3.h"
-#include "limits.h"
+
+#define BUFFER_SIZE 1
 
 #define OUT_OF_UINT32 (uint64_t)(UINT32_MAX + 1)
 
-uint32_t abs_diff(uint32_t a, uint32_t b);
-uint32_t max_uint32(uint32_t a, uint32_t b);
-uint32_t min_uint32(uint32_t a, uint32_t b);
-
+/* Libft */
+char    *get_next_line(int fd); /* Get next line */
+char    *ft_strjoin_gnl(char *s1, char *s2);
 uint64_t array_to_uint32(const char *nptr);
 char	*ft_ultoa(unsigned long n);
 int		ft_isalpha(int c);
@@ -59,10 +63,6 @@ char	*ft_strnstr(const char *big, const char *little, size_t len);
 char	*ft_strdup(const char *s);
 char	*ft_itoa(int n);
 char	*ft_ltoa(long n);
-int		ft_putchar_fd(char c, int fd);
-void	ft_putstr_fd(char *s, int fd);
-void	ft_putendl_fd(char *s, int fd);
-void	ft_putnbr_fd(int n, int fd);
 char	*ft_strmapi(char const *s, char (*f)(unsigned int, char));
 void	ft_striteri(char *s, void (*f)(unsigned int, char*));
 int 	ft_strcpy(char* dst, char *src, int len);	
@@ -71,8 +71,19 @@ char    *ft_strjoin_free(char *s1, char *s2, char option);
 int 	ft_lower_strcmp(char *s1, char *s2);
 int 	ft_strcmp(char *s1, char *s2);
 void 	free_incomplete_array(void **array, int max);
-
 int8_t	str_is_digit(char *str);
 int8_t	str_is_hexa(char *str);
+int		ft_putchar_fd(char c, int fd);
+void	ft_putstr_fd(char *s, int fd);
+void	ft_putendl_fd(char *s, int fd);
+void	ft_putnbr_fd(int n, int fd);
+void	free_double_char(char **array);
+
+/* Math */
+uint32_t abs_diff(uint32_t a, uint32_t b);
+uint32_t max_uint32(uint32_t a, uint32_t b);
+uint32_t min_uint32(uint32_t a, uint32_t b);
+
+
 
 #endif

@@ -34,13 +34,8 @@ t_list 			*ft_lstjoin(t_list *first, t_list *second);
 void 			ft_lstclear_nodeptr(t_list **lst);
 void			ft_lst_remove_if(t_list **list, void *ref, void (*del)(), int (*condition)());
 void 			*get_lst_index_content(t_list *lst, int index);
-
 void			lst_clear(t_list **lst, void (*del)(void*));
 void 			reverse_lst(t_list **lst);
-
 void			list_sort(t_list **lst, int (*cmp)());
-
-
-
 
  # endif /* DEFINE_LINKED_LIST_H */
