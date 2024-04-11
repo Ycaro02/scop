@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_printf.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfour <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: nfour <nfour@student.42angouleme.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/05 09:57:22 by nfour             #+#    #+#             */
-/*   Updated: 2022/10/05 18:55:39 by nfour            ###   ########.fr       */
+/*   Updated: 2024/04/11 14:31:27 by nfour            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,20 +37,18 @@ static void ft_put_float_double_nbr(double nbr, int *count, int fd) {
     int_part = (int)nbr;
     decimal_part = nbr - int_part;
 
-    // Affichage de la partie entière
+    /* Display integer parts */
     if (int_part >= 10) {
         ft_put_float_double_nbr(int_part / 10, count, fd);
     }
     *count += ft_putchar_fd(int_part % 10 + '0', fd);
 
-    // Affichage de la virgule si nécessaire
+    /* Display float parts */
     if (decimal_part > 0 && *count > 0) {
         *count += ft_putchar_fd('.', fd);
     }
-
-    // Affichage de la partie décimale
     if (decimal_part > 0 && *count > 0) {
-        for (int i = 0; i < 6; ++i) { // Afficher jusqu'à 6 décimales
+        for (int i = 0; i < 6; ++i) { /* Display until 6 value */
             decimal_part *= 10;
             *count += ft_putchar_fd((int)decimal_part + '0', fd);
             decimal_part -= (int)decimal_part;

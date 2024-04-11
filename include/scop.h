@@ -17,10 +17,9 @@ enum e_obj_token {
 	ENUM_F=(1 << 8)
 };
 
-/* Token acception in OBJ file */
+/* Token accepted in OBJ file */
 
 #define TOKEN_UNKNOWN	"unknown"	/* Type: string Nb Value: 1 Description: Unknown token. */
-
 #define TOKEN_COMMENT	"#"			/* Type: string Nb Value: 1 Description: A comment line. */
 #define TOKEN_OBJ 		"o"			/* Type: string Nb Value: 1 Description: The name of the object */
 #define TOKEN_SMOOTH	"s"			/* Type: bool (true or false) Nb Value: 1 Description: The smoothing group state. on to activate, off to deactivate.*/
