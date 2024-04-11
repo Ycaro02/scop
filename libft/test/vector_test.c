@@ -39,6 +39,16 @@ static void basic_vec2_test()
 		ft_printf_fd(1, RED"Division of vec2_float and vec2_float2 is incorrect\n"RESET);
 	}
 
+	if (CMP_VEC2(vec2_float, vec2_float))
+		ft_printf_fd(1, GREEN"Comparison of vec2_float and vec2_float is correct\n"RESET);
+	else
+		ft_printf_fd(1, RED"Comparison of vec2_float and vec2_float is incorrect\n"RESET);
+
+	if (CMP_VEC2(vec2_float, vec2_float2))
+		ft_printf_fd(1, RED"Comparison of vec2_float and vec2_float2 is incorrect\n"RESET);
+	else
+		ft_printf_fd(1, GREEN"Comparison of vec2_float and vec2_float2 is correct\n"RESET);
+
 }
 
 static void basic_test_vec3() 
@@ -79,6 +89,16 @@ static void basic_test_vec3()
 		DISPLAY_VEC3(float, vec3_float_div);
 		ft_printf_fd(1, RED"Division of vec3_float and vec3_float2 is incorrect\n"RESET);
 	}
+
+	if (CMP_VEC3(vec3_float, vec3_float))
+		ft_printf_fd(1, GREEN"Comparison of vec3_float and vec3_float is correct\n"RESET);
+	else
+		ft_printf_fd(1, RED"Comparison of vec3_float and vec3_float is incorrect\n"RESET);
+
+	if (CMP_VEC3(vec3_float, vec3_float2))
+		ft_printf_fd(1, RED"Comparison of vec3_float and vec3_float2 is incorrect\n"RESET);
+	else
+		ft_printf_fd(1, GREEN"Comparison of vec3_float and vec3_float2 is correct\n"RESET);
 }
 
 int main(int argc, char **argv)
