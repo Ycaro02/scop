@@ -7,6 +7,10 @@ CFLAGS			=	-Wall -Wextra -Werror -O3 -g
 # ASCII_ART		=	./rsc/mk/ascii.sh
 ASCII_NAME		=	${NAME}
 
+
+OPENGL_LIB= -lglfw -lGL -lm -L//usr/lib/x86_64-linux-gnu/
+
+
 ARGS			=	rsc/42.obj
 
 all:		$(NAME)
@@ -16,7 +20,7 @@ all:		$(NAME)
 
 $(NAME):	$(LIBFT) $(LIST) $(OBJ_DIR) $(OBJS) $(DISPLAY_NAME)
 	@printf "$(CYAN)Compiling ${NAME} ...$(RESET)\n"
-	@$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(LIBFT) $(LIST) -lm
+	@$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(LIBFT) $(LIST) ${OPENGL_LIB}
 	@printf "$(GREEN)Compiling $(NAME) done$(RESET)\n"
 
 $(LIST):

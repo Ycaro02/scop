@@ -31,6 +31,8 @@ int main(int argc, char **argv)
 {
     GLFWwindow *win;
     
+	(void)argc, (void)argv;
+
     win = init_glfw();
     if (!win) {
         ft_printf_fd(2, "Error: Failed to init glfw\n");

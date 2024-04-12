@@ -55,8 +55,11 @@ typedef struct s_obj_file {
 } t_obj_file;
 
 
-/* Basic load file function */
+/* parser/load_file.c */
 char	**ft_split_trim(char const *str, char c);
 char	**load_file(char *path);
+
+/* parser/parse_obj_file.c */
+int8_t	parse_obj_file(char *path);
 
 #endif /* SCOP_HEADER_H */

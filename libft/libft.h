@@ -6,7 +6,7 @@
 /*   By: nfour <nfour@student.42angouleme.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 15:43:41 by nfour             #+#    #+#             */
-/*   Updated: 2024/04/11 19:08:50 by nfour            ###   ########.fr       */
+/*   Updated: 2024/04/12 09:32:07 by nfour            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,10 @@ void	ft_putstr_fd(char *s, int fd);
 void	ft_putendl_fd(char *s, int fd);
 void	ft_putnbr_fd(int n, int fd);
 void	free_double_char(char **array);
+void	display_double_char(char **array);
+u32		double_char_size(char **array);
+u8		str_is_float(char *str);
+float	ft_atof(char *str);
 
 /* Math */
 uint32_t abs_diff(uint32_t a, uint32_t b);

@@ -26,9 +26,9 @@ RM			=	rm -rf
 
 ALL_DIR		= $(OBJ_DIR) $(OBJ_DIR)/$(PARSER_DIR)
 
-# ifeq ($(findstring bonus, $(MAKECMDGOALS)), bonus)
-# ASCII_NAME	= "bonus"
-# SRCS += $(SRCS_BONUS)
-# else
-# SRCS += $(MAIN_MANDATORY)
-# endif
+ifeq ($(findstring bonus, $(MAKECMDGOALS)), bonus)
+ASCII_NAME	= "bonus"
+SRCS += $(SRCS_BONUS)
+else
+SRCS += $(MAIN_MANDATORY)
+endif

@@ -6,7 +6,7 @@
 /*   By: nfour <nfour@student.42angouleme.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/28 16:41:07 by nfour             #+#    #+#             */
-/*   Updated: 2024/04/11 18:54:18 by nfour            ###   ########.fr       */
+/*   Updated: 2024/04/12 09:30:33 by nfour            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,16 +135,4 @@ char    *get_next_line(int fd)
         line = ft_get_line(joined);
         free(joined);
         return (line);
-}
-
-void free_double_char(char **array)
-{
-		int i = 0;
-        
-		while (array[i])
-        {
-			free(array[i]);
-			i++;
-        }
-        free(array);
 }

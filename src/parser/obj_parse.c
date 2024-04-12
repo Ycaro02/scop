@@ -1,25 +1,44 @@
 #include "../../include/scop.h"
 
-void display_double_char(char **array)
+/**
+ *	@brief Face node free
+ *	@param node node to free
+*/
+void free_face_node(void *node)
 {
-	u32 i = 0;
-	while (array[i] != NULL) {
-		ft_printf_fd(1, "%s\n", array[i]);
-		i++;
+	if (((t_face_node *)node)->other) {
+		free(((t_face_node *)node)->other);
+	}
+	free(node);
+}
+
+/**
+ *	@brief Free obj file structure
+ *	@param obj obj file to free
+*/
+void free_obj_file(t_obj_file *obj)
+{
+	if (obj->o) {
+		free(obj->o);
+	} if (obj->mtllib) {
+		free(obj->mtllib);
+	} if (obj->usemtl) {
+		free(obj->usemtl);
+	} if (obj->vertex) {
+		ft_lstclear(&obj->vertex, free);
+	} if (obj->face) {
+		ft_lstclear(&obj->face, free_face_node);
+	} if (obj->vertex) {
+		lst_clear(&obj->vertex, free);
 	}
 }
 
-u32 double_char_size(char **array)
-{
-	u32 i = 0;
 
-	while (array[i] != NULL) {
-		i++;
-	}
-	return (i);
-
-}
-
+/**
+ * @brief Check if a string is a valid token
+ * @param to_check string to check
+ * @return 0 if not valid, else the value of the token
+*/
 static u16 is_valid_token(char *to_check)
 {
 	char *tokens[] = {
@@ -44,7 +63,12 @@ static u16 is_valid_token(char *to_check)
 
 }
 
-
+/**
+ * @brief Get string after token
+ * @param to_fill_ptr string to fill
+ * @param line line to parse
+ * @return TRUE if success, else FALSE
+*/
 static s8 get_str_after_token(char **to_fill_ptr, char **line)
 {
 	if (line[0] == NULL || *line[0] == '\0' || line[1] != NULL) {
@@ -56,63 +80,12 @@ static s8 get_str_after_token(char **to_fill_ptr, char **line)
 	return (TRUE);
 }
 
-
-static u8 str_is_float(char *str)
-{
-	u8 point_found = 0;
-
-	if (!str) {
-		return (FALSE);
-	} else if (*str == '-') {
-		str++;
-	}
-	while (*str) {
-		if (*str == '.') {
-			if (point_found) {
-				return (FALSE);
-			}
-			point_found = 1;
-		} else if (!ft_isdigit(*str)) {
-			return (FALSE);
-		}
-		str++;
-	}
-	return (TRUE);
-
-}
-
-float ft_atof(char *str)
-{
-	/* Create result and neg var */
-	double res = 0, neg = 1;
-	/* decimal var for decimal parts compute */
-	double dec = 0.1;
-
-	if (!str) {
-		return (0);
-	} else if (*str == '-') { /* if first is '-' neg = -1 and skip it */
-		neg = -1;
-		str++;
-	}
-
-	/* like atoi just add digit ony by one with * 10 */
-	while (*str >= '0' && *str <= '9') {
-		res = res * 10 + *str - '0';
-		str++;
-	}
-	/* check for decimal parts */
-	if (*str && *str == '.') { 
-		str++; /* skip dot */
-		/* same logic than atoi, but /10 each iterate instead of *10 */
-		while (*str && *str >= '0' && *str <= '9') {
-			res += (*str - '0') * dec;
-			dec *= 0.1;
-			str++;
-		}
-	}
-	return ((res * neg));
-}
-
+/**
+ * @brief Line to vec3_u32
+ * @param line line to parse
+ * @param other_val ptr on u32, set to the number of other value
+ * @return t_vec3_u32
+*/
 t_vec3_u32 line_to_vec3_u32(char **line, u32 *other_val)
 {
 	t_vec3_u32 vec = {0, 0, 0};
@@ -137,14 +110,13 @@ t_vec3_u32 line_to_vec3_u32(char **line, u32 *other_val)
 	return (vec);
 }
 
-void free_face_node(void *node)
-{
-	if (((t_face_node *)node)->other) {
-		free(((t_face_node *)node)->other);
-	}
-	free(node);
-}
 
+/**
+ * @brief Line to face
+ * @param file obj file
+ * @param line line to parse
+ * @return TRUE if success, else FALSE
+*/
 u8 line_to_face(t_obj_file *file, char **line)
 {
 	t_face_node *face;
@@ -174,7 +146,11 @@ u8 line_to_face(t_obj_file *file, char **line)
 
 }
 
-
+/**
+ * @brief Line to vertex
+ * @param line line to parse
+ * @return allocated t_vec3_float ptr , NULL if fail
+*/
 static t_vec3_float *line_to_vertex(char **line)
 {
 	t_vec3_float *vertex = NULL;
@@ -200,6 +176,12 @@ static t_vec3_float *line_to_vertex(char **line)
 	return (vertex);
 }
 
+/**
+ * @brief Add vertex node to linked list
+ * @param list ptr on list head
+ * @param line line to parse
+ * @return TRUE if success, else FALSE
+*/
 static u8 add_vertex_node(t_list **list, char **line)
 {
 	t_vec3_float *vertex = line_to_vertex(line);
@@ -210,6 +192,11 @@ static u8 add_vertex_node(t_list **list, char **line)
 	return (TRUE);
 }
 
+/**
+ * @brief Handle smooth str
+ * @param str str to parse
+ * @return TRUE if success, else FALSE
+*/
 u8 handle_smooth_str(char *str)
 {
 	if (ft_strncmp(str, "on", ft_strlen("on")) == 0) {
@@ -221,6 +208,13 @@ u8 handle_smooth_str(char *str)
 	}
 }
 
+/**
+ * @brief Handle line by token
+ * @param file obj file
+ * @param line line to parse
+ * @param token token value
+ * @return TRUE if success, else FALSE
+*/
 static u8 handle_line_by_token(t_obj_file *file, char **line, u16 token)
 {
 	char *tmp = NULL;
@@ -285,27 +279,8 @@ void  display_vertex_lst(t_list *lst)
 }
 
 
-void free_obj_file(t_obj_file *obj)
-{
-	if (obj->o) {
-		free(obj->o);
-	}
-	if (obj->mtllib) {
-		free(obj->mtllib);
-	}
-	if (obj->usemtl) {
-		free(obj->usemtl);
-	}
-	if (obj->vertex) {
-		ft_lstclear(&obj->vertex, free);
-	}
-	if (obj->face) {
-		ft_lstclear(&obj->face, free_face_node);
-	}
-	lst_clear(&obj->vertex, free);
-}
 
-static int8_t parse_obj_file(char *path)
+int8_t parse_obj_file(char *path)
 {
 	t_obj_file obj;
 	char **file = NULL;
@@ -328,20 +303,17 @@ static int8_t parse_obj_file(char *path)
 			handle_line_by_token(&obj, trim, token);
 			free_double_char(trim);
 		}
-		// display_double_char(trim);
 	}
-	// display_double_char(file);
-	// display_vertex_lst(obj.vertex);
 	free_obj_file(&obj);
 	free_double_char(file);
 	return (1);
 }
 
-int main()
-{
-	if (!parse_obj_file("rsc/42.obj")) {
-		ft_printf_fd(2, "Error\n");
-		return (1);
-	}
-	return (0);
-}
+// int main()
+// {
+// 	if (!parse_obj_file("rsc/42.obj")) {
+// 		ft_printf_fd(2, "Error\n");
+// 		return (1);
+// 	}
+// 	return (0);
+// }
