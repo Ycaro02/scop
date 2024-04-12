@@ -38,7 +38,7 @@ GLFWwindow *init_glfw()
     return (win);
 }
 
-static void main_loop(GLFWwindow *win) 
+void main_loop(GLFWwindow *win) 
 {
     while (!glfwWindowShouldClose(win)) {
         /* clear gl render context*/
@@ -48,6 +48,12 @@ static void main_loop(GLFWwindow *win)
         /* Event */
         glfwPollEvents();
     }
+}
+
+static void glfw_destroy(GLFWwindow *win)
+{
+	glfwDestroyWindow(win);
+	glfwTerminate();
 }
 
 int main(int argc, char **argv)
@@ -62,20 +68,16 @@ int main(int argc, char **argv)
 		ft_printf_fd(2, "Error parse 42.obj\n");
 		return (1);
 	}
-
-	free_obj_model(model);
-	
-
-	/* exit here to test parsing */	
-	exit(1);
-
     win = init_glfw();
     if (!win) {
         ft_printf_fd(2, "Error: Failed to init glfw\n");
         glfwTerminate();
         return (1);
     }
+
+	init_gl_vertex_buffer(model);
     main_loop(win);
-	glfwDestroyWindow(win);
-    glfwTerminate();
+	free_obj_model(model);
+	glfw_destroy(win);
+	return (0);
 }

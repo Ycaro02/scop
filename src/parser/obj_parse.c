@@ -111,13 +111,13 @@ static u8 handle_line_by_token(t_obj_file *file, char **line, u16 token)
 		case ENUM_COMMENT:
 			break;
 		case ENUM_OBJ:
-			if (!get_str_after_token(&file->o, &line[1])) {
+			if (!get_str_after_token(&file->o, line)) {
 				return (FALSE);
 			}
 			ft_printf_fd(1, PINK"\nObject name: %s"RESET, file->o);
 			break;
 		case ENUM_SMOOTH:
-			if (!get_str_after_token(&tmp, &line[1])) {
+			if (!get_str_after_token(&tmp, line)) {
 				return (FALSE);
 			}
 			file->smooth = handle_smooth_str(tmp);
@@ -125,7 +125,7 @@ static u8 handle_line_by_token(t_obj_file *file, char **line, u16 token)
 			free(tmp);
 			break;
 		case ENUM_VERTEX:
-			if (!add_vertex_node(&file->vertex, &line[1])) {
+			if (!add_vertex_node(&file->vertex, line)) {
 				return (FALSE) ;
 			}
 			break;
@@ -134,19 +134,19 @@ static u8 handle_line_by_token(t_obj_file *file, char **line, u16 token)
 		case ENUM_VN:
 			break;
 		case ENUM_MTLLIB:
-			if (!get_str_after_token(&file->mtllib, &line[1])) {
+			if (!get_str_after_token(&file->mtllib, line)) {
 				return (FALSE);
 			}
 			ft_printf_fd(1, CYAN"\nMTLIB name: %s"RESET, file->mtllib);
 			break;
 		case ENUM_USEMTL:
-			if (!get_str_after_token(&file->usemtl, &line[1])) {
+			if (!get_str_after_token(&file->usemtl, line)) {
 				return (FALSE);
 			}
 			ft_printf_fd(1, ORANGE"\nUsemtl name: %s"RESET, file->usemtl);
 			break;
 		case ENUM_F:
-			line_to_face(file, &line[1]);
+			line_to_face(file, line);
 			break;
 		default:
 			ft_printf_fd(2, RED"Error: Invalid token %s\n"RESET, line[0]);
@@ -183,7 +183,7 @@ t_obj_model *parse_obj_file(char *path)
 				free_double_char(trim);
 				return (NULL);
 			}
-			handle_line_by_token(&obj, trim, token);
+			handle_line_by_token(&obj, &trim[1], token);
 			free_double_char(trim);
 		}
 	}
@@ -195,24 +195,3 @@ t_obj_model *parse_obj_file(char *path)
 
 	return (model);
 }
-
-
-
-// static void init_gl_vertex_buffer(t_obj_file *obj)
-// {
-// 	GLuint vbo;
-// 	glGenBuffers(1, &vbo);
-// 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
-// 	glBufferData(GL_ARRAY_BUFFER, sizeof(t_vec3_float) * ft_lstsize(obj->vertex)
-// 		, (list to array here obj->vertex), GL_STATIC_DRAW);
-// }
-
-
-// int main()
-// {
-// 	if (!parse_obj_file("rsc/42.obj")) {
-// 		ft_printf_fd(2, "Error\n");
-// 		return (1);
-// 	}
-// 	return (0);
-// }

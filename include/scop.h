@@ -46,7 +46,7 @@ enum e_obj_token {
 
 typedef struct s_face_node {
 	t_vec3_u32 	vec;				/* vec3 uint32 for 3 first val */
-	u32			*other;				/* uin32_t int array aloc for other value if needed */
+	u32			*other;				/* uin32_t int array aloc for other value if needed otherwise NULL */
 } t_face_node;
 
 typedef struct s_obj_file {
@@ -64,13 +64,13 @@ typedef struct s_obj_file {
 typedef struct s_obj_model {
 	t_vec3_float	*vertex;	/* vertex array */
 	u32				v_size;		/* vertex size */
+	u32				*tri_face;	/* face array */
+	u32				f_size;		/* face size */
 	// t_obj_file	*obj;		/* obj file structure */
 	// u32			vt_size;		/* texture size */
 	// u32			vn_size;		/* normal size */
-	// u32			f_size;			/* face size */
 	// t_vec3_float	*vt;		/* texture array */
 	// t_vec3_float	*vn;		/* normal array */
-	// t_face_node	*face;		/* face array */
 	// u8			smooth;		/* The smoothing group state. 'on' to activate, 'off' to deactivate. 1 for true, otherwise 0*/
 }	t_obj_model;
 
@@ -88,6 +88,8 @@ t_vec3_float	*vertex_list_toarray(t_list *lst, u32 lst_size);
 void			display_vertex_lst(t_list *lst);
 void			free_obj_model(t_obj_model *model);
 t_obj_model		*init_obj_model(t_obj_file *obj_file);
+void init_gl_vertex_buffer(t_obj_model *model);
+
 
 /* parser/parse_line.c  */
 u8				handle_smooth_str(char *str);
@@ -95,6 +97,9 @@ void			free_obj_model(t_obj_model *model);
 t_vec3_float	*line_to_vertex_node(char **line);
 u8				line_to_face(t_obj_file *file, char **line);
 t_vec3_u32		line_to_vec3_u32(char **line, u32 *other_val);
+
+
+
 
 
 #endif /* SCOP_HEADER_H */

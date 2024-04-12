@@ -68,3 +68,27 @@ t_obj_model *init_obj_model(t_obj_file *obj_file)
 	free_obj_file(obj_file);
 	return (model);
 }
+
+void print_vertex_data(t_obj_model *model) {
+    t_vec3_float* bufferData = malloc(sizeof(t_vec3_float) * model->v_size);
+
+    glGetBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(t_vec3_float) * model->v_size, bufferData);
+
+    for (u32 i = 0; i < model->v_size; i++) {
+        ft_printf_fd(1, ORANGE"Vertex %u: x = %f, y = %f, z = %f\n"RESET, i, bufferData[i].x, bufferData[i].y, bufferData[i].z);
+    }
+    free(bufferData);
+}
+
+void init_gl_vertex_buffer(t_obj_model *model)
+{
+	GLuint vbo;
+	glGenBuffers(1, &vbo);
+	glBindBuffer(GL_ARRAY_BUFFER, vbo);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(t_vec3_float) * model->v_size
+		, model->vertex, GL_STATIC_DRAW);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(t_vec3_float), (void*)0);
+	print_vertex_data(model);
+}
+
+// void init
