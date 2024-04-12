@@ -91,4 +91,54 @@ void init_gl_vertex_buffer(t_obj_model *model)
 	print_vertex_data(model);
 }
 
-// void init
+
+/* TOTEST */
+void quadra_to_triangle(t_list *face_node_lst)
+{
+    t_list *triangle_list = NULL;
+
+    for (t_list *current = face_node_lst; current; current = current->next) {
+        t_face_node *node = current->content;
+        if (node->other) {
+            u32 other_size = 1; /* hardcode need to count*/
+            for (u32 i = 0; i < other_size; i++) {
+                t_vec3_u32 *triangle = ft_calloc(1, sizeof(t_vec3_u32));
+                if (!triangle) {
+                    ft_printf_fd(2, RED"Error: Malloc failed\n"RESET);
+                    return;
+                }
+				triangle->x = node->vec.x;
+                if (i == 0) {
+                    triangle->y = node->vec.z;
+                    triangle->z = node->other[i];
+                } else  {
+                    triangle->y = node->other[i - 1];
+                    triangle->z = node->other[i];
+				}
+                ft_lstadd_back(&triangle_list, ft_lstnew(triangle));
+            }
+            free(node->other);
+            node->other = NULL;
+        }
+    }
+
+    for (t_list *current = triangle_list; current; current = current->next) {
+        t_vec3_u32 *triangle = current->content;
+        ft_printf_fd(1, "Triangle: %u, %u, %u\n", triangle->x, triangle->y, triangle->z);
+    }
+}
+
+
+void face_node_to_array(t_list *lst, u32 lst_size) {
+	u32 i = 0;
+	u32 *array = ft_calloc(sizeof(t_face_node), lst_size);
+
+	if (!array) {
+		ft_printf_fd(2, RED"Error: Malloc failed\n"RESET);
+		return;
+	}
+	for (t_list *current = lst; current; current = current->next) {
+		// ft_memcpy(&array[i], current->content, sizeof(t_face_node));
+		i++;
+	}
+}
