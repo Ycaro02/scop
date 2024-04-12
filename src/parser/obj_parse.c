@@ -304,9 +304,33 @@ int8_t parse_obj_file(char *path)
 			free_double_char(trim);
 		}
 	}
+	vertext_list_toarray(obj.vertex, ft_lstsize(obj.vertex));
+
 	free_obj_file(&obj);
 	free_double_char(file);
 	return (1);
+}
+
+t_vec3_float *vertext_list_toarray(t_list *lst, u32 lst_size)
+{
+	t_vec3_float	*array = ft_calloc(sizeof(t_vec3_float), lst_size);
+	u32				i = 0;
+	
+	if (!array) {
+		return (NULL);
+	}
+	for (t_list *current = lst; current; current = current->next) {
+		// array[i] = *(t_vec3_float *)current->content;
+		ft_memcpy(&array[i], current->content, sizeof(t_vec3_float));
+		i++;
+	}
+
+	ft_printf_fd(1, "Vertex list to array\n");
+	for (i = 0; i < lst_size; i++) {
+		DISPLAY_VEC3(float, array[i]);
+	}
+
+	return (array);
 }
 
 // static void init_gl_vertex_buffer(t_obj_file *obj)

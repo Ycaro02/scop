@@ -56,6 +56,13 @@ int main(int argc, char **argv)
     
 	(void)argc, (void)argv;
 
+	if (!parse_obj_file("rsc/42.obj")) {
+		ft_printf_fd(2, "Error parse 42.obj\n");
+		return (1);
+	}
+
+
+
     win = init_glfw();
     if (!win) {
         ft_printf_fd(2, "Error: Failed to init glfw\n");

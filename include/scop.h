@@ -66,6 +66,7 @@ char	**ft_split_trim(char const *str, char c);
 char	**load_file(char *path);
 
 /* parser/parse_obj_file.c */
-int8_t	parse_obj_file(char *path);
+int8_t			parse_obj_file(char *path);
+t_vec3_float	*vertext_list_toarray(t_list *lst, u32 lst_size);
 
 #endif /* SCOP_HEADER_H */
