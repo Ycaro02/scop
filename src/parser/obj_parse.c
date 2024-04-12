@@ -303,6 +303,21 @@ void free_obj_model(t_obj_model *model)
 	free(model);
 }
 
+t_obj_model *init_obj_model(t_obj_file *obj_file)
+{
+	t_obj_model *model = ft_calloc(1, sizeof(t_obj_model));
+	if (!model) {
+		ft_printf_fd(2, RED"Error: Malloc failed\n"RESET);
+		free_obj_file(obj_file);
+		return (NULL);
+	}
+
+	model->vertex = vertex_list_toarray(obj_file->vertex, ft_lstsize(obj_file->vertex));
+	model->v_size = ft_lstsize(obj_file->vertex);
+	free_obj_file(obj_file);
+	return (model);
+}
+
 t_obj_model *parse_obj_file(char *path)
 {
 	t_obj_file obj;
@@ -327,20 +342,12 @@ t_obj_model *parse_obj_file(char *path)
 			free_double_char(trim);
 		}
 	}
-
-	t_obj_model *model = ft_calloc(1, sizeof(t_obj_model));
-	if (!model) {
-		ft_printf_fd(2, RED"Error: Malloc failed\n"RESET);
-		free_obj_file(&obj);
-		free_double_char(file);
-		return (NULL);
-	}
-
-	model->vertex = vertex_list_toarray(obj.vertex, ft_lstsize(obj.vertex));
-	model->v_size = ft_lstsize(obj.vertex);
-
-	free_obj_file(&obj);
 	free_double_char(file);
+
+
+	t_obj_model *model = init_obj_model(&obj);
+
+
 	return (model);
 }
 
