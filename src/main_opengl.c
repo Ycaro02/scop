@@ -30,6 +30,8 @@ GLFWwindow *init_glfw()
         return NULL;
     }
 
+	// gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
+	
 	glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 	glClearColor(200.0f, 0.0f, 0.0f, 1.0f);
 	ft_printf_fd(1, "GL %d.%d\n", GLAD_VERSION_MAJOR(version), GLAD_VERSION_MINOR(version));

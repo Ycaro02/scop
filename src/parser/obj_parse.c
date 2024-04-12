@@ -309,6 +309,16 @@ int8_t parse_obj_file(char *path)
 	return (1);
 }
 
+// static void init_gl_vertex_buffer(t_obj_file *obj)
+// {
+// 	GLuint vbo;
+// 	glGenBuffers(1, &vbo);
+// 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
+// 	glBufferData(GL_ARRAY_BUFFER, sizeof(t_vec3_float) * ft_lstsize(obj->vertex)
+// 		, (list to array here obj->vertex), GL_STATIC_DRAW);
+// }
+
+
 // int main()
 // {
 // 	if (!parse_obj_file("rsc/42.obj")) {

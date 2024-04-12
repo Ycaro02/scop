@@ -2,7 +2,9 @@
 #define SCOP_HEADER_H
 
 #include "../libft/libft.h"
-#include "../glad_gen/include/glad/gl.h"
+
+#include "../glad_gen/include/glad/gl.h" /* include glad header before glfw3 */
+
 #include "../include/glfw3.h"
 
 #define SCREEN_WIDTH 800
