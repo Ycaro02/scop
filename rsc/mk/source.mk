@@ -10,6 +10,8 @@ MAIN_MANDATORY 	=	main_opengl.c
 
 SRCS			=	parser/obj_parse.c\
 					parser/load_file.c\
+					parser/parse_line.c\
+					parser/build_obj_model.c\
 					glad/gl.c\
 
 

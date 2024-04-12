@@ -64,6 +64,9 @@ int main(int argc, char **argv)
 	}
 
 	free_obj_model(model);
+	
+
+	/* exit here to test parsing */	
 	exit(1);
 
     win = init_glfw();

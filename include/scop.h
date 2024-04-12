@@ -75,13 +75,26 @@ typedef struct s_obj_model {
 }	t_obj_model;
 
 /* parser/load_file.c */
-char	**ft_split_trim(char const *str, char c);
-char	**load_file(char *path);
+char			**ft_split_trim(char const *str, char c);
+char			**load_file(char *path);
 
-/* parser/parse_obj_file.c */
+/* parser/obj_parse.c */
 t_obj_model		*parse_obj_file(char *path);
 t_vec3_float	*vertex_list_toarray(t_list *lst, u32 lst_size);
+void			free_obj_file(t_obj_file *obj);
 
-void free_obj_model(t_obj_model *model);
+/* parser/build_obj_model.c */
+t_vec3_float	*vertex_list_toarray(t_list *lst, u32 lst_size);
+void			display_vertex_lst(t_list *lst);
+void			free_obj_model(t_obj_model *model);
+t_obj_model		*init_obj_model(t_obj_file *obj_file);
+
+/* parser/parse_line.c  */
+u8				handle_smooth_str(char *str);
+void			free_obj_model(t_obj_model *model);
+t_vec3_float	*line_to_vertex_node(char **line);
+u8				line_to_face(t_obj_file *file, char **line);
+t_vec3_u32		line_to_vec3_u32(char **line, u32 *other_val);
+
 
 #endif /* SCOP_HEADER_H */
