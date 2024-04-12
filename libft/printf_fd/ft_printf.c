@@ -6,11 +6,13 @@
 /*   By: nfour <nfour@student.42angouleme.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/05 09:57:22 by nfour             #+#    #+#             */
-/*   Updated: 2024/04/11 14:31:27 by nfour            ###   ########.fr       */
+/*   Updated: 2024/04/12 17:11:07 by nfour            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
+#include "../stack_string/stack_string.c"
+
 
 static void ft_check_p(unsigned long nbr, int *count, int fd)
 {
@@ -25,36 +27,77 @@ static void ft_check_p(unsigned long nbr, int *count, int fd)
 	}
 }
 
-static void ft_put_float_double_nbr(double nbr, int *count, int fd) {
-    int		int_part = 0;
-	double	decimal_part = (double)0;
-
-	if (nbr < 0) {
-        nbr = -nbr;
-        *count += ft_putchar_fd('-', fd);
-    }
-
-    int_part = (int)nbr;
-    decimal_part = nbr - int_part;
-
-    /* Display integer parts */
-    if (int_part >= 10) {
-        ft_put_float_double_nbr(int_part / 10, count, fd);
-    }
-    *count += ft_putchar_fd(int_part % 10 + '0', fd);
-
-    /* Display float parts */
-    if (decimal_part > 0 && *count > 0) {
-        *count += ft_putchar_fd('.', fd);
-    }
-    if (decimal_part > 0 && *count > 0) {
-        for (int i = 0; i < 6; ++i) { /* Display until 6 value */
-            decimal_part *= 10;
-            *count += ft_putchar_fd((int)decimal_part + '0', fd);
-            decimal_part -= (int)decimal_part;
-        }
-    }
+static void round_double_sstring(t_sstring *sstr)
+{
+	int i = sstr->size - 1;
+	while (i >= 0) {
+		if (sstr->data[i] == '.') {
+			i--;
+			continue;
+		}
+		if (sstr->data[i] == '9') {
+			sstr->data[i] = '0';
+		} else {
+			sstr->data[i] += 1;
+			break;
+		}
+		i--;
+	}
+	if (i < 0) {
+		push_sstring(sstr, '1');
+	}
 }
+
+
+t_sstring double_to_sstring(double nbr, int precision)
+{
+	t_sstring	sstr = empty_sstring();
+	int			int_part = 0;
+	double		decimal_part = (double)0;
+
+	/* handle neg */
+	if (nbr < 0) {
+		push_sstring(&sstr, '-');
+		nbr = -nbr;
+	}
+
+	/* Store int and double part */
+	int_part = (int)nbr;
+	decimal_part = nbr - (double)int_part;
+	
+	/* Store integer part */
+	char *tmp = ft_itoa(int_part);
+	if (tmp) {
+		concat_sstring(&sstr, tmp);
+		free(tmp);
+	}
+
+	/* Store point and float part */
+	if (decimal_part > (double)0.0) {
+		push_sstring(&sstr, '.');
+		for (int i = 0; i < precision + 1; ++i) {
+			decimal_part *= 10;
+			push_sstring(&sstr, (int)decimal_part + '0');
+			decimal_part -= (int)decimal_part;
+		}
+	}
+
+	/* Round and pop last value used for rounded */
+	if (sstr.data[sstr.size - 1] >= '5') {
+		round_double_sstring(&sstr);
+	}
+	pop_sstring(&sstr);
+
+	return (sstr);
+}
+
+static void ft_put_float_double_nbr(double nbr, int *count, int fd)  {
+	*count += ft_printf_fd(fd, "%s", double_to_sstring(nbr, 6).data);
+}
+
+// static void test(int nb){
+// }
+
 static int ft_continue_display(const char *s, int i, va_list params, int fd)
 {
 	int nb;

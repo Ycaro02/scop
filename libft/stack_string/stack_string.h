@@ -56,6 +56,12 @@ void        clear_sstring(t_sstring *sstr);
 void        push_sstring(t_sstring *sstr, char c);
 
 /**
+ * @brief Pop a char from a stack string
+ * @param sstr Pointer on the stack string to pop the char from
+*/
+void		pop_sstring(t_sstring *sstr);
+
+/**
  * @brief Concatenate a string to a stack string
  * @param sstr Pointer on the stack string to concatenate the string to
  * @param str The string to concatenate

@@ -38,7 +38,7 @@ void push_sstring(t_sstring *sstr, char c)
 {
     if (sstr->size < SSTRING_MAX) {
         sstr->data[sstr->size] = c;
-        sstr->size++;
+        sstr->size += 1;
         sstr->data[sstr->size] = 0;
     }
 }
@@ -52,4 +52,12 @@ void concat_sstring(t_sstring *sstr, char *str)
         sstr->size += len;
         sstr->data[sstr->size] = 0;
     }
+}
+
+void pop_sstring(t_sstring *sstr)
+{
+	if (sstr->size > 0) {
+		sstr->size -= 1;
+		sstr->data[sstr->size] = 0;
+	}
 }

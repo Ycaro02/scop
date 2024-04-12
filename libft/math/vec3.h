@@ -6,7 +6,7 @@
 /*   By: nfour <nfour@student.42angouleme.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 15:43:13 by nfour             #+#    #+#             */
-/*   Updated: 2024/04/11 15:46:01 by nfour            ###   ########.fr       */
+/*   Updated: 2024/04/12 17:12:09 by nfour            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 #define DEFINE_VECTOR3_HEADER
 
 #include <sys/types.h>
-// #include <stdio.h>
 
 /*
  *	This header file provides macros and structures for handling 3D vectors of various data types.
