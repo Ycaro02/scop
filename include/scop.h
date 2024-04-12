@@ -3,6 +3,9 @@
 
 #include "../libft/libft.h"
 
+#include "../glad_gen/include/glad/gl.h"
+
+#include "../include/glfw3.h"
 
 enum e_obj_token {
 	ENUM_UNKNOWN=0,

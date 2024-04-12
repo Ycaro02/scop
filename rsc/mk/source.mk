@@ -4,10 +4,13 @@ SRC_DIR 		=	src
 
 PARSER_DIR		=	parser
 
+GLAD_DIR		=	glad
+
 MAIN_MANDATORY 	=	main_opengl.c
 
 SRCS			=	parser/obj_parse.c\
 					parser/load_file.c\
+					glad/gl.c\
 
 
 # SRCS_BONUS		=	main_bonus.c
@@ -24,7 +27,7 @@ OBJS 			= $(addprefix $(OBJ_DIR)/, $(SRCS:.c=.o))
 
 RM			=	rm -rf
 
-ALL_DIR		= $(OBJ_DIR) $(OBJ_DIR)/$(PARSER_DIR)
+ALL_DIR		= $(OBJ_DIR) $(OBJ_DIR)/$(PARSER_DIR) $(OBJ_DIR)/${GLAD_DIR}
 
 ifeq ($(findstring bonus, $(MAKECMDGOALS)), bonus)
 ASCII_NAME	= "bonus"

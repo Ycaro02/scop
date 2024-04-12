@@ -1,9 +1,17 @@
-#include "../include/glfw3.h"
-#include "../libft/libft.h"
+#include "../include/scop.h"
+
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode) {
+	(void)scancode, (void)mode;
+    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
+        glfwSetWindowShouldClose(window, GL_TRUE);
+	}
+}
 
 GLFWwindow *init_glfw() 
 {
     GLFWwindow *win;
+	int version = 0;
+
 
     if (!glfwInit())
         return (NULL);
@@ -12,6 +20,17 @@ GLFWwindow *init_glfw()
         return (NULL);
     }
     glfwMakeContextCurrent(win);
+
+	glfwSetKeyCallback(win, key_callback);
+
+ 	if (!(version = gladLoaderLoadGL())) {
+        ft_printf_fd(2, "Error: Failed to initialize Glad\n");
+        glfwDestroyWindow(win);
+        glfwTerminate();
+        return NULL;
+    }
+	ft_printf_fd(1, "GL %d.%d\n", GLAD_VERSION_MAJOR(version), GLAD_VERSION_MINOR(version));
+
     return (win);
 }
 
