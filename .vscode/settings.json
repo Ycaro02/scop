@@ -7,7 +7,8 @@
 		"vec3.h": "c",
 		"linked_list.h": "c",
 		"libft.h": "c",
-		"glfw3.h": "c"
+		"glfw3.h": "c",
+		"gl.h": "c"
 	},
 	"42header.email": "nfour@student.42angouleme.fr",
 	"42header.username": "nfour"

@@ -2,10 +2,11 @@
 #define SCOP_HEADER_H
 
 #include "../libft/libft.h"
-
 #include "../glad_gen/include/glad/gl.h"
-
 #include "../include/glfw3.h"
+
+#define SCREEN_WIDTH 800
+#define SCREEN_HEIGHT 600
 
 enum e_obj_token {
 	ENUM_UNKNOWN=0,
