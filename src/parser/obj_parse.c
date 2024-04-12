@@ -269,6 +269,22 @@ static u8 handle_line_by_token(t_obj_file *file, char **line, u16 token)
 }
 
 
+t_vec3_float	*vertex_list_toarray(t_list *lst, u32 lst_size) 
+{
+	u32 i = 0;
+	t_vec3_float *array = ft_calloc(sizeof(t_vec3_float), lst_size);
+
+	if (!array) {
+		ft_printf_fd(2, RED"Error: Malloc failed\n"RESET);
+		return (NULL);
+	}
+	for (t_list *current = lst; current; current = current->next) {
+		ft_memcpy(&array[i], current->content, sizeof(t_vec3_float));
+		i++;
+	}
+	return (array);
+}
+
 void  display_vertex_lst(t_list *lst)
 {
 	ft_printf_fd(1, "Vertex list\n");
@@ -279,8 +295,15 @@ void  display_vertex_lst(t_list *lst)
 }
 
 
+void free_obj_model(t_obj_model *model)
+{
+	if (model->vertex) {
+		free(model->vertex);
+	}
+	free(model);
+}
 
-int8_t parse_obj_file(char *path)
+t_obj_model *parse_obj_file(char *path)
 {
 	t_obj_file obj;
 	char **file = NULL;
@@ -298,40 +321,30 @@ int8_t parse_obj_file(char *path)
 			if ((token = is_valid_token(trim[0])) == 0) {
 				ft_printf_fd(2, RED"Error: Invalid token %s\n"RESET, trim[0]);
 				free_double_char(trim);
-				return (0);
+				return (NULL);
 			}
 			handle_line_by_token(&obj, trim, token);
 			free_double_char(trim);
 		}
 	}
-	vertext_list_toarray(obj.vertex, ft_lstsize(obj.vertex));
+
+	t_obj_model *model = ft_calloc(1, sizeof(t_obj_model));
+	if (!model) {
+		ft_printf_fd(2, RED"Error: Malloc failed\n"RESET);
+		free_obj_file(&obj);
+		free_double_char(file);
+		return (NULL);
+	}
+
+	model->vertex = vertex_list_toarray(obj.vertex, ft_lstsize(obj.vertex));
+	model->v_size = ft_lstsize(obj.vertex);
 
 	free_obj_file(&obj);
 	free_double_char(file);
-	return (1);
+	return (model);
 }
 
-t_vec3_float *vertext_list_toarray(t_list *lst, u32 lst_size)
-{
-	t_vec3_float	*array = ft_calloc(sizeof(t_vec3_float), lst_size);
-	u32				i = 0;
-	
-	if (!array) {
-		return (NULL);
-	}
-	for (t_list *current = lst; current; current = current->next) {
-		// array[i] = *(t_vec3_float *)current->content;
-		ft_memcpy(&array[i], current->content, sizeof(t_vec3_float));
-		i++;
-	}
 
-	ft_printf_fd(1, "Vertex list to array\n");
-	for (i = 0; i < lst_size; i++) {
-		DISPLAY_VEC3(float, array[i]);
-	}
-
-	return (array);
-}
 
 // static void init_gl_vertex_buffer(t_obj_file *obj)
 // {

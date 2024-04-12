@@ -56,12 +56,15 @@ int main(int argc, char **argv)
     
 	(void)argc, (void)argv;
 
-	if (!parse_obj_file("rsc/42.obj")) {
+	t_obj_model *model = parse_obj_file("rsc/42.obj");
+
+	if (!model) {
 		ft_printf_fd(2, "Error parse 42.obj\n");
 		return (1);
 	}
 
-
+	free_obj_model(model);
+	exit(1);
 
     win = init_glfw();
     if (!win) {

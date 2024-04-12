@@ -53,7 +53,7 @@ typedef struct s_obj_file {
 	char	*o;				/* The name of the object */
 	char	*mtllib;		/* The name of the material file associated with the object */
 	char	*usemtl;		/* The name of the material to be used for the subsequent faces of the object */
-	t_list	*vertex;				/* The coordinates of a 3D vertex, list of t_vec3_float */
+	t_list	*vertex;		/* The coordinates of a 3D vertex, list of t_vec3_float */
 	t_list	*vt;			/* The texture coordinates associated with a vertex, list of vec2/vec3 float */
 	t_list	*vn;			/* The coordinates of the normal vector associated with a vertex, list of t_vec3_float */
 	t_list	*face;				/* The indices of the vertices composing a face, list t_fnode */
@@ -61,12 +61,27 @@ typedef struct s_obj_file {
 } t_obj_file;
 
 
+typedef struct s_obj_model {
+	t_vec3_float	*vertex;	/* vertex array */
+	u32				v_size;		/* vertex size */
+	// t_obj_file	*obj;		/* obj file structure */
+	// u32			vt_size;		/* texture size */
+	// u32			vn_size;		/* normal size */
+	// u32			f_size;			/* face size */
+	// t_vec3_float	*vt;		/* texture array */
+	// t_vec3_float	*vn;		/* normal array */
+	// t_face_node	*face;		/* face array */
+	// u8			smooth;		/* The smoothing group state. 'on' to activate, 'off' to deactivate. 1 for true, otherwise 0*/
+}	t_obj_model;
+
 /* parser/load_file.c */
 char	**ft_split_trim(char const *str, char c);
 char	**load_file(char *path);
 
 /* parser/parse_obj_file.c */
-int8_t			parse_obj_file(char *path);
-t_vec3_float	*vertext_list_toarray(t_list *lst, u32 lst_size);
+t_obj_model		*parse_obj_file(char *path);
+t_vec3_float	*vertex_list_toarray(t_list *lst, u32 lst_size);
+
+void free_obj_model(t_obj_model *model);
 
 #endif /* SCOP_HEADER_H */
