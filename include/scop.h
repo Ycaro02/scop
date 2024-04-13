@@ -99,6 +99,8 @@ u8				line_to_face(t_obj_file *file, char **line);
 t_vec3_u32		line_to_vec3_u32(char **line, u32 *other_val);
 
 
-
+/* main to move */
+void check_struct_size(char *str_test, u32 struct_size, u32 wanted_size);
+t_list *quadra_to_triangle(t_list *face_node_lst);
 
 #endif /* SCOP_HEADER_H */

@@ -12,6 +12,7 @@ SRCS			=	parser/obj_parse.c\
 					parser/load_file.c\
 					parser/parse_line.c\
 					parser/build_obj_model.c\
+					parser/face_handling.c\
 					glad/gl.c\
 
 
