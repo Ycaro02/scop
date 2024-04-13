@@ -103,9 +103,57 @@ void init_gl_vertex_buffer(t_obj_model *model)
 	GLuint vbo;
 	glGenBuffers(1, &vbo);
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(t_vec3_float) * model->v_size
+	glBufferData(GL_ARRAY_BUFFER, sizeof(t_vec3_float) * model->v_size\
 		, model->vertex, GL_STATIC_DRAW);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(t_vec3_float), (void*)0);
-	print_vertex_data(model);
+	
+	// print_vertex_data(model);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);  /* unbind */
 }
 
+void init_gl_index_buffer(t_obj_model *model)
+{
+	GLuint ebo;
+	glGenBuffers(1, &ebo);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(t_vec3_u32) * model->tri_size\
+		, model->tri_face, GL_STATIC_DRAW);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);  /* unbind */
+}
+
+void load_shader()
+{
+	const char *vertex_shader = "#version 330 core\nlayout(location = 0) in vec3 aPos;\nvoid main() {\n gl_Position = vec4(aPos, 1.0);\n}";
+	const char *fragment_shader = "#version 330 core\nout vec4 FragColor;\nvoid main() {\nFragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n}";
+	/* create shader */
+	GLuint vertex_shader_id = glCreateShader(GL_VERTEX_SHADER);
+	GLuint fragment_shader_id = glCreateShader(GL_FRAGMENT_SHADER);
+
+	/* compile shader */
+	glShaderSource(vertex_shader_id, 1, &vertex_shader, NULL);
+	glCompileShader(vertex_shader_id);
+	glShaderSource(fragment_shader_id, 1, &fragment_shader, NULL);
+	glCompileShader(fragment_shader_id);
+
+	GLuint shader_program = glCreateProgram();
+	
+	/* Attach and link shader program  */
+	glAttachShader(shader_program, vertex_shader_id);
+	glAttachShader(shader_program, fragment_shader_id);
+	glLinkProgram(shader_program);
+
+	glUseProgram(shader_program);
+
+	/* delete ressource */
+	glDeleteShader(vertex_shader_id);
+	glDeleteShader(fragment_shader_id);
+}
+
+void draw_obj_model()
+{
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+}
+
+// glBindVertexArray(VAO);
+// glDrawElements(GL_TRIANGLES, /* nombre d'indices */, GL_UNSIGNED_INT, 0);
