@@ -189,9 +189,7 @@ t_obj_model *parse_obj_file(char *path)
 	}
 	free_double_char(file);
 
-
 	t_obj_model *model = init_obj_model(&obj);
-
 
 	return (model);
 }

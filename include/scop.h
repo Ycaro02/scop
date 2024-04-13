@@ -64,8 +64,8 @@ typedef struct s_obj_file {
 typedef struct s_obj_model {
 	t_vec3_float	*vertex;	/* vertex array */
 	u32				v_size;		/* vertex size */
-	u32				*tri_face;	/* face array */
-	u32				f_size;		/* face size */
+	t_vec3_u32		*tri_face;	/* face array */
+	u32				tri_size;		/* face size */
 	// t_obj_file	*obj;		/* obj file structure */
 	// u32			vt_size;		/* texture size */
 	// u32			vn_size;		/* normal size */
@@ -89,7 +89,7 @@ void			display_vertex_lst(t_list *lst);
 void			free_obj_model(t_obj_model *model);
 t_obj_model		*init_obj_model(t_obj_file *obj_file);
 void init_gl_vertex_buffer(t_obj_model *model);
-
+t_list *quadra_to_triangle(t_list *face_node_lst);
 
 /* parser/parse_line.c  */
 u8				handle_smooth_str(char *str);
@@ -97,7 +97,6 @@ void			free_obj_model(t_obj_model *model);
 t_vec3_float	*line_to_vertex_node(char **line);
 u8				line_to_face(t_obj_file *file, char **line);
 t_vec3_u32		line_to_vec3_u32(char **line, u32 *other_val);
-
 
 
 
