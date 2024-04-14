@@ -78,6 +78,8 @@ t_camera create_camera_view(t_obj_model *model)
 	GLint projectionLoc = glGetUniformLocation(model->vertex_shader_id, "projection");
 	glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, (GLfloat*)projection);
 
+
+	/* Debug brut display */
 	for (u32 i = 0; i < 16; i++) {
 		GLfloat *view = ((GLfloat *)camera.view) + i;
 		GLfloat *identity = ((GLfloat *)(model->identity_mat4)) + i;

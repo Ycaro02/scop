@@ -51,6 +51,12 @@ enum e_obj_token {
 */
 #define TOKEN_FACE	"f"
 
+/* need to go in utils/math */
+typedef struct s_mat4 {
+	t_vec4_float mat[4];
+} t_mat4;
+
+/* Camera in implementation */
 typedef struct s_camera {
 	t_vec4_float	view[4];
 	t_vec3_float	pos;
@@ -58,6 +64,7 @@ typedef struct s_camera {
 	t_vec3_float	up;
 } t_camera;
 
+/* Node used only for parse */
 typedef struct s_face_node {
 	t_vec3_u32 	vec;				/* vec3 uint32 for 3 first val */
 	u32			*other;				/* uin32_t int array aloc for other value if needed otherwise NULL */
