@@ -1,6 +1,8 @@
 #ifndef SCOP_HEADER_H
 #define SCOP_HEADER_H
 
+#include <math.h>
+
 #include "../libft/libft.h"
 
 #include "../glad_gen/include/glad/gl.h" /* include glad header before glfw3 */
@@ -43,6 +45,12 @@ enum e_obj_token {
  *	Nb Value: variable (3 or more)
 */
 #define TOKEN_FACE	"f"
+
+typedef struct s_camera {
+	t_vec3_float	pos;
+	t_vec3_float	dir;
+	t_vec3_float	up;
+} t_camera;
 
 typedef struct s_face_node {
 	t_vec3_u32 	vec;				/* vec3 uint32 for 3 first val */

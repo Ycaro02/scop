@@ -185,3 +185,33 @@ GLuint init_gl_triangle_array(t_obj_model *model)
 	// glDrawElements(GL_TRIANGLES, model->tri_size, GL_UNSIGNED_INT, 0);
 	// glBindVertexArray(0);
 }
+
+/* Vectoriel product */
+t_vec3_float cross_vec3(t_vec3_float a, t_vec3_float b) {
+	t_vec3_float result;
+	result.x = a.y * b.z - a.z * b.y;
+	result.y = a.z * b.x - a.x * b.z;
+	result.z = a.x * b.y - a.y * b.x;
+	return (result);
+}
+
+t_vec3_float normalize(t_vec3_float v) {
+    float len = sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
+	if (len == (float)0) {
+		ft_printf_fd(1, RED"Error: Normalize by 0\n"RESET);
+		return (v);
+	}
+    t_vec3_float result;
+    result.x = v.x / len;
+    result.y = v.y / len;
+    result.z = v.z / len;
+    return result;
+}
+
+// t_camera create_camera_view() {
+// 	t_camera camera = {0};
+// 	t_vec3_float front = {0.0f, 0.0f, 3.0f};
+// 	t_vec3_float dir = {0.0f, 0.0f, -1.0f};
+// 	t_vec3_float up = {0.0f, 1.0f, 0.0f};
+	
+// }
