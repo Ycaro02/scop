@@ -125,20 +125,41 @@ void print_vertex_data(t_obj_model *model) {
 
 
 
+char *load_shader_file(char *path)
+{
+	char **file = load_file(path);
+	char *shader_src = ft_strdup("");
+
+
+	if (!file) {
+		ft_printf_fd(2, RED"Error: Failed to load shader file\n"RESET);
+		return (NULL);
+	}
+	for (u32 i = 0; file[i]; ++i) {
+		shader_src = ft_strjoin_free(shader_src, file[i], 'f');
+		shader_src = ft_strjoin_free(shader_src, "\n", 'f');
+	}
+
+	free_double_char(file);
+
+	ft_printf_fd(1, "Shader src: %s\n", shader_src);
+	return (shader_src);
+}
 
 void load_shader(t_obj_model *model)
 {
-	const char *vertex_shader = "#version 330 core\nlayout (location = 0) in vec3 aPos;\nuniform mat4 model;\nuniform mat4 view;\nuniform mat4 projection;\nvoid main()\n{gl_Position = projection * view * model * vec4(aPos, 1.0);}";
-	// const char *vertex_shader = "#version 330 core\nlayout(location = 0) in vec3 aPos;\nvoid main() {\n gl_Position = vec4(aPos, 1.0);\n}";
-	const char *fragment_shader = "#version 330 core\nout vec4 FragColor;\nvoid main() {\nFragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n}";
+	// const char *vertex_shader = "#version 330 core\nlayout (location = 0) in vec3 aPos;\nuniform mat4 model;\nuniform mat4 view;\nuniform mat4 projection;\nvoid main()\n{gl_Position = projection * view * model * vec4(aPos, 1.0);}";
+	char *vertex_shader = load_shader_file(VERTEX_SHADER_PATH);
+	char *fragment_shader = load_shader_file(FRAGMENT_SHADER_PATH);
+	
 	/* create shader */
 	model->vertex_shader_id = glCreateShader(GL_VERTEX_SHADER);
 	GLuint fragment_shader_id = glCreateShader(GL_FRAGMENT_SHADER);
 
 	/* compile shader */
-	glShaderSource(model->vertex_shader_id, 1, &vertex_shader, NULL);
+	glShaderSource(model->vertex_shader_id, 1, (const char **)&vertex_shader, NULL);
 	glCompileShader(model->vertex_shader_id);
-	glShaderSource(fragment_shader_id, 1, &fragment_shader, NULL);
+	glShaderSource(fragment_shader_id, 1, (const char **)&fragment_shader, NULL);
 	glCompileShader(fragment_shader_id);
 
 	GLuint shader_program = glCreateProgram();
@@ -150,9 +171,13 @@ void load_shader(t_obj_model *model)
 
 	glUseProgram(shader_program);
 
-	/* delete ressource */
+	/* delete shader tocheck */
 	// glDeleteShader(vertex_shader_id);
-	glDeleteShader(fragment_shader_id);
+	// glDeleteShader(fragment_shader_id);
+
+	/* delete ressource */
+	free(vertex_shader);
+	free(fragment_shader);
 }
 
 GLuint init_gl_triangle_array(t_obj_model *model)

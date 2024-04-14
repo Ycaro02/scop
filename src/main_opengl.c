@@ -53,7 +53,7 @@ void main_loop(t_obj_model *model, GLuint vao, GLFWwindow *win)
         /* clear gl render context*/
         glClear(GL_COLOR_BUFFER_BIT);
 
-		create_camera_view(model->vertex_shader_id);
+		// create_camera_view(model->vertex_shader_id);
         /* Swap display buff with bg buff*/
 		glBindVertexArray(vao);
 		glDrawElements(GL_TRIANGLES, (model->tri_size * 3), GL_UNSIGNED_INT, 0);

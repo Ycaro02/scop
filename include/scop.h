@@ -9,6 +9,10 @@
 
 #include "../include/glfw3.h"
 
+
+#define VERTEX_SHADER_PATH "rsc/shaders/vertex_shader.glsl"
+#define FRAGMENT_SHADER_PATH "rsc/shaders/fragment_shader.glsl"
+
 #define SCREEN_WIDTH 1920
 #define SCREEN_HEIGHT 1080
 
