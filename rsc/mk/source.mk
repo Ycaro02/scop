@@ -6,6 +6,8 @@ PARSER_DIR		=	parser
 
 GLAD_DIR		=	glad
 
+RENDER_DIR		=	render
+
 MAIN_MANDATORY 	=	main_opengl.c
 
 SRCS			=	parser/obj_parse.c\
@@ -13,6 +15,8 @@ SRCS			=	parser/obj_parse.c\
 					parser/parse_line.c\
 					parser/build_obj_model.c\
 					parser/face_handling.c\
+					render/camera.c\
+					render/mat4.c\
 					glad/gl.c\
 
 
@@ -30,7 +34,7 @@ OBJS 			= $(addprefix $(OBJ_DIR)/, $(SRCS:.c=.o))
 
 RM			=	rm -rf
 
-ALL_DIR		= $(OBJ_DIR) $(OBJ_DIR)/$(PARSER_DIR) $(OBJ_DIR)/${GLAD_DIR}
+ALL_DIR		= $(OBJ_DIR) $(OBJ_DIR)/$(PARSER_DIR) $(OBJ_DIR)/${GLAD_DIR} $(OBJ_DIR)/${RENDER_DIR}
 
 ifeq ($(findstring bonus, $(MAKECMDGOALS)), bonus)
 ASCII_NAME	= "bonus"

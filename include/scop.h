@@ -121,11 +121,11 @@ t_vec3_u32		line_to_vec3_u32(char **line, u32 *other_val);
 void			check_struct_size(char *str_test, u32 struct_size, u32 wanted_size);
 t_list			*quadra_to_triangle(t_list *face_node_lst);
 
-
+/* render/camera */
 t_camera create_camera_view(t_obj_model *model);
 
 
-/*mat4*/
+/*render/mat4*/
 t_vec4_float *create_mat4(t_vec4_float a, t_vec4_float b, t_vec4_float c, t_vec4_float d);
 t_vec4_float *create_mat4_identity();
 
