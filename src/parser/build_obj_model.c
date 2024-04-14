@@ -173,6 +173,9 @@ GLuint init_gl_vertex_buffer(t_obj_model *model)
 	return (vbo);
 }
 
+/**
+ * @brief Print element buufer data (triangle give to opengl)
+*/
 void print_elem_data(t_obj_model *model) {
 	t_vec3_u32* bufferData = malloc(sizeof(t_vec3_u32) * model->tri_size);
 
@@ -216,9 +219,4 @@ void init_gl_triangle_array(t_obj_model *model)
     /* Unlink vao */
     glBindVertexArray(0);
 
-	// return (model->vao);
-	/* draw */
-	// glBindVertexArray(VAO);
-	// glDrawElements(GL_TRIANGLES, model->tri_size, GL_UNSIGNED_INT, 0);
-	// glBindVertexArray(0);
 }

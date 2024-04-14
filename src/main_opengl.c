@@ -39,7 +39,7 @@ GLFWwindow *init_glfw()
     }
 
 	glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);// glClearColor(200.0f, 0.0f, 0.0f, 1.0f);
+	// glClearColor(0.2f, 0.3f, 0.3f, 1.0f);// glClearColor(200.0f, 0.0f, 0.0f, 1.0f);
 	ft_printf_fd(1, "GL %d.%d\n", GLAD_VERSION_MAJOR(version), GLAD_VERSION_MINOR(version));
     return (win);
 }
@@ -102,6 +102,8 @@ int main(int argc, char **argv)
 	init_gl_triangle_array(model);
 	ft_printf_fd(1, "tri_size: %u\n", model->tri_size);
 
+
+	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
     main_loop(model, win);
 	free_obj_model(model);
