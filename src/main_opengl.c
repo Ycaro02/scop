@@ -47,12 +47,15 @@ GLFWwindow *init_glfw()
     return (win);
 }
 
-void main_loop(GLFWwindow *win) 
+void main_loop(t_obj_model *model, GLuint vao, GLFWwindow *win) 
 {
     while (!glfwWindowShouldClose(win)) {
         /* clear gl render context*/
         glClear(GL_COLOR_BUFFER_BIT);
         /* Swap display buff with bg buff*/
+		glBindVertexArray(vao);
+		glDrawElements(GL_TRIANGLES, (model->tri_size * 3), GL_UNSIGNED_INT, 0);
+		glBindVertexArray(0);
         glfwSwapBuffers(win);
         /* Event */
         glfwPollEvents();
@@ -84,8 +87,14 @@ int main(int argc, char **argv)
         return (1);
     }
 
-	init_gl_vertex_buffer(model);
-    main_loop(win);
+	// init_gl_vertex_buffer(model);
+	// init_gl_index_buffer(model);
+	// draw_obj_model(model->tri_size * 3);
+	load_shader();
+	GLuint vao = init_gl_triangle_array(model);
+
+
+    main_loop(model, vao, win);
 	free_obj_model(model);
 	glfw_destroy(win);
 	return (0);

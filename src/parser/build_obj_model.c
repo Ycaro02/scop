@@ -83,6 +83,8 @@ t_obj_model *init_obj_model(t_obj_file *obj_file)
 	model->tri_size = ft_lstsize(triangle_lst);
 
 
+	// load_shader();
+
 	free_obj_file(obj_file);
 	return (model);
 }
@@ -98,28 +100,29 @@ void print_vertex_data(t_obj_model *model) {
     free(bufferData);
 }
 
-void init_gl_vertex_buffer(t_obj_model *model)
-{
-	GLuint vbo;
-	glGenBuffers(1, &vbo);
-	glBindBuffer(GL_ARRAY_BUFFER, vbo);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(t_vec3_float) * model->v_size\
-		, model->vertex, GL_STATIC_DRAW);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(t_vec3_float), (void*)0);
+// void init_gl_vertex_buffer(t_obj_model *model)
+// {
+// 	GLuint vbo;
+// 	glGenBuffers(1, &vbo);
+// 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
+// 	glBufferData(GL_ARRAY_BUFFER, sizeof(t_vec3_float) * model->v_size
+// 		, model->vertex, GL_STATIC_DRAW);
+// 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(t_vec3_float), (void*)0);
 	
-	// print_vertex_data(model);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);  /* unbind */
-}
+// 	// print_vertex_data(model);
+// 	glBindBuffer(GL_ARRAY_BUFFER, 0);  /* unbind */
+// }
 
-void init_gl_index_buffer(t_obj_model *model)
-{
-	GLuint ebo;
-	glGenBuffers(1, &ebo);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(t_vec3_u32) * model->tri_size\
-		, model->tri_face, GL_STATIC_DRAW);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);  /* unbind */
-}
+// void init_gl_index_buffer(t_obj_model *model)
+// {
+// 	GLuint ebo;
+// 	glGenBuffers(1, &ebo);
+// 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
+// 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(t_vec3_u32) * model->tri_size
+// 		, model->tri_face, GL_STATIC_DRAW);
+// 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);  /* unbind */
+// }
+
 
 void load_shader()
 {
@@ -149,11 +152,36 @@ void load_shader()
 	glDeleteShader(fragment_shader_id);
 }
 
-void draw_obj_model()
+GLuint init_gl_triangle_array(t_obj_model *model)
 {
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-}
+	/* Create new vao */
+    GLuint VAO;
+    glGenVertexArrays(1, &VAO);
+    glBindVertexArray(VAO);
 
-// glBindVertexArray(VAO);
-// glDrawElements(GL_TRIANGLES, /* nombre d'indices */, GL_UNSIGNED_INT, 0);
+    /* create and fill vbo */
+    GLuint vbo;
+    glGenBuffers(1, &vbo);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(t_vec3_float) * model->v_size, model->vertex, GL_STATIC_DRAW);
+
+   /* Config new vertex attr */
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(t_vec3_float), (void*)0);
+    glEnableVertexAttribArray(0);  // N'oubliez pas d'activer l'attribut de vertex à l'index 0
+
+    /* create and fill ebo */
+    GLuint ebo;
+    glGenBuffers(1, &ebo);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(t_vec3_u32) * model->tri_size, model->tri_face, GL_STATIC_DRAW);
+
+    /* Unlink vao */
+    glBindVertexArray(0);
+	ft_printf_fd(1, "VAO: %u\n", VAO);
+
+	return (VAO);
+	/* draw */
+	// glBindVertexArray(VAO);
+	// glDrawElements(GL_TRIANGLES, model->tri_size, GL_UNSIGNED_INT, 0);
+	// glBindVertexArray(0);
+}

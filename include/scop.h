@@ -7,8 +7,8 @@
 
 #include "../include/glfw3.h"
 
-#define SCREEN_WIDTH 800
-#define SCREEN_HEIGHT 600
+#define SCREEN_WIDTH 1920
+#define SCREEN_HEIGHT 1080
 
 enum e_obj_token {
 	ENUM_UNKNOWN=0,
@@ -88,8 +88,11 @@ t_vec3_float	*vertex_list_toarray(t_list *lst, u32 lst_size);
 void			display_vertex_lst(t_list *lst);
 void			free_obj_model(t_obj_model *model);
 t_obj_model		*init_obj_model(t_obj_file *obj_file);
-void init_gl_vertex_buffer(t_obj_model *model);
-t_list *quadra_to_triangle(t_list *face_node_lst);
+t_list			*quadra_to_triangle(t_list *face_node_lst);
+void load_shader();
+GLuint init_gl_triangle_array(t_obj_model *model);
+// void			init_gl_vertex_buffer(t_obj_model *model);
+// void			draw_obj_model(GLuint nb_index);
 
 /* parser/parse_line.c  */
 u8				handle_smooth_str(char *str);
@@ -100,7 +103,7 @@ t_vec3_u32		line_to_vec3_u32(char **line, u32 *other_val);
 
 
 /* main to move */
-void check_struct_size(char *str_test, u32 struct_size, u32 wanted_size);
-t_list *quadra_to_triangle(t_list *face_node_lst);
+void			check_struct_size(char *str_test, u32 struct_size, u32 wanted_size);
+t_list			*quadra_to_triangle(t_list *face_node_lst);
 
 #endif /* SCOP_HEADER_H */
