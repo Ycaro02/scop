@@ -191,5 +191,9 @@ t_obj_model *parse_obj_file(char *path)
 
 	t_obj_model *model = init_obj_model(&obj);
 
+	model->identity_mat4 = create_mat4_identity();
+
+	// DISPLAY_VEC4(float, model->identity_mat4[0]);
+
 	return (model);
 }

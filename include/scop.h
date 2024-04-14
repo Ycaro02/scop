@@ -9,6 +9,7 @@
 
 #include "../include/glfw3.h"
 
+#define PI 3.14159265
 
 #define VERTEX_SHADER_PATH "rsc/shaders/vertex_shader.glsl"
 #define FRAGMENT_SHADER_PATH "rsc/shaders/fragment_shader.glsl"
@@ -74,11 +75,12 @@ typedef struct s_obj_file {
 } t_obj_file;
 
 typedef struct s_obj_model {
-	t_vec3_float	*vertex;	/* vertex array */
-	u32				v_size;		/* vertex size */
-	t_vec3_u32		*tri_face;	/* face array */
+	t_vec3_float	*vertex;		/* vertex array */
+	u32				v_size;			/* vertex size */
+	t_vec3_u32		*tri_face;		/* face array */
 	u32				tri_size;		/* face size */
 	GLuint			vertex_shader_id;
+	t_vec4_float	*identity_mat4;	/* identity matrix */
 	// t_obj_file	*obj;		/* obj file structure */
 	// u32			vt_size;		/* texture size */
 	// u32			vn_size;		/* normal size */
@@ -120,6 +122,11 @@ void			check_struct_size(char *str_test, u32 struct_size, u32 wanted_size);
 t_list			*quadra_to_triangle(t_list *face_node_lst);
 
 
-t_camera create_camera_view(GLuint vertex_shader_id);
+t_camera create_camera_view(t_obj_model *model);
+
+
+/*mat4*/
+t_vec4_float *create_mat4(t_vec4_float a, t_vec4_float b, t_vec4_float c, t_vec4_float d);
+t_vec4_float *create_mat4_identity();
 
 #endif /* SCOP_HEADER_H */

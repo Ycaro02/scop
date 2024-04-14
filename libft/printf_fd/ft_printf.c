@@ -6,7 +6,7 @@
 /*   By: nfour <nfour@student.42angouleme.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/05 09:57:22 by nfour             #+#    #+#             */
-/*   Updated: 2024/04/12 17:11:07 by nfour            ###   ########.fr       */
+/*   Updated: 2024/04/14 17:12:19 by nfour            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,11 @@ t_sstring double_to_sstring(double nbr, int precision)
 			decimal_part *= 10;
 			push_sstring(&sstr, (int)decimal_part + '0');
 			decimal_part -= (int)decimal_part;
+		}
+	} else {
+		push_sstring(&sstr, '.');
+		for (int i = 0; i < precision; ++i) {
+			push_sstring(&sstr, '0');
 		}
 	}
 
