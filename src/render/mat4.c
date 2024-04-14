@@ -1,5 +1,9 @@
 #include "../../include/scop.h"
 
+/**
+ * @brief Create a 4x4 matrix from 4 vectors of 4 float 
+ * @return pointer on allocated t_vec4_float
+*/
 t_vec4_float *create_mat4(t_vec4_float a, t_vec4_float b, t_vec4_float c, t_vec4_float d)
 {
 	t_vec4_float *vec = ft_calloc(4, sizeof(t_vec4_float));
@@ -14,6 +18,10 @@ t_vec4_float *create_mat4(t_vec4_float a, t_vec4_float b, t_vec4_float c, t_vec4
 	return (vec);
 }
 
+/**
+ * @brief Create a 4x4 identity matrix
+ * @return pointer on allocated t_vec4_float
+*/
 t_vec4_float *create_mat4_identity()
 {
 	t_vec4_float *vec = ft_calloc(4, sizeof(t_vec4_float));
@@ -26,12 +34,5 @@ t_vec4_float *create_mat4_identity()
 	vec[2] = CREATE_VEC4(float, 0.0, 0.0, 1.0, 0.0);
 	vec[3] = CREATE_VEC4(float, 0.0, 0.0, 0.0, 1.0);
 
-
-	ft_printf_fd(1, "identity = %d\n"PINK, vec[0].x);
-	DISPLAY_VEC4(float, vec[0]);
-	DISPLAY_VEC4(float, vec[1]);
-	DISPLAY_VEC4(float, vec[2]);
-	DISPLAY_VEC4(float, vec[3]);
-	ft_printf_fd(1, RESET);
 	return (vec);
 }

@@ -38,10 +38,8 @@ GLFWwindow *init_glfw()
         return NULL;
     }
 
-	// gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
-	
 	glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-	// glClearColor(200.0f, 0.0f, 0.0f, 1.0f);
+	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);// glClearColor(200.0f, 0.0f, 0.0f, 1.0f);
 	ft_printf_fd(1, "GL %d.%d\n", GLAD_VERSION_MAJOR(version), GLAD_VERSION_MINOR(version));
     return (win);
 }
@@ -52,8 +50,8 @@ void main_loop(t_obj_model *model, GLuint vao, GLFWwindow *win)
         /* clear gl render context*/
         glClear(GL_COLOR_BUFFER_BIT);
 
-		
-		create_camera_view(model);
+		/* Camera view need to work on */
+		// create_camera_view(model);
 		
 		/* Swap display buff with bg buff*/
 		glBindVertexArray(vao);

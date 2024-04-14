@@ -79,20 +79,17 @@ t_camera create_camera_view(t_obj_model *model)
 	glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, (GLfloat*)projection);
 
 	for (u32 i = 0; i < 16; i++) {
-		float *view = ((float *)camera.view) + i;
-		float *identity = ((float *)(model->identity_mat4)) + i;
-		float *model = ((float *)projection) + i;
+		GLfloat *view = ((GLfloat *)camera.view) + i;
+		GLfloat *identity = ((GLfloat *)(model->identity_mat4)) + i;
+		GLfloat *model = ((GLfloat *)projection) + i;
 
-		ft_printf_fd(1, ORANGE"view[%u]: %f\n"RESET, i, *view);
-		ft_printf_fd(1, CYAN"identity[%u]: %f\n"RESET, i, *identity);
-		ft_printf_fd(1, PINK"model[%u]: %f\n"RESET, i, *model);
+		ft_printf_fd(1, ORANGE"Idx[%u]view: %f,"RESET, i, *view);
+		ft_printf_fd(1, CYAN" identity: %f,"RESET, i, *identity);
+		ft_printf_fd(1, PINK" model: %f\n"RESET, i, *model);
 	}
 
 
-	for (u32 i = 0; i < 4; i++) {
-		// DISPLAY_VEC4(float, camera.view[i]);
-		DISPLAY_VEC4(float, model->identity_mat4[i]);
-	}
+
 
 	return (camera);
 }
