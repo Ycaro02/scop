@@ -14,8 +14,10 @@
 #define VERTEX_SHADER_PATH "rsc/shaders/vertex_shader.glsl"
 #define FRAGMENT_SHADER_PATH "rsc/shaders/fragment_shader.glsl"
 
-#define SCREEN_WIDTH 800
-#define SCREEN_HEIGHT 800
+#define NEW_VERTEX_SHADER "rsc/shaders/new_vertex_shader.glsl"
+
+#define SCREEN_WIDTH 600
+#define SCREEN_HEIGHT 600
 
 enum e_obj_token {
 	ENUM_UNKNOWN=0,
@@ -87,7 +89,6 @@ typedef struct s_obj_model {
 	u32				v_size;			/* vertex size */
 	t_vec3_u32		*tri_face;		/* face array */
 	u32				tri_size;		/* face size */
-	GLuint			vertex_shader_id;
 	t_vec4_float	*identity_mat4;	/* identity matrix */
 	GLuint			vao;			/* vertex array object */
 	GLuint			vbo;			/* vertex buffer object */

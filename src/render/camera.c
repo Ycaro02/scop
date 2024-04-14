@@ -1,6 +1,20 @@
 #include "../../include/scop.h"
 
 
+void display_brut_camera_data (t_camera *camera, t_obj_model *model, GLfloat *projection)
+{
+	for (u32 i = 0; i < 16; i++) {
+		GLfloat *view = ((GLfloat *)camera->view) + i;
+		GLfloat *identity = ((GLfloat *)(model->identity_mat4)) + i;
+		GLfloat *model = ((GLfloat *)projection) + i;
+
+		ft_printf_fd(1, ORANGE"Idx[%u]view: %f,"RESET, i, *view);
+		ft_printf_fd(1, CYAN" model: %f,"RESET, i, *identity);
+		ft_printf_fd(1, PINK" projection: %f\n"RESET, i, *model);
+	}
+}
+
+
 /* Vectoriel product */
 t_vec3_float cross_vec3(t_vec3_float a, t_vec3_float b) {
 	t_vec3_float result;
@@ -43,55 +57,90 @@ void create_perspective_projection_matrix(float matrix[16], float fov, float asp
     matrix[14] = -(2.0f * farPlane * nearPlane) / (farPlane - nearPlane); // colonne 4, ligne 3
 }
 
+/* scalar product between to vec3 float 	*/
+float dot_vec3(t_vec3_float v1, t_vec3_float v2) {
+    return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
+}
+
 t_camera create_camera_view(t_obj_model *model)
 {
-	t_camera camera = {0};
-	// t_vec3_float target = {0.0f, 0.0f, 0.0f}; /* target dir */
+    t_camera camera = {0};
 
-	camera.pos = CREATE_VEC3(float, 0.0f, 0.0f, 3.0f); /* camera pos */
-	camera.dir = CREATE_VEC3(float, 0.0f, 0.0f, -1.0f); /* camera dir */
-	camera.up = CREATE_VEC3(float, 0.0f, 1.0f, 0.0f); /* camera up */
+    camera.pos = CREATE_VEC3(float, 0.0f, 0.0f, 2.0f); /* camera pos */
+    camera.dir = CREATE_VEC3(float, 0.0f, 0.0f, -1.0f); /* camera dir */
+    camera.up = CREATE_VEC3(float, 0.0f, 1.0f, 0.0f); /* camera up */
 
-	DISPLAY_VEC3(float, camera.pos);
-	// t_vec3_float direction = normalize_flaot_vec3(SUB_VEC3(float, camera.pos, target));
-	t_vec3_float direction = normalize_flaot_vec3(camera.dir);
-	t_vec3_float right = normalize_flaot_vec3(cross_vec3(camera.up, direction));
-	t_vec3_float up = cross_vec3(direction, right);
+    t_vec3_float direction = normalize_flaot_vec3(camera.dir);
+    t_vec3_float right = normalize_flaot_vec3(cross_vec3(camera.up, direction));
+    t_vec3_float up = cross_vec3(direction, right);
 
+    camera.view[0] = CREATE_VEC4(float, right.x, right.y, right.z, -dot_vec3(right, camera.pos));
+    camera.view[1] = CREATE_VEC4(float, up.x, up.y, up.z, -dot_vec3(up, camera.pos));
+    camera.view[2] = CREATE_VEC4(float, direction.x, direction.y, direction.z, -dot_vec3(direction, camera.pos));
+    camera.view[3] = CREATE_VEC4(float, 0.0f, 0.0f, 0.0f, 1.0f);
 
-	camera.view[0] = CREATE_VEC4(float, right.x, right.y, right.z, 0.0f);
-	camera.view[1] = CREATE_VEC4(float, up.x, up.y, up.z, 0.0f);
-	camera.view[2] = CREATE_VEC4(float, direction.x, direction.y, direction.z, 0.0f);
-	camera.view[3] = CREATE_VEC4(float, -camera.pos.x, -camera.pos.y, -camera.pos.z, 1.0f);
+	glUseProgram(model->shader_id);
 
-	GLint viewLoc = glGetUniformLocation(model->vertex_shader_id, "view");
-	glUniformMatrix4fv(viewLoc, 1, GL_FALSE, (GLfloat*)camera.view);
+    GLint viewLoc = glGetUniformLocation(model->shader_id, "view");
+	if (viewLoc == -1)
+		ft_printf_fd(2, RED"Error: glGetUniformLocation view failed\n"RESET);
+    glUniformMatrix4fv(viewLoc, 1, GL_FALSE, (GLfloat*)camera.view);
 
-	GLint modelLoc = glGetUniformLocation(model->vertex_shader_id, "model");
-	glUniformMatrix4fv(modelLoc, 1, GL_FALSE, (GLfloat *)(model->identity_mat4));
+    GLint modelLoc = glGetUniformLocation(model->shader_id, "model");
+    glUniformMatrix4fv(modelLoc, 1, GL_FALSE, (GLfloat *)(model->identity_mat4));
 
-	float projection[16];
-	
-	create_perspective_projection_matrix(projection, 45.0f\
-		, (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, 0.1f, 100.0f);
+    float projection[16];
+    
+    create_perspective_projection_matrix(projection, 45.0f\
+        , (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, 0.1f, 100.0f);
 
-	GLint projectionLoc = glGetUniformLocation(model->vertex_shader_id, "projection");
-	glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, (GLfloat*)projection);
-
-
-	/* Debug brut display */
-	for (u32 i = 0; i < 16; i++) {
-		GLfloat *view = ((GLfloat *)camera.view) + i;
-		GLfloat *identity = ((GLfloat *)(model->identity_mat4)) + i;
-		GLfloat *model = ((GLfloat *)projection) + i;
-
-		ft_printf_fd(1, ORANGE"Idx[%u]view: %f,"RESET, i, *view);
-		ft_printf_fd(1, CYAN" identity: %f,"RESET, i, *identity);
-		ft_printf_fd(1, PINK" model: %f\n"RESET, i, *model);
-	}
+    GLint projLoc = glGetUniformLocation(model->shader_id, "projection");
+    glUniformMatrix4fv(projLoc, 1, GL_FALSE, (GLfloat*)projection);
 
 
+	display_brut_camera_data(&camera, model, projection);
 
-
-	return (camera);
+    return (camera);
 }
+
+
+// t_camera create_camera_view(t_obj_model *model)
+// {
+// 	t_camera camera = {0};
+// 	// t_vec3_float target = {0.0f, 0.0f, 0.0f}; /* target dir */
+
+// 	camera.pos = CREATE_VEC3(float, 0.0f, 0.0f, 3.0f); /* camera pos */
+// 	camera.dir = CREATE_VEC3(float, 0.0f, 0.0f, -1.0f); /* camera dir */
+// 	camera.up = CREATE_VEC3(float, 0.0f, 1.0f, 0.0f); /* camera up */
+
+// 	DISPLAY_VEC3(float, camera.pos);
+// 	// t_vec3_float direction = normalize_flaot_vec3(SUB_VEC3(float, camera.pos, target));
+// 	t_vec3_float direction = normalize_flaot_vec3(camera.dir);
+// 	t_vec3_float right = normalize_flaot_vec3(cross_vec3(camera.up, direction));
+// 	t_vec3_float up = cross_vec3(direction, right);
+
+
+// 	camera.view[0] = CREATE_VEC4(float, right.x, right.y, right.z, 0.0f);
+// 	camera.view[1] = CREATE_VEC4(float, up.x, up.y, up.z, 0.0f);
+// 	camera.view[2] = CREATE_VEC4(float, direction.x, direction.y, direction.z, 0.0f);
+// 	camera.view[3] = CREATE_VEC4(float, -camera.pos.x, -camera.pos.y, -camera.pos.z, 1.0f);
+
+// 	GLint viewLoc = glGetUniformLocation(model->shader_id, "view");
+// 	glUniformMatrix4fv(viewLoc, 1, GL_FALSE, (GLfloat*)camera.view);
+
+// 	GLint modelLoc = glGetUniformLocation(model->shader_id, "model");
+// 	glUniformMatrix4fv(modelLoc, 1, GL_FALSE, (GLfloat *)(model->identity_mat4));
+
+// 	float projection[16];
+	
+// 	create_perspective_projection_matrix(projection, 45.0f
+// 		, (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, 0.1f, 100.0f);
+
+// 	GLint projectionLoc = glGetUniformLocation(model->shader_id, "projection");
+// 	glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, (GLfloat*)projection);
+
+
+
+
+// 	return (camera);
+// }

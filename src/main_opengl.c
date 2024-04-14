@@ -69,10 +69,12 @@ void main_loop(t_obj_model *model, GLFWwindow *win)
         glClear(GL_COLOR_BUFFER_BIT);
 
 		/* Camera view need to work on */
-		// create_camera_view(model);
 		set_shader_var_vec4(model->shader_id, "myColor", (t_vec4_float){0.0f, 0.7f, 0.7f, 1.0f});
 
+		create_camera_view(model);
+
 		glUseProgram(model->shader_id);
+
 		glBindVertexArray(model->vao);
 	
 		// glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, model->ebo);

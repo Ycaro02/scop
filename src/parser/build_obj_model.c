@@ -127,36 +127,50 @@ char *load_shader_file(char *path)
 GLuint load_shader(t_obj_model *model)
 {
 	// const char *vertex_shader = "#version 330 core\nlayout (location = 0) in vec3 aPos;\nuniform mat4 model;\nuniform mat4 view;\nuniform mat4 projection;\nvoid main()\n{gl_Position = projection * view * model * vec4(aPos, 1.0);}";
-	char *vertex_shader = load_shader_file(VERTEX_SHADER_PATH);
+	// char *vertex_shader = load_shader_file(VERTEX_SHADER_PATH);
+	char *vertex_shader = load_shader_file(NEW_VERTEX_SHADER);
+	
 	char *fragment_shader = load_shader_file(FRAGMENT_SHADER_PATH);
 	
 	/* create shader */
-	model->vertex_shader_id = glCreateShader(GL_VERTEX_SHADER);
-	GLuint fragment_shader_id = glCreateShader(GL_FRAGMENT_SHADER);
+	GLuint frag_vertex_shader = glCreateShader(GL_VERTEX_SHADER);
+	GLuint frag_pixel_shader = glCreateShader(GL_FRAGMENT_SHADER);
 
 	/* compile shader */
-	glShaderSource(model->vertex_shader_id, 1, (const char **)&vertex_shader, NULL);
-	glCompileShader(model->vertex_shader_id);
-	glShaderSource(fragment_shader_id, 1, (const char **)&fragment_shader, NULL);
-	glCompileShader(fragment_shader_id);
+	glShaderSource(frag_vertex_shader, 1, (const char **)&vertex_shader, NULL);
+	glCompileShader(frag_vertex_shader);
 
-	GLuint shader_program = glCreateProgram();
+	glShaderSource(frag_pixel_shader, 1, (const char **)&fragment_shader, NULL);
+	glCompileShader(frag_pixel_shader);
+
+	model->shader_id = glCreateProgram();
 	
 	/* Attach and link shader program  */
-	glAttachShader(shader_program, model->vertex_shader_id);
-	glAttachShader(shader_program, fragment_shader_id);
-	glLinkProgram(shader_program);
+	glAttachShader(model->shader_id , frag_vertex_shader);
+	glAttachShader(model->shader_id , frag_pixel_shader);
+	glLinkProgram(model->shader_id );
 
-	glUseProgram(shader_program);
+	GLint succes = 0;
+	glGetProgramiv(model->shader_id , GL_LINK_STATUS, &succes);
+	if (!succes) {
+		GLchar data[1024];
+		ft_bzero(data, 1024);
+		glGetProgramInfoLog(model->shader_id , 512, NULL, data);
+		ft_printf_fd(2, "Shader program log: %s\n", data);
+	} else {
+		ft_printf_fd(1, "Shader program linked\n");
+	}
+
+	glUseProgram(model->shader_id);
 
 	/* delete shader tocheck */
-	// glDeleteShader(vertex_shader_id);
-	// glDeleteShader(fragment_shader_id);
+	// glDeleteShader(frag_vertex_shader);
+	// glDeleteShader(frag_pixel_shader);
 
 	/* delete ressource */
 	free(vertex_shader);
 	free(fragment_shader);
-	return (shader_program);
+	return (model->shader_id);
 }
 
 
