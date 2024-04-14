@@ -44,7 +44,7 @@ GLFWwindow *init_glfw()
     return (win);
 }
 
-void main_loop(t_obj_model *model, GLuint vao, GLFWwindow *win) 
+void main_loop(t_obj_model *model, GLFWwindow *win) 
 {
     while (!glfwWindowShouldClose(win)) {
         /* clear gl render context*/
@@ -54,7 +54,7 @@ void main_loop(t_obj_model *model, GLuint vao, GLFWwindow *win)
 		// create_camera_view(model);
 		
 		glUseProgram(model->shader_id);
-		glBindVertexArray(vao);
+		glBindVertexArray(model->vao);
 	
 		// glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, model->ebo);
 	
@@ -103,7 +103,7 @@ int main(int argc, char **argv)
 	ft_printf_fd(1, "tri_size: %u\n", model->tri_size);
 
 
-    main_loop(model, model->vao, win);
+    main_loop(model, win);
 	free_obj_model(model);
 	glfw_destroy(win);
 	return (0);
