@@ -14,8 +14,8 @@
 #define VERTEX_SHADER_PATH "rsc/shaders/vertex_shader.glsl"
 #define FRAGMENT_SHADER_PATH "rsc/shaders/fragment_shader.glsl"
 
-#define SCREEN_WIDTH 1920
-#define SCREEN_HEIGHT 1080
+#define SCREEN_WIDTH 800
+#define SCREEN_HEIGHT 800
 
 enum e_obj_token {
 	ENUM_UNKNOWN=0,
@@ -63,6 +63,7 @@ typedef struct s_face_node {
 	u32			*other;				/* uin32_t int array aloc for other value if needed otherwise NULL */
 } t_face_node;
 
+/* Brut parsing structure */
 typedef struct s_obj_file {
 	char	*o;				/* The name of the object */
 	char	*mtllib;		/* The name of the material file associated with the object */
@@ -81,6 +82,10 @@ typedef struct s_obj_model {
 	u32				tri_size;		/* face size */
 	GLuint			vertex_shader_id;
 	t_vec4_float	*identity_mat4;	/* identity matrix */
+	GLuint			vao;			/* vertex array object */
+	GLuint			vbo;			/* vertex buffer object */
+	GLuint			ebo;			/* element buffer object */
+	GLuint			shader_id;		/* shader program id */
 	// t_obj_file	*obj;		/* obj file structure */
 	// u32			vt_size;		/* texture size */
 	// u32			vn_size;		/* normal size */
@@ -104,10 +109,8 @@ void			display_vertex_lst(t_list *lst);
 void			free_obj_model(t_obj_model *model);
 t_obj_model		*init_obj_model(t_obj_file *obj_file);
 t_list			*quadra_to_triangle(t_list *face_node_lst);
-void load_shader(t_obj_model *model);
-GLuint init_gl_triangle_array(t_obj_model *model);
-// void			init_gl_vertex_buffer(t_obj_model *model);
-// void			draw_obj_model(GLuint nb_index);
+GLuint			load_shader(t_obj_model *model);
+void			init_gl_triangle_array(t_obj_model *model);
 
 /* parser/parse_line.c  */
 u8				handle_smooth_str(char *str);

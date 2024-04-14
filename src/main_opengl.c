@@ -53,11 +53,18 @@ void main_loop(t_obj_model *model, GLuint vao, GLFWwindow *win)
 		/* Camera view need to work on */
 		// create_camera_view(model);
 		
-		/* Swap display buff with bg buff*/
+		glUseProgram(model->shader_id);
 		glBindVertexArray(vao);
+	
+		// glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, model->ebo);
+	
 		glDrawElements(GL_TRIANGLES, (model->tri_size * 3), GL_UNSIGNED_INT, 0);
+		
+		/* unbind vertex array */
 		glBindVertexArray(0);
-        glfwSwapBuffers(win);
+        
+		/* swap buff to display */
+		glfwSwapBuffers(win);
         /* Event */
         glfwPollEvents();
     }
@@ -91,11 +98,12 @@ int main(int argc, char **argv)
 	// init_gl_vertex_buffer(model);
 	// init_gl_index_buffer(model);
 	// draw_obj_model(model->tri_size * 3);
-	load_shader(model);
-	GLuint vao = init_gl_triangle_array(model);
+	model->shader_id = load_shader(model);
+	init_gl_triangle_array(model);
+	ft_printf_fd(1, "tri_size: %u\n", model->tri_size);
 
 
-    main_loop(model, vao, win);
+    main_loop(model, model->vao, win);
 	free_obj_model(model);
 	glfw_destroy(win);
 	return (0);

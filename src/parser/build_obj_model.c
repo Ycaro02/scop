@@ -124,7 +124,7 @@ char *load_shader_file(char *path)
 	return (shader_src);
 }
 
-void load_shader(t_obj_model *model)
+GLuint load_shader(t_obj_model *model)
 {
 	// const char *vertex_shader = "#version 330 core\nlayout (location = 0) in vec3 aPos;\nuniform mat4 model;\nuniform mat4 view;\nuniform mat4 projection;\nvoid main()\n{gl_Position = projection * view * model * vec4(aPos, 1.0);}";
 	char *vertex_shader = load_shader_file(VERTEX_SHADER_PATH);
@@ -156,6 +156,7 @@ void load_shader(t_obj_model *model)
 	/* delete ressource */
 	free(vertex_shader);
 	free(fragment_shader);
+	return (shader_program);
 }
 
 
@@ -167,11 +168,8 @@ GLuint init_gl_vertex_buffer(t_obj_model *model)
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(t_vec3_float) * model->v_size, model->vertex, GL_STATIC_DRAW);
 
-   /* Config new vertex attr */
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(t_vec3_float), (void*)0);
-	glEnableVertexAttribArray(0);  /* Enable vertex attr */
-	/*print here*/
-	print_vertex_data(model);
+  
+
 	return (vbo);
 }
 
@@ -191,26 +189,34 @@ void print_elem_data(t_obj_model *model) {
  * @param model obj model
  * @return vao uint value
 */
-GLuint init_gl_triangle_array(t_obj_model *model)
+void init_gl_triangle_array(t_obj_model *model)
 {
-	/* Create new vao */
-    GLuint vao;
-    glGenVertexArrays(1, &vao);
-    glBindVertexArray(vao);
+	/* Create new vao Vertex Array Object */
+    glGenVertexArrays(1, &model->vao);
+    glBindVertexArray(model->vao);
 
-	GLuint vbo = init_gl_vertex_buffer(model);
-	(void)vbo;
+	/* init Vertex Buffer Object */
+	model->vbo = init_gl_vertex_buffer(model);
 
-    /* create and fill ebo */
-    GLuint ebo;
-    glGenBuffers(1, &ebo);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
+    /* create and fill ebo Element Buffer Objects */
+    glGenBuffers(1, &model->ebo);
+	/* Bind EBO to GL alement array */
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, model->ebo);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(t_vec3_u32) * model->tri_size, model->tri_face, GL_STATIC_DRAW);
+	
+	/*print here*/
 	print_elem_data(model);
+
+ /* Config new vertex attr */
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(t_vec3_float), (void*)0);
+	glEnableVertexAttribArray(0);  /* Enable vertex attr */
+	/*print here*/
+	print_vertex_data(model);
+
     /* Unlink vao */
     glBindVertexArray(0);
 
-	return (vao);
+	// return (model->vao);
 	/* draw */
 	// glBindVertexArray(VAO);
 	// glDrawElements(GL_TRIANGLES, model->tri_size, GL_UNSIGNED_INT, 0);

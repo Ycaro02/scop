@@ -48,7 +48,7 @@ t_list *quadra_to_triangle(t_list *face_node_lst)
 	check_struct_size("t_vec3_u32", sizeof(t_vec3_u32), 12);
 	check_struct_size("t_vec3_float", sizeof(t_vec3_float), 12);
 	check_struct_size("t_vec3_double", sizeof(t_vec3_double), 24);
-
+	check_struct_size("t_vec4_float", sizeof(t_vec4_float), 16);
     // for (t_list *current = triangle_list; current; current = current->next) {
     //     t_vec3_u32 *triangle = current->content;
     //     ft_printf_fd(1, ORANGE"Triangle: %u, %u, %u\n"RESET, triangle->x, triangle->y, triangle->z);
