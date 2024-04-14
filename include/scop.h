@@ -47,6 +47,7 @@ enum e_obj_token {
 #define TOKEN_FACE	"f"
 
 typedef struct s_camera {
+	t_vec4_float	view[4];
 	t_vec3_float	pos;
 	t_vec3_float	dir;
 	t_vec3_float	up;
@@ -68,12 +69,12 @@ typedef struct s_obj_file {
 	u8		smooth;			/* The smoothing group state. 'on' to activate, 'off' to deactivate. 1 for true, otherwise 0*/
 } t_obj_file;
 
-
 typedef struct s_obj_model {
 	t_vec3_float	*vertex;	/* vertex array */
 	u32				v_size;		/* vertex size */
 	t_vec3_u32		*tri_face;	/* face array */
 	u32				tri_size;		/* face size */
+	GLuint			vertex_shader_id;
 	// t_obj_file	*obj;		/* obj file structure */
 	// u32			vt_size;		/* texture size */
 	// u32			vn_size;		/* normal size */
@@ -97,7 +98,7 @@ void			display_vertex_lst(t_list *lst);
 void			free_obj_model(t_obj_model *model);
 t_obj_model		*init_obj_model(t_obj_file *obj_file);
 t_list			*quadra_to_triangle(t_list *face_node_lst);
-void load_shader();
+void load_shader(t_obj_model *model);
 GLuint init_gl_triangle_array(t_obj_model *model);
 // void			init_gl_vertex_buffer(t_obj_model *model);
 // void			draw_obj_model(GLuint nb_index);
@@ -113,5 +114,8 @@ t_vec3_u32		line_to_vec3_u32(char **line, u32 *other_val);
 /* main to move */
 void			check_struct_size(char *str_test, u32 struct_size, u32 wanted_size);
 t_list			*quadra_to_triangle(t_list *face_node_lst);
+
+
+t_camera create_camera_view(GLuint vertex_shader_id);
 
 #endif /* SCOP_HEADER_H */

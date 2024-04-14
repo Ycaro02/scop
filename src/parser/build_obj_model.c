@@ -124,31 +124,34 @@ void print_vertex_data(t_obj_model *model) {
 // }
 
 
-void load_shader()
+
+
+void load_shader(t_obj_model *model)
 {
-	const char *vertex_shader = "#version 330 core\nlayout(location = 0) in vec3 aPos;\nvoid main() {\n gl_Position = vec4(aPos, 1.0);\n}";
+	const char *vertex_shader = "#version 330 core\nlayout (location = 0) in vec3 aPos;\nuniform mat4 model;\nuniform mat4 view;\nuniform mat4 projection;\nvoid main()\n{gl_Position = projection * view * model * vec4(aPos, 1.0);}";
+	// const char *vertex_shader = "#version 330 core\nlayout(location = 0) in vec3 aPos;\nvoid main() {\n gl_Position = vec4(aPos, 1.0);\n}";
 	const char *fragment_shader = "#version 330 core\nout vec4 FragColor;\nvoid main() {\nFragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n}";
 	/* create shader */
-	GLuint vertex_shader_id = glCreateShader(GL_VERTEX_SHADER);
+	model->vertex_shader_id = glCreateShader(GL_VERTEX_SHADER);
 	GLuint fragment_shader_id = glCreateShader(GL_FRAGMENT_SHADER);
 
 	/* compile shader */
-	glShaderSource(vertex_shader_id, 1, &vertex_shader, NULL);
-	glCompileShader(vertex_shader_id);
+	glShaderSource(model->vertex_shader_id, 1, &vertex_shader, NULL);
+	glCompileShader(model->vertex_shader_id);
 	glShaderSource(fragment_shader_id, 1, &fragment_shader, NULL);
 	glCompileShader(fragment_shader_id);
 
 	GLuint shader_program = glCreateProgram();
 	
 	/* Attach and link shader program  */
-	glAttachShader(shader_program, vertex_shader_id);
+	glAttachShader(shader_program, model->vertex_shader_id);
 	glAttachShader(shader_program, fragment_shader_id);
 	glLinkProgram(shader_program);
 
 	glUseProgram(shader_program);
 
 	/* delete ressource */
-	glDeleteShader(vertex_shader_id);
+	// glDeleteShader(vertex_shader_id);
 	glDeleteShader(fragment_shader_id);
 }
 
@@ -195,7 +198,7 @@ t_vec3_float cross_vec3(t_vec3_float a, t_vec3_float b) {
 	return (result);
 }
 
-t_vec3_float normalize(t_vec3_float v) {
+t_vec3_float normalize_flaot_vec3(t_vec3_float v) {
     float len = sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
 	if (len == (float)0) {
 		ft_printf_fd(1, RED"Error: Normalize by 0\n"RESET);
@@ -205,13 +208,40 @@ t_vec3_float normalize(t_vec3_float v) {
     result.x = v.x / len;
     result.y = v.y / len;
     result.z = v.z / len;
-    return result;
+    return (result);
 }
 
-// t_camera create_camera_view() {
-// 	t_camera camera = {0};
-// 	t_vec3_float front = {0.0f, 0.0f, 3.0f};
-// 	t_vec3_float dir = {0.0f, 0.0f, -1.0f};
-// 	t_vec3_float up = {0.0f, 1.0f, 0.0f};
-	
-// }
+t_camera create_camera_view(GLuint vertex_shader_id) 
+{
+	t_camera camera = {0};
+	t_vec3_float target = {0.0f, 0.0f, 0.0f}; /* target dir */
+	// camera.pos = {0.0f, 0.0f, 3.0f}; /* camera pos */
+	// camera.dir = {0.0f, 0.0f, -1.0f}; /* camera dir */
+	// camera.up = {0.0f, 1.0f, 0.0f}; /* camera up */
+	camera.pos = CREATE_VEC3(float, 0.0f, 0.0f, 3.0f); /* camera pos */
+	camera.dir = CREATE_VEC3(float, 0.0f, 0.0f, -1.0f); /* camera dir */
+	camera.up = CREATE_VEC3(float, 0.0f, 1.0f, 0.0f); /* camera up */
+
+
+	t_vec3_float direction = normalize_flaot_vec3(SUB_VEC3(float, camera.pos, target));
+	t_vec3_float right = normalize_flaot_vec3(cross_vec3(camera.up, direction));
+	t_vec3_float up = cross_vec3(direction, right);
+
+
+	// camera.view[0] = {right.x, right.y, right.z, 0.0f};
+	// camera.view[1] = {up.x, up.y, up.z, 0.0f};
+	// camera.view[2] = {direction.x, direction.y, direction.z, 0.0f};
+	// camera.view[3] = {-camera.pos.x, -camera.pos.y, -camera.pos.z, 1.0f};
+
+
+	camera.view[0] = CREATE_VEC4(float, right.x, right.y, right.z, 0.0f);
+	camera.view[1] = CREATE_VEC4(float, up.x, up.y, up.z, 0.0f);
+	camera.view[2] = CREATE_VEC4(float, direction.x, direction.y, direction.z, 0.0f);
+	camera.view[3] = CREATE_VEC4(float, -camera.pos.x, -camera.pos.y, -camera.pos.z, 1.0f);
+
+
+	GLint viewLoc = glGetUniformLocation(vertex_shader_id, "view");
+	glUniformMatrix4fv(viewLoc, 1, GL_FALSE, (GLfloat*)camera.view);
+
+	return (camera);
+}

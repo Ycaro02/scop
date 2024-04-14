@@ -6,7 +6,7 @@
 /*   By: nfour <nfour@student.42angouleme.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 15:43:41 by nfour             #+#    #+#             */
-/*   Updated: 2024/04/12 16:49:15 by nfour            ###   ########.fr       */
+/*   Updated: 2024/04/14 13:33:26 by nfour            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 #include "list/linked_list.h"
 #include "math/vec2.h"
 #include "math/vec3.h"
+#include "math/vec4.h"
 
 #define BUFFER_SIZE 1
 
