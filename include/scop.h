@@ -82,6 +82,7 @@ typedef struct s_obj_file {
 } t_obj_file;
 
 typedef struct s_obj_model {
+	t_camera		cam;			/* camera structure */
 	t_vec3_float	*vertex;		/* vertex array */
 	u32				v_size;			/* vertex size */
 	t_vec3_u32		*tri_face;		/* face array */
@@ -131,7 +132,9 @@ t_list			*quadra_to_triangle(t_list *face_node_lst);
 /* render/camera */
 t_camera	create_camera(float fov, float aspect_ratio, float near, float far);
 void		update_camera(t_camera* camera, GLuint shader_id);
-
+void move_camera_forward(t_camera* camera, float distance);
+void move_camera_backward(t_camera* camera, float distance);
+void rotate_camera(t_camera* camera, float angle, vec3 axis);
 
 /*render/mat4*/
 t_vec4_float *create_mat4(t_vec4_float a, t_vec4_float b, t_vec4_float c, t_vec4_float d);

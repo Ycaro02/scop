@@ -1,5 +1,53 @@
 #include "../include/scop.h"
 
+t_camera init_custom_camera() {
+    t_camera camera;
+
+    // init cam position
+    camera.position[0] = 4.707497f;
+    camera.position[1] = 0.00000f;
+    camera.position[2] = 4.215041f;
+
+    // init cam target
+    camera.target[0] = 0.443883f;
+    camera.target[1] = 0.00000f;
+    camera.target[2] = 1.516423f;
+
+    // init up vector
+    camera.up[0] = 0.00000f;
+    camera.up[1] = 1.00000f;
+    camera.up[2] = 0.00000f;
+
+    /* init view mat4 */
+    float view[16] = {
+        0.534815f, 0.00000f, 0.844968f, 0.00000f,
+        0.00000f, 1.00000f, 0.00000f, 0.00000f,
+        -0.844968f, 0.00000f, 0.534815f, 0.00000f,
+        1.043934f, 0.00000f, -6.231958f, 1.00000f
+    };
+    ft_memcpy(camera.view, view, sizeof(view));
+
+    /* init proj mat4 */
+    float projection[16] = {
+        2.414213f, 0.00000f, 0.00000f, 0.00000f,
+        0.00000f, 2.414213f, 0.00000f, 0.00000f,
+        0.00000f, 0.00000f, -1.002002f, -1.00000f,
+        0.00000f, 0.00000f, -0.200200f, 0.00000f
+    };
+    ft_memcpy(camera.projection, projection, sizeof(projection));
+
+    /* init model mat4 */
+    float model[16] = {
+        1.00000f, 0.00000f, 0.00000f, 0.00000f,
+        0.00000f, 1.00000f, 0.00000f, 0.00000f,
+        0.00000f, 0.00000f, 1.00000f, 0.00000f,
+        0.00000f, 0.00000f, 0.00000f, 1.00000f
+    };
+    ft_memcpy(camera.model, model, sizeof(model));
+
+    return camera;
+}
+
 void check_struct_size(char *str_test, u32 struct_size, u32 wanted_size)
 {
 	if (struct_size == wanted_size) {
@@ -9,14 +57,64 @@ void check_struct_size(char *str_test, u32 struct_size, u32 wanted_size)
 	}
 }
 
+void display_camera_value(t_camera *cam)
+{
+	ft_printf_fd(1, CYAN"Camera position: %f %f %f\n", cam->position[0], cam->position[1], cam->position[2]);
+	ft_printf_fd(1, "Camera target: %f %f %f\n", cam->target[0], cam->target[1], cam->target[2]);
+	ft_printf_fd(1, "Camera up: %f %f %f\n", cam->up[0], cam->up[1], cam->up[2]);
+	ft_printf_fd(1, "Camera view: \n");
+	for (u32 i = 0; i < 4; i++) {
+		ft_printf_fd(1, "%f %f %f %f\n", cam->view[i][0], cam->view[i][1], cam->view[i][2], cam->view[i][3]);
+	}
+	ft_printf_fd(1, "Camera projection: \n");
+	for (u32 i = 0; i < 4; i++) {
+		ft_printf_fd(1, "%f %f %f %f\n", cam->projection[i][0], cam->projection[i][1], cam->projection[i][2], cam->projection[i][3]);
+	}
+	ft_printf_fd(1, "Camera model: \n");
+	for (u32 i = 0; i < 4; i++) {
+		ft_printf_fd(1, "%f %f %f %f\n", cam->model[i][0], cam->model[i][1], cam->model[i][2], cam->model[i][3]);
+	}
+	ft_printf_fd(1, RESET);
+}
+
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode) {
 	(void)scancode, (void)mode;
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
         glfwSetWindowShouldClose(window, GL_TRUE);
+		return ;
 	}
+	t_obj_model *model = glfwGetWindowUserPointer(window);
+	if (key == GLFW_KEY_W && action >= GLFW_PRESS) {
+		ft_printf_fd(1, "Move camera forward\n");
+		move_camera_forward(&model->cam, 0.1f);
+	} else if (key == GLFW_KEY_S && action >= GLFW_PRESS) {
+		ft_printf_fd(1, "Move camera backward\n");
+		move_camera_backward(&model->cam, 0.1f);
+	} else if (key == GLFW_KEY_A && action >= GLFW_PRESS) {
+		ft_printf_fd(1, "Rotate horizontal camera +1\n");
+		rotate_camera(&model->cam, 1.0f, (vec3){0, 1, 0});
+	} else if (key == GLFW_KEY_D && action >= GLFW_PRESS) {
+		ft_printf_fd(1, "Rotate horizontal camera -1\n");
+		rotate_camera(&model->cam, -1.0f, (vec3){0, 1, 0});
+	} else if (key == GLFW_KEY_Q && action >= GLFW_PRESS) {
+		ft_printf_fd(1, "Rotate vertical camera +1\n");
+		rotate_camera(&model->cam, 1.0f, (vec3){1, 0, 0});
+	} else if (key == GLFW_KEY_E && action >= GLFW_PRESS) {
+		ft_printf_fd(1, "Rotate vertical camera -1\n");
+		rotate_camera(&model->cam, -1.0f, (vec3){1, 0, 0});
+	} else if (key == GLFW_KEY_R && action >= GLFW_PRESS) {
+		ft_printf_fd(1, "Reset camera\n");
+		model->cam = create_camera(45.0f, (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, 0.1f, 100.0f);
+	} else if (key == GLFW_KEY_ENTER && action >= GLFW_PRESS) {
+		ft_printf_fd(1, "Init custom camera\n");
+		model->cam = init_custom_camera();
+	} else if (key == GLFW_KEY_SPACE && action >= GLFW_PRESS) {
+		display_camera_value(&model->cam);
+	}
+
 }
 
-GLFWwindow *init_glfw() 
+GLFWwindow *init_glfw(t_obj_model *model) 
 {
     GLFWwindow *win;
 	int version = 0;
@@ -28,6 +126,9 @@ GLFWwindow *init_glfw()
         return (NULL);
     }
     glfwMakeContextCurrent(win);
+
+	/* Set the user pointer to the model, can get it with glfwGetWindowUserPointer(win); */
+	glfwSetWindowUserPointer(win, model);
 
 	glfwSetKeyCallback(win, key_callback);
 
@@ -56,6 +157,7 @@ void main_loop(t_obj_model *model, GLFWwindow *win)
 		set_shader_var_vec4(model->shader_id, "myColor", (t_vec4_float){0.0f, 0.7f, 0.7f, 1.0f});
 
 		glUseProgram(model->shader_id);
+		update_camera(&model->cam, model->shader_id);
 
 		glBindVertexArray(model->vao);
 	
@@ -89,12 +191,14 @@ int main(int argc, char **argv)
 	}
 
 	t_obj_model *model = parse_obj_file(argv[1]);
-
 	if (!model) {
 		ft_printf_fd(2, "Error parse 42.obj\n");
 		return (1);
 	}
-    win = init_glfw();
+
+	model->cam = create_camera(45.0f, (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, 0.1f, 100.0f);
+
+    win = init_glfw(model);
     if (!win) {
         ft_printf_fd(2, "Error: Failed to init glfw\n");
         glfwTerminate();
@@ -111,9 +215,7 @@ int main(int argc, char **argv)
 
 	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
-	glUseProgram(model->shader_id);
-	t_camera cam = create_camera(45.0f, (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, 0.1f, 100.0f);
-	update_camera(&cam, model->shader_id);
+	// glUseProgram(model->shader_id);
 
 
     main_loop(model, win);
