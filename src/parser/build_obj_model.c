@@ -49,9 +49,6 @@ void free_obj_model(t_obj_model *model)
 	if (model->tri_face) {
 		free(model->tri_face);
 	}
-	if (model->identity_mat4) {
-		free(model->identity_mat4);
-	}
 	free(model);
 }
 
@@ -126,12 +123,7 @@ char *load_shader_file(char *path)
 
 GLuint load_shader(t_obj_model *model)
 {
-	
-	char *vertex_shader = load_shader_file(VERTEX_SHADER_PATH);
-	// char *vertex_shader = load_shader_file(NEW_VERTEX_SHADER);
-
-
-
+	char *vertex_shader = load_shader_file(NEW_VERTEX_SHADER);
 	char *fragment_shader = load_shader_file(FRAGMENT_SHADER_PATH);
 	
 	/* create shader */

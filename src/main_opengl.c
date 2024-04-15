@@ -55,8 +55,6 @@ void main_loop(t_obj_model *model, GLFWwindow *win)
 		/* Camera view need to work on */
 		set_shader_var_vec4(model->shader_id, "myColor", (t_vec4_float){0.0f, 0.7f, 0.7f, 1.0f});
 
-		create_camera_view(model);
-
 		glUseProgram(model->shader_id);
 
 		glBindVertexArray(model->vao);
@@ -112,6 +110,11 @@ int main(int argc, char **argv)
 
 
 	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
+	glUseProgram(model->shader_id);
+	t_camera cam = create_camera(45.0f, (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, 0.1f, 100.0f);
+	update_camera(&cam, model->shader_id);
+
 
     main_loop(model, win);
 	free_obj_model(model);

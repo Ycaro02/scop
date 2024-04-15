@@ -1,15 +1,15 @@
 #ifndef SCOP_HEADER_H
 #define SCOP_HEADER_H
 
+
 #include <math.h>
+#include <cglm/cglm.h>
 
 #include "../libft/libft.h"
 
 #include "../glad_gen/include/glad/gl.h" /* include glad header before glfw3 */
 
 #include "../include/glfw3.h"
-
-#define PI 3.14159265
 
 #define VERTEX_SHADER_PATH "rsc/shaders/vertex_shader.glsl"
 #define FRAGMENT_SHADER_PATH "rsc/shaders/fragment_shader.glsl"
@@ -53,17 +53,14 @@ enum e_obj_token {
 */
 #define TOKEN_FACE	"f"
 
-/* need to go in utils/math */
-typedef struct s_mat4 {
-	t_vec4_float mat[4];
-} t_mat4;
-
 /* Camera in implementation */
-typedef struct s_camera {
-	t_vec4_float	view[4];
-	t_vec3_float	pos;
-	t_vec3_float	dir;
-	t_vec3_float	up;
+typedef struct t_camera {
+    vec3 position;
+    vec3 target;
+    vec3 up;
+    mat4 view;
+    mat4 projection;
+	mat4 model;
 } t_camera;
 
 /* Node used only for parse */
@@ -89,7 +86,6 @@ typedef struct s_obj_model {
 	u32				v_size;			/* vertex size */
 	t_vec3_u32		*tri_face;		/* face array */
 	u32				tri_size;		/* face size */
-	t_vec4_float	*identity_mat4;	/* identity matrix */
 	GLuint			vao;			/* vertex array object */
 	GLuint			vbo;			/* vertex buffer object */
 	GLuint			ebo;			/* element buffer object */
@@ -133,7 +129,8 @@ void			check_struct_size(char *str_test, u32 struct_size, u32 wanted_size);
 t_list			*quadra_to_triangle(t_list *face_node_lst);
 
 /* render/camera */
-t_camera create_camera_view(t_obj_model *model);
+t_camera	create_camera(float fov, float aspect_ratio, float near, float far);
+void		update_camera(t_camera* camera, GLuint shader_id);
 
 
 /*render/mat4*/

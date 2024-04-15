@@ -9,7 +9,12 @@
 		"libft.h": "c",
 		"glfw3.h": "c",
 		"gl.h": "c",
-		"algorithm": "cpp"
+		"algorithm": "cpp",
+		"math.h": "c",
+		"cglm.h": "c",
+		"vec2.h": "c",
+		"mat4.h": "c",
+		"mat4x2.h": "c"
 	},
 	"42header.email": "nfour@student.42angouleme.fr",
 	"42header.username": "nfour"
