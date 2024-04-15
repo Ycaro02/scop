@@ -126,10 +126,12 @@ char *load_shader_file(char *path)
 
 GLuint load_shader(t_obj_model *model)
 {
-	// const char *vertex_shader = "#version 330 core\nlayout (location = 0) in vec3 aPos;\nuniform mat4 model;\nuniform mat4 view;\nuniform mat4 projection;\nvoid main()\n{gl_Position = projection * view * model * vec4(aPos, 1.0);}";
-	// char *vertex_shader = load_shader_file(VERTEX_SHADER_PATH);
-	char *vertex_shader = load_shader_file(NEW_VERTEX_SHADER);
 	
+	char *vertex_shader = load_shader_file(VERTEX_SHADER_PATH);
+	// char *vertex_shader = load_shader_file(NEW_VERTEX_SHADER);
+
+
+
 	char *fragment_shader = load_shader_file(FRAGMENT_SHADER_PATH);
 	
 	/* create shader */
@@ -148,7 +150,8 @@ GLuint load_shader(t_obj_model *model)
 	/* Attach and link shader program  */
 	glAttachShader(model->shader_id , frag_vertex_shader);
 	glAttachShader(model->shader_id , frag_pixel_shader);
-	glLinkProgram(model->shader_id );
+	
+	glLinkProgram(model->shader_id);
 
 	GLint succes = 0;
 	glGetProgramiv(model->shader_id , GL_LINK_STATUS, &succes);
@@ -181,9 +184,6 @@ GLuint init_gl_vertex_buffer(t_obj_model *model)
 	glGenBuffers(1, &vbo);
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(t_vec3_float) * model->v_size, model->vertex, GL_STATIC_DRAW);
-
-  
-
 	return (vbo);
 }
 
@@ -221,10 +221,10 @@ void init_gl_triangle_array(t_obj_model *model)
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, model->ebo);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(t_vec3_u32) * model->tri_size, model->tri_face, GL_STATIC_DRAW);
 	
-	/*print here*/
+	/* print here */
 	print_elem_data(model);
 
- /* Config new vertex attr */
+ 	/* Config new vertex attr */
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(t_vec3_float), (void*)0);
 	glEnableVertexAttribArray(0);  /* Enable vertex attr */
 	/*print here*/

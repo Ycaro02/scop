@@ -44,22 +44,6 @@ GLFWwindow *init_glfw()
     return (win);
 }
 
-void set_shader_var_vec4(GLuint shader_id, char *var_name, t_vec4_float vec)
-{
-	glUseProgram(shader_id);
-	
-	GLint var_loc = glGetUniformLocation(shader_id, var_name);
-	glUniform4f(var_loc, vec.x, vec.y, vec.z, vec.w);
-
-}
-
-void set_shader_var_mat4(GLuint shader_id, char *var_name, t_vec4_float *mat4)
-{
-	glUseProgram(shader_id);
-	
-	GLint var_loc = glGetUniformLocation(shader_id, var_name);
-	glUniformMatrix4fv(var_loc, 1, GL_FALSE, (GLfloat *)mat4);
-}
 
 
 void main_loop(t_obj_model *model, GLFWwindow *win) 
@@ -101,9 +85,12 @@ int main(int argc, char **argv)
 {
     GLFWwindow *win;
     
-	(void)argc, (void)argv;
+	if (argc != 2) { /* need to check file */
+		ft_printf_fd(2, "Usage: %s <obj_file>\n", argv[0]);
+		return (1);
+	}
 
-	t_obj_model *model = parse_obj_file("rsc/42.obj");
+	t_obj_model *model = parse_obj_file(argv[1]);
 
 	if (!model) {
 		ft_printf_fd(2, "Error parse 42.obj\n");

@@ -17,6 +17,7 @@ SRCS			=	parser/obj_parse.c\
 					parser/face_handling.c\
 					render/camera.c\
 					render/mat4.c\
+					render/shader_utils.c\
 					glad/gl.c\
 
 

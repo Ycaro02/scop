@@ -140,4 +140,8 @@ t_camera create_camera_view(t_obj_model *model);
 t_vec4_float *create_mat4(t_vec4_float a, t_vec4_float b, t_vec4_float c, t_vec4_float d);
 t_vec4_float *create_mat4_identity();
 
+/* render/shader_utils */
+void set_shader_var_mat4(GLuint shader_id, char *var_name, t_vec4_float *mat4);
+void set_shader_var_vec4(GLuint shader_id, char *var_name, t_vec4_float vec);
+
 #endif /* SCOP_HEADER_H */
