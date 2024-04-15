@@ -37,17 +37,9 @@ void update_camera(t_camera* camera, GLuint shader_id)
 {
     glm_lookat(camera->position, camera->target, camera->up, camera->view);
 
-    // Mettre à jour la matrice de vue dans le shader
-    GLint viewLoc = glGetUniformLocation(shader_id, "view");
-    glUniformMatrix4fv(viewLoc, 1, GL_FALSE, (GLfloat*)camera->view);
-
-    // Mettre à jour la matrice de projection dans le shader
-    GLint projLoc = glGetUniformLocation(shader_id, "projection");
-    glUniformMatrix4fv(projLoc, 1, GL_FALSE, (GLfloat*)camera->projection);
-
-    // Mettre à jour la matrice de modèle dans le shader
-    GLint modelLoc = glGetUniformLocation(shader_id, "model");
-    glUniformMatrix4fv(modelLoc, 1, GL_FALSE, (GLfloat*)camera->model);
+    set_shader_var_mat4(shader_id, "view", camera->view);
+    set_shader_var_mat4(shader_id, "model", camera->model);
+    set_shader_var_mat4(shader_id, "projection", camera->projection);
 }
 
 /**
@@ -84,4 +76,55 @@ void rotate_camera(t_camera* camera, float angle, vec3 axis) {
     mat4 rotation;
     glm_rotate_make(rotation, glm_rad(angle), axis);
     glm_mat4_mulv3(rotation, camera->target, 1.0f, camera->target);
+}
+
+
+
+t_camera init_custom_camera() 
+{
+    t_camera camera;
+
+    // init cam position
+    camera.position[0] = 4.707497f;
+    camera.position[1] = 0.00000f;
+    camera.position[2] = 4.215041f;
+
+    // init cam target
+    camera.target[0] = 0.443883f;
+    camera.target[1] = 0.00000f;
+    camera.target[2] = 1.516423f;
+
+    // init up vector
+    camera.up[0] = 0.00000f;
+    camera.up[1] = 1.00000f;
+    camera.up[2] = 0.00000f;
+
+    /* init view mat4 */
+    float view[16] = {
+        0.534815f, 0.00000f, 0.844968f, 0.00000f,
+        0.00000f, 1.00000f, 0.00000f, 0.00000f,
+        -0.844968f, 0.00000f, 0.534815f, 0.00000f,
+        1.043934f, 0.00000f, -6.231958f, 1.00000f
+    };
+    ft_memcpy(camera.view, view, sizeof(view));
+
+    /* init proj mat4 */
+    float projection[16] = {
+        2.414213f, 0.00000f, 0.00000f, 0.00000f,
+        0.00000f, 2.414213f, 0.00000f, 0.00000f,
+        0.00000f, 0.00000f, -1.002002f, -1.00000f,
+        0.00000f, 0.00000f, -0.200200f, 0.00000f
+    };
+    ft_memcpy(camera.projection, projection, sizeof(projection));
+
+    /* init model mat4 */
+    float model[16] = {
+        1.00000f, 0.00000f, 0.00000f, 0.00000f,
+        0.00000f, 1.00000f, 0.00000f, 0.00000f,
+        0.00000f, 0.00000f, 1.00000f, 0.00000f,
+        0.00000f, 0.00000f, 0.00000f, 1.00000f
+    };
+    ft_memcpy(camera.model, model, sizeof(model));
+
+    return camera;
 }

@@ -9,12 +9,12 @@ void set_shader_var_vec4(GLuint shader_id, char *var_name, t_vec4_float vec)
 
 }
 
-void set_shader_var_mat4(GLuint shader_id, char *var_name, t_vec4_float *mat4)
+void set_shader_var_mat4(GLuint shader_id, char *var_name, mat4 data)
 {
 	glUseProgram(shader_id);
 	
 	GLint var_loc = glGetUniformLocation(shader_id, var_name);
-	glUniformMatrix4fv(var_loc, 1, GL_FALSE, (GLfloat *)mat4);
+	glUniformMatrix4fv(var_loc, 1, GL_FALSE, (GLfloat *)data);
 }
 
 char *load_shader_file(char *path)

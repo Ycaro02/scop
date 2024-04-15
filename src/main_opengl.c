@@ -1,53 +1,5 @@
 #include "../include/scop.h"
 
-t_camera init_custom_camera() {
-    t_camera camera;
-
-    // init cam position
-    camera.position[0] = 4.707497f;
-    camera.position[1] = 0.00000f;
-    camera.position[2] = 4.215041f;
-
-    // init cam target
-    camera.target[0] = 0.443883f;
-    camera.target[1] = 0.00000f;
-    camera.target[2] = 1.516423f;
-
-    // init up vector
-    camera.up[0] = 0.00000f;
-    camera.up[1] = 1.00000f;
-    camera.up[2] = 0.00000f;
-
-    /* init view mat4 */
-    float view[16] = {
-        0.534815f, 0.00000f, 0.844968f, 0.00000f,
-        0.00000f, 1.00000f, 0.00000f, 0.00000f,
-        -0.844968f, 0.00000f, 0.534815f, 0.00000f,
-        1.043934f, 0.00000f, -6.231958f, 1.00000f
-    };
-    ft_memcpy(camera.view, view, sizeof(view));
-
-    /* init proj mat4 */
-    float projection[16] = {
-        2.414213f, 0.00000f, 0.00000f, 0.00000f,
-        0.00000f, 2.414213f, 0.00000f, 0.00000f,
-        0.00000f, 0.00000f, -1.002002f, -1.00000f,
-        0.00000f, 0.00000f, -0.200200f, 0.00000f
-    };
-    ft_memcpy(camera.projection, projection, sizeof(projection));
-
-    /* init model mat4 */
-    float model[16] = {
-        1.00000f, 0.00000f, 0.00000f, 0.00000f,
-        0.00000f, 1.00000f, 0.00000f, 0.00000f,
-        0.00000f, 0.00000f, 1.00000f, 0.00000f,
-        0.00000f, 0.00000f, 0.00000f, 1.00000f
-    };
-    ft_memcpy(camera.model, model, sizeof(model));
-
-    return camera;
-}
-
 void check_struct_size(char *str_test, u32 struct_size, u32 wanted_size)
 {
 	if (struct_size == wanted_size) {
