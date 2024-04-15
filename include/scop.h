@@ -16,8 +16,8 @@
 
 #define NEW_VERTEX_SHADER "rsc/shaders/new_vertex_shader.glsl"
 
-#define SCREEN_WIDTH 600
-#define SCREEN_HEIGHT 600
+#define SCREEN_WIDTH 700
+#define SCREEN_HEIGHT 700
 
 enum e_obj_token {
 	ENUM_UNKNOWN=0,
@@ -114,7 +114,6 @@ void			display_vertex_lst(t_list *lst);
 void			free_obj_model(t_obj_model *model);
 t_obj_model		*init_obj_model(t_obj_file *obj_file);
 t_list			*quadra_to_triangle(t_list *face_node_lst);
-GLuint			load_shader(t_obj_model *model);
 void			init_gl_triangle_array(t_obj_model *model);
 
 /* parser/parse_line.c  */
@@ -143,5 +142,6 @@ t_vec4_float *create_mat4_identity();
 /* render/shader_utils */
 void set_shader_var_mat4(GLuint shader_id, char *var_name, t_vec4_float *mat4);
 void set_shader_var_vec4(GLuint shader_id, char *var_name, t_vec4_float vec);
+GLuint			load_shader(t_obj_model *model);
 
 #endif /* SCOP_HEADER_H */

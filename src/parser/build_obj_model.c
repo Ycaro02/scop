@@ -1,29 +1,5 @@
 #include "../../include/scop.h"
 
-/* need to go in libft linked list API */
-/**
- * @brief List to array
- * @param lst pointer on linked list head
- * @param lst_size size of the list, number of node
- * @param type_size size of the type to copy
- * @return allocated t_vec3_u32 array, NULL if fail
-*/
-void	*list_to_array(t_list *lst, u32 lst_size, u32 type_size) 
-{
-	u32		i = 0;
-	void	*array = ft_calloc(type_size, lst_size);
-
-	if (!array) {
-		ft_printf_fd(2, RED"Error: Malloc failed\n"RESET);
-		return (NULL);
-	}
-	for (t_list *current = lst; current; current = current->next) {
-		ft_memcpy(array + (i * type_size), current->content, type_size);
-		i++;
-	}
-	return (array);
-}
-
 /**
  * @brief Display vertex list
  * @param lst vertex list
@@ -100,75 +76,6 @@ void print_vertex_data(t_obj_model *model) {
     free(bufferData);
 }
 
-char *load_shader_file(char *path)
-{
-	char **file = load_file(path);
-	char *shader_src = ft_strdup("");
-
-
-	if (!file) {
-		ft_printf_fd(2, RED"Error: Failed to load shader file\n"RESET);
-		return (NULL);
-	}
-	for (u32 i = 0; file[i]; ++i) {
-		shader_src = ft_strjoin_free(shader_src, file[i], 'f');
-		shader_src = ft_strjoin_free(shader_src, "\n", 'f');
-	}
-
-	free_double_char(file);
-
-	ft_printf_fd(1, "Shader src: %s\n", shader_src);
-	return (shader_src);
-}
-
-GLuint load_shader(t_obj_model *model)
-{
-	char *vertex_shader = load_shader_file(NEW_VERTEX_SHADER);
-	char *fragment_shader = load_shader_file(FRAGMENT_SHADER_PATH);
-	
-	/* create shader */
-	GLuint frag_vertex_shader = glCreateShader(GL_VERTEX_SHADER);
-	GLuint frag_pixel_shader = glCreateShader(GL_FRAGMENT_SHADER);
-
-	/* compile shader */
-	glShaderSource(frag_vertex_shader, 1, (const char **)&vertex_shader, NULL);
-	glCompileShader(frag_vertex_shader);
-
-	glShaderSource(frag_pixel_shader, 1, (const char **)&fragment_shader, NULL);
-	glCompileShader(frag_pixel_shader);
-
-	model->shader_id = glCreateProgram();
-	
-	/* Attach and link shader program  */
-	glAttachShader(model->shader_id , frag_vertex_shader);
-	glAttachShader(model->shader_id , frag_pixel_shader);
-	
-	glLinkProgram(model->shader_id);
-
-	GLint succes = 0;
-	glGetProgramiv(model->shader_id , GL_LINK_STATUS, &succes);
-	if (!succes) {
-		GLchar data[1024];
-		ft_bzero(data, 1024);
-		glGetProgramInfoLog(model->shader_id , 512, NULL, data);
-		ft_printf_fd(2, "Shader program log: %s\n", data);
-	} else {
-		ft_printf_fd(1, "Shader program linked\n");
-	}
-
-	glUseProgram(model->shader_id);
-
-	/* delete shader tocheck */
-	// glDeleteShader(frag_vertex_shader);
-	// glDeleteShader(frag_pixel_shader);
-
-	/* delete ressource */
-	free(vertex_shader);
-	free(fragment_shader);
-	return (model->shader_id);
-}
-
-
 GLuint init_gl_vertex_buffer(t_obj_model *model)
 {
 	/* create and fill vbo */
@@ -180,7 +87,7 @@ GLuint init_gl_vertex_buffer(t_obj_model *model)
 }
 
 /**
- * @brief Print element buufer data (triangle give to opengl)
+ * @brief [ DEBUG ] Print element bufer data (triangle give to opengl)
 */
 void print_elem_data(t_obj_model *model) {
 	t_vec3_u32* bufferData = malloc(sizeof(t_vec3_u32) * model->tri_size);

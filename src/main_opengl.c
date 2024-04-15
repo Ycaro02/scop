@@ -114,7 +114,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 
 }
 
-GLFWwindow *init_glfw(t_obj_model *model) 
+GLFWwindow *init_openGL_context(t_obj_model *model) 
 {
     GLFWwindow *win;
 	int version = 0;
@@ -152,71 +152,62 @@ void main_loop(t_obj_model *model, GLFWwindow *win)
     while (!glfwWindowShouldClose(win)) {
         /* clear gl render context*/
         glClear(GL_COLOR_BUFFER_BIT);
-
-		/* Camera view need to work on */
+		/* basic test for color */
 		set_shader_var_vec4(model->shader_id, "myColor", (t_vec4_float){0.0f, 0.7f, 0.7f, 1.0f});
 
-		glUseProgram(model->shader_id);
+		glUseProgram(model->shader_id); /* useless ? */
 		update_camera(&model->cam, model->shader_id);
-
 		glBindVertexArray(model->vao);
-	
-		// glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, model->ebo);
-	
 		glDrawElements(GL_TRIANGLES, (model->tri_size * 3), GL_UNSIGNED_INT, 0);
 		
 		/* unbind vertex array */
 		glBindVertexArray(0);
-        
 		/* swap buff to display */
 		glfwSwapBuffers(win);
-        /* Event */
+        /* Event handling */
         glfwPollEvents();
     }
 }
 
 static void glfw_destroy(GLFWwindow *win)
 {
+	gladLoaderUnloadGL();
 	glfwDestroyWindow(win);
 	glfwTerminate();
 }
 
 int main(int argc, char **argv)
 {
-    GLFWwindow *win;
+    GLFWwindow	*win;
+	t_obj_model	*model;
     
 	if (argc != 2) { /* need to check file */
 		ft_printf_fd(2, "Usage: %s <obj_file>\n", argv[0]);
 		return (1);
 	}
 
-	t_obj_model *model = parse_obj_file(argv[1]);
+	model = parse_obj_file(argv[1]);
 	if (!model) {
 		ft_printf_fd(2, "Error parse 42.obj\n");
 		return (1);
 	}
 
+	/* Init camera structure */
 	model->cam = create_camera(45.0f, (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, 0.1f, 100.0f);
 
-    win = init_glfw(model);
+    win = init_openGL_context(model);
     if (!win) {
-        ft_printf_fd(2, "Error: Failed to init glfw\n");
+        ft_printf_fd(2, "Error: init_openGL_context\n");
         glfwTerminate();
         return (1);
     }
 
-	// init_gl_vertex_buffer(model);
-	// init_gl_index_buffer(model);
-	// draw_obj_model(model->tri_size * 3);
 	model->shader_id = load_shader(model);
 	init_gl_triangle_array(model);
 	ft_printf_fd(1, "tri_size: %u\n", model->tri_size);
 
-
-	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-
-	// glUseProgram(model->shader_id);
-
+	/* set this with event handle */
+	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
     main_loop(model, win);
 	free_obj_model(model);

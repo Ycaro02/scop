@@ -1,26 +1,38 @@
 #include "../../include/scop.h"
 
+/**
+ * @brief Create a new camera
+ * @param fov field of view
+ * @param aspect_ratio aspect ratio
+ * @param near near plane
+ * @param far far plane
+ * @return new camera
+*/
 t_camera create_camera(float fov, float aspect_ratio, float near, float far) 
 {
     t_camera camera;
 
-    // Initialiser la position, la cible et le vecteur "up" de la caméra
+    /* Initialize position, target and up vector */
     glm_vec3_copy((vec3){0.0f, 0.0f, 3.0f}, camera.position);
     glm_vec3_copy((vec3){0.0f, 0.0f, -1.0f}, camera.target);
     glm_vec3_copy((vec3){0.0f, 1.0f, 0.0f}, camera.up);
 
-    // Initialiser la matrice de modèle à l'identité
+    /* Init identity matrice 4x4 */
     glm_mat4_identity(camera.model);
 
-    // Calculer la matrice de vue
+    /* Compute view martice */
     glm_lookat(camera.position, camera.target, camera.up, camera.view);
 
-    // Calculer la matrice de projection
+    /* Compute projection matrice */
     glm_perspective(glm_rad(fov), aspect_ratio, near, far, camera.projection);
-
-    return camera;
+    return (camera);
 }
 
+/**
+ * @brief Update camera
+ * @param camera camera to update
+ * @param shader_id shader id
+*/
 void update_camera(t_camera* camera, GLuint shader_id) 
 {
     glm_lookat(camera->position, camera->target, camera->up, camera->view);
@@ -38,6 +50,11 @@ void update_camera(t_camera* camera, GLuint shader_id)
     glUniformMatrix4fv(modelLoc, 1, GL_FALSE, (GLfloat*)camera->model);
 }
 
+/**
+ * @brief Move camera forward
+ * @param camera camera to move
+ * @param distance distance to move
+*/
 void move_camera_forward(t_camera* camera, float distance) 
 {
     vec3 direction;
@@ -48,10 +65,21 @@ void move_camera_forward(t_camera* camera, float distance)
     glm_vec3_add(camera->target, direction, camera->target);
 }
 
+/**
+ * @brief Move camera backward
+ * @param camera camera to move
+ * @param distance distance to move
+*/
 void move_camera_backward(t_camera* camera, float distance) {
     move_camera_forward(camera, -distance);
 }
 
+/**
+ * @brief Move camera left
+ * @param camera camera to move
+ * @param distance distance to move
+ * @param axis axis to move
+*/
 void rotate_camera(t_camera* camera, float angle, vec3 axis) {
     mat4 rotation;
     glm_rotate_make(rotation, glm_rad(angle), axis);
