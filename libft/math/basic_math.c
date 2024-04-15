@@ -27,3 +27,12 @@ uint32_t min_uint32(uint32_t a, uint32_t b)
     return (a <= b ? a : b);
 }
 
+
+float percent(float from, float to, float current) 
+{
+    float div = to - from;
+    if (div == 0.0f) {
+        return (1.0f);
+    }  
+    return ((current - from) / div);
+}

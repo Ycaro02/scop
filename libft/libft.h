@@ -6,7 +6,7 @@
 /*   By: nfour <nfour@student.42angouleme.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 15:43:41 by nfour             #+#    #+#             */
-/*   Updated: 2024/04/14 13:33:26 by nfour            ###   ########.fr       */
+/*   Updated: 2024/04/15 17:01:10 by nfour            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@
 #include "math/vec4.h"
 
 #define BUFFER_SIZE 1
+
 
 #define OUT_OF_UINT32 (uint64_t)(UINT32_MAX + 1)
 

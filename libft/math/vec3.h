@@ -6,7 +6,7 @@
 /*   By: nfour <nfour@student.42angouleme.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 15:43:13 by nfour             #+#    #+#             */
-/*   Updated: 2024/04/14 13:31:30 by nfour            ###   ########.fr       */
+/*   Updated: 2024/04/15 17:03:12 by nfour            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,10 @@
 #define DEFINE_VECTOR3_HEADER
 
 #include <sys/types.h>
+
+#define FT_INLINE   static inline __attribute((always_inline))
+#define FT_EPSILON  1e-5f
+
 
 /*
  *	This header file provides macros and structures for handling 3D vectors of various data types.
@@ -109,5 +113,42 @@ DEFINE_VEC3_STRUCT(double)
         ft_printf_fd(1, "Signed Vec3 x: %d, y: %d, z: %d\n", vec.x, vec.y, vec.z); \
     } \
 }
+
+/* Bigger math function */
+#include <math.h>
+
+/* Dot product */
+#define VEC3_DOT(type, a, b) (type)((a.x * b.x) + (a.y * b.y) + (a.z * b.z))
+
+/* Dot on same target */
+#define VEC3_NORM2(type, a) VEC3_DOT(type, a, a)
+
+/* Vector norm */
+#define VEC3_NORM(type, a)  sqrtf(VEC3_NORM2(type, a))
+
+
+FT_INLINE void vec3_scale(t_vec3_float v, float s, t_vec3_float *dest) {
+  dest->x = v.x * s;
+  dest->y = v.y * s;
+  dest->z = v.z * s;
+}
+
+/* Normalise the v vector */
+FT_INLINE void vec3_normalise(t_vec3_float *v) {
+    float norm = VEC3_NORM(float, ((t_vec3_float)*v));
+    if (norm < FT_EPSILON) {
+        *v = CREATE_VEC3(float, 0.0f, 0.0f, 0.0f);
+        return;
+    }
+    vec3_scale(*v, 1.0f / norm, v);
+}
+
+#define DEG_TO_RADIAN(deg)  (float)(deg * (float)M_PI / 180.0f)
+#define RADIAN_TO_DEG(rad)  (float)(rad * 180.0f / (float)M_PI)
+#define FLOAT_EQUAL(a, b)   (fabs(a - b) < FLT_EPSILON)
+
+/*
+    normalise(x) -> norm(x) -> sqrtf(norm2(x)) -> dot(x, x)
+*/
 
 # endif /* DEFINE_VECTOR3_HEADER */

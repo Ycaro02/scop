@@ -21,10 +21,12 @@ t_camera create_camera(float fov, float aspect_ratio, float near, float far)
     glm_mat4_identity(camera.model);
 
     /* Compute view martice */
-    glm_lookat(camera.position, camera.target, camera.up, camera.view);
+    // glm_lookat(camera.position, camera.target, camera.up, camera.view);
+    glm_lookat_rh(camera.position, camera.target, camera.up, camera.view);
 
     /* Compute projection matrice */
-    glm_perspective(glm_rad(fov), aspect_ratio, near, far, camera.projection);
+    // glm_perspective(glm_rad(fov), aspect_ratio, near, far, camera.projection);
+    glm_perspective_rh_no(glm_rad(fov), aspect_ratio, near, far, camera.projection);
     return (camera);
 }
 
@@ -35,7 +37,8 @@ t_camera create_camera(float fov, float aspect_ratio, float near, float far)
 */
 void update_camera(t_camera* camera, GLuint shader_id) 
 {
-    glm_lookat(camera->position, camera->target, camera->up, camera->view);
+    glm_lookat_rh(camera->position, camera->target, camera->up, camera->view);
+    // glm_lookat(camera->position, camera->target, camera->up, camera->view);
 
     set_shader_var_mat4(shader_id, "view", camera->view);
     set_shader_var_mat4(shader_id, "model", camera->model);
@@ -50,12 +53,23 @@ void update_camera(t_camera* camera, GLuint shader_id)
 void move_camera_forward(t_camera* camera, float distance) 
 {
     vec3 direction;
+
     glm_vec3_sub(camera->target, camera->position, direction);
-    glm_vec3_normalize(direction);
+    glm_vec3_normalize(direction); /* tocheck */
     glm_vec3_scale(direction, distance, direction);
     glm_vec3_add(camera->position, direction, camera->position);
     glm_vec3_add(camera->target, direction, camera->target);
+
 }
+
+// void vector_test()
+// {
+//     t_vec3_float vec1 = (t_vec3_float){1.0f, 2.0f, 3.0f};
+//     t_vec3_float vec11 = (t_vec3_float){5.0f, 4.0f, 2.0f};
+
+//     VEC3_DOT(float, vec1, vec11);  
+// }
+
 
 /**
  * @brief Move camera backward
@@ -78,7 +92,54 @@ void rotate_camera(t_camera* camera, float angle, vec3 axis) {
     glm_mat4_mulv3(rotation, camera->target, 1.0f, camera->target);
 }
 
+t_camera init_custom_camera2() 
+{
+    t_camera camera;
 
+    // init cam position
+    camera.position[0] = 6.426827f;
+    camera.position[1] = 0.00000f;
+    camera.position[2] = -1.212486f;
+
+    // init cam target
+    camera.target[0] = -1.211794f;
+    camera.target[1] = 0.00000f;
+    camera.target[2] = 1.625706f;
+
+    // init up vector
+    camera.up[0] = 0.00000f;
+    camera.up[1] = 1.00000f;
+    camera.up[2] = 0.00000f;
+
+    // init view mat4
+    float view[16] = {
+        -0.348293f, 0.00000f, 0.937385f, 0.00000f,
+        0.00000f, 1.000000f, 0.00000f, 0.00000f,
+        -0.937385f, 0.00000f, -0.348293f, 0.00000f,
+        1.101853f, 0.00000f, -6.446716f, 1.00000f
+    };
+    ft_memcpy(camera.view, view, sizeof(view));
+
+    // init projection mat4
+    float projection[16] = {
+        2.414213f, 0.00000f, 0.00000f, 0.00000f,
+        0.00000f, 2.414213f, 0.00000f, 0.00000f,
+        0.00000f, 0.00000f, -1.002002f, -1.00000f,
+        0.00000f, 0.00000f, -0.200200f, 0.00000f
+    };
+    ft_memcpy(camera.projection, projection, sizeof(projection));
+
+    // init model mat4
+    float model[16] = {
+        1.00000f, 0.00000f, 0.00000f, 0.00000f,
+        0.00000f, 1.00000f, 0.00000f, 0.00000f,
+        0.00000f, 0.00000f, 1.00000f, 0.00000f,
+        0.00000f, 0.00000f, 0.00000f, 1.00000f
+    };
+    ft_memcpy(camera.model, model, sizeof(model));
+
+    return camera;
+}
 
 t_camera init_custom_camera() 
 {
@@ -126,5 +187,5 @@ t_camera init_custom_camera()
     };
     ft_memcpy(camera.model, model, sizeof(model));
 
-    return camera;
+    return (camera);
 }

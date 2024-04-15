@@ -29,13 +29,17 @@ void display_camera_value(t_camera *cam)
 	ft_printf_fd(1, RESET);
 }
 
-void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode) {
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode) 
+{
+	t_obj_model *model = glfwGetWindowUserPointer(window);
+	static u8 fill_mode = 0;
+
+
 	(void)scancode, (void)mode;
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
         glfwSetWindowShouldClose(window, GL_TRUE);
 		return ;
 	}
-	t_obj_model *model = glfwGetWindowUserPointer(window);
 	if (key == GLFW_KEY_W && action >= GLFW_PRESS) {
 		ft_printf_fd(1, "Move camera forward\n");
 		move_camera_forward(&model->cam, 0.1f);
@@ -62,6 +66,11 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 		model->cam = init_custom_camera();
 	} else if (key == GLFW_KEY_SPACE && action >= GLFW_PRESS) {
 		display_camera_value(&model->cam);
+	} else if (key == GLFW_KEY_P && action >= GLFW_PRESS) {
+		ft_printf_fd(1, "Change polygon mode\n");
+		fill_mode = !fill_mode;
+		/* This working cause GL_FILL is GL_LINE + 1*/
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE + fill_mode);
 	}
 
 }
@@ -105,7 +114,8 @@ void main_loop(t_obj_model *model, GLFWwindow *win)
         /* clear gl render context*/
         glClear(GL_COLOR_BUFFER_BIT);
 		/* basic test for color */
-		set_shader_var_vec4(model->shader_id, "myColor", (t_vec4_float){0.0f, 0.7f, 0.7f, 1.0f});
+		// set_shader_var_vec4(model->shader_id, "myColor", (t_vec4_float){0.0f, 0.7f, 0.7f, 1.0f});
+		set_shader_var_vec4(model->shader_id, "myColor", (t_vec4_float){0.0f, 0.9f, 0.0f, 1.0f});
 
 		glUseProgram(model->shader_id); /* useless ? */
 		update_camera(&model->cam, model->shader_id);
