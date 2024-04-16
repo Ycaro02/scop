@@ -44,7 +44,7 @@ vec3_float *line_to_vertex_node(char **line)
 	float x = ft_atof(line[0]);
 	float y = ft_atof(line[1]);
 	float z = ft_atof(line[2]);
-	CREATE_VEC3(x, y, z, *vertex);
+	CREATE_VEC3(x, y, z, (*vertex));
 	// vertex->x = ft_atof(line[0]);
 	// vertex->y = ft_atof(line[1]);
 	// vertex->z = ft_atof(line[2]);
@@ -82,11 +82,11 @@ void line_to_vec3_u32(char **line, u32 *other_val, vec3_u32 *vec, u8 *error)
 	u32 y = array_to_uint32(line[1]);
 	u32 z = array_to_uint32(line[2]);
 
-	CREATE_VEC3(x, y, z, *vec);
+	CREATE_VEC3(x, y, z, (*vec));
 	// vec[0] = array_to_uint32(line[0]);
 	// vec[1] = array_to_uint32(line[1]);
 	// vec[2] = array_to_uint32(line[2]);
-	return (vec);
+	// return (vec);
 }
 
 
@@ -123,7 +123,7 @@ u8 line_to_face(t_obj_file *file, char **line)
 			// ft_printf_fd(2, PURPLE" idx: |%u| val: |%u|"RESET, i, face->other[i]);
 		}
 	}
-	face->vec = CREATE_VEC3(vec[0], vec[1], vec[2]);
+	CREATE_VEC3(vec[0], vec[1], vec[2], face->vec);
 	ft_lstadd_back(&file->face, ft_lstnew(face));
 	// ft_printf_fd(1, CYAN"\nFace: ");
 	// DISPLAY_VEC3(u32, face->vec);

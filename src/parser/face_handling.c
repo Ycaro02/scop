@@ -30,13 +30,13 @@ t_list *quadra_to_triangle(t_list *face_node_lst)
                     ft_printf_fd(2, RED"Error: Malloc failed\n"RESET);
                     return (NULL);
                 }
-				sub_triangle->x = node->vec[0];
+				(*sub_triangle)[0] = node->vec[0];
                 if (i == 0) {
-                    sub_triangle->y = node->vec[2];
-                    sub_triangle->z = node->other[i];
+                    (*sub_triangle)[1] = node->vec[2];
+                    (*sub_triangle)[2] = node->other[i];
                 } else  {
-                    sub_triangle->y = node->other[i - 1];
-                    sub_triangle->z = node->other[i];
+                    (*sub_triangle)[1] = node->other[i - 1];
+                    (*sub_triangle)[2] = node->other[i];
 				}
                 ft_lstadd_back(&triangle_list, ft_lstnew(sub_triangle));
             }
@@ -48,7 +48,7 @@ t_list *quadra_to_triangle(t_list *face_node_lst)
 	check_struct_size("vec3_u32", sizeof(vec3_u32), 12);
 	check_struct_size("vec3_float", sizeof(vec3_float), 12);
 	check_struct_size("vec3_double", sizeof(vec3_double), 24);
-	check_struct_size("t_vec4_float", sizeof(t_vec4_float), 16);
+	check_struct_size("t_vec4_float", sizeof(vec4_float), 16);
     // for (t_list *current = triangle_list; current; current = current->next) {
     //     vec3_u32 *triangle = current->content;
     //     ft_printf_fd(1, ORANGE"Triangle: %u, %u, %u\n"RESET, triangle->x, triangle->y, triangle->z);

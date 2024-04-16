@@ -8,8 +8,8 @@ void  display_vertex_lst(t_list *lst)
 {
 	ft_printf_fd(1, "Vertex list\n");
 	for (t_list *current = lst; current; current = current->next) {
-		vec3_float vec = *(vec3_float *)current->content;
-		DISPLAY_VEC3(float, vec)
+		vec3_float *vec = (vec3_float *)current->content;
+		VECTOR_FLOAT_DISPLAY(3, (*vec))
 	}
 }
 
@@ -70,7 +70,7 @@ void print_vertex_data(t_obj_model *model) {
     glGetBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vec3_float) * model->v_size, bufferData);
 
     for (u32 i = 0; i < model->v_size; i++) {
-        ft_printf_fd(1, ORANGE"Vertex %u: x = %f, y = %f, z = %f\n"RESET, i, bufferData[i].x, bufferData[i].y, bufferData[i].z);
+        ft_printf_fd(1, ORANGE"Vertex %u: x = %f, y = %f, z = %f\n"RESET, i, bufferData[i][0], bufferData[i][1], bufferData[i][2]);
     }
     free(bufferData);
 }
@@ -94,7 +94,7 @@ void print_elem_data(t_obj_model *model) {
 	glGetBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, sizeof(vec3_u32) * model->tri_size, bufferData);
 
 	for (u32 i = 0; i < model->tri_size; i++) {
-		ft_printf_fd(1, PINK"Element %u: x = %u, y = %u, z = %u\n"RESET, i, bufferData[i].x, bufferData[i].y, bufferData[i].z);
+		ft_printf_fd(1, PINK"Element %u: x = %u, y = %u, z = %u\n"RESET, i, bufferData[i][0], bufferData[i][1], bufferData[i][2]);
 	}
 	free(bufferData);
 }

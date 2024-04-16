@@ -115,7 +115,7 @@ void main_loop(t_obj_model *model, GLFWwindow *win)
         glClear(GL_COLOR_BUFFER_BIT);
 		/* basic test for color */
 		// set_shader_var_vec4(model->shader_id, "myColor", (t_vec4_float){0.0f, 0.7f, 0.7f, 1.0f});
-		set_shader_var_vec4(model->shader_id, "myColor", (t_vec4_float){0.0f, 0.9f, 0.0f, 1.0f});
+		set_shader_var_vec4(model->shader_id, "myColor", (vec4_float){0.0f, 0.9f, 0.0f, 1.0f});
 
 		glUseProgram(model->shader_id); /* useless ? */
 		update_camera(&model->cam, model->shader_id);
