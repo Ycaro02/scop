@@ -92,68 +92,19 @@ void rotate_camera(t_camera* camera, float angle, vec3 axis) {
     glm_mat4_mulv3(rotation, camera->target, 1.0f, camera->target);
 }
 
-t_camera init_custom_camera2() 
-{
-    t_camera camera;
-
-    // init cam position
-    camera.position[0] = 6.426827f;
-    camera.position[1] = 0.00000f;
-    camera.position[2] = -1.212486f;
-
-    // init cam target
-    camera.target[0] = -1.211794f;
-    camera.target[1] = 0.00000f;
-    camera.target[2] = 1.625706f;
-
-    // init up vector
-    camera.up[0] = 0.00000f;
-    camera.up[1] = 1.00000f;
-    camera.up[2] = 0.00000f;
-
-    // init view mat4
-    float view[16] = {
-        -0.348293f, 0.00000f, 0.937385f, 0.00000f,
-        0.00000f, 1.000000f, 0.00000f, 0.00000f,
-        -0.937385f, 0.00000f, -0.348293f, 0.00000f,
-        1.101853f, 0.00000f, -6.446716f, 1.00000f
-    };
-    ft_memcpy(camera.view, view, sizeof(view));
-
-    // init projection mat4
-    float projection[16] = {
-        2.414213f, 0.00000f, 0.00000f, 0.00000f,
-        0.00000f, 2.414213f, 0.00000f, 0.00000f,
-        0.00000f, 0.00000f, -1.002002f, -1.00000f,
-        0.00000f, 0.00000f, -0.200200f, 0.00000f
-    };
-    ft_memcpy(camera.projection, projection, sizeof(projection));
-
-    // init model mat4
-    float model[16] = {
-        1.00000f, 0.00000f, 0.00000f, 0.00000f,
-        0.00000f, 1.00000f, 0.00000f, 0.00000f,
-        0.00000f, 0.00000f, 1.00000f, 0.00000f,
-        0.00000f, 0.00000f, 0.00000f, 1.00000f
-    };
-    ft_memcpy(camera.model, model, sizeof(model));
-
-    return camera;
-}
-
 t_camera init_custom_camera() 
 {
     t_camera camera;
 
     // init cam position
-    camera.position[0] = 4.707497f;
+    camera.position[0] = 5.483057f;
     camera.position[1] = 0.00000f;
-    camera.position[2] = 4.215041f;
+    camera.position[2] = 1.265557f;
 
     // init cam target
-    camera.target[0] = 0.443883f;
+    camera.target[0] = -3.340549f;
     camera.target[1] = 0.00000f;
-    camera.target[2] = 1.516423f;
+    camera.target[2] = 1.130818f;
 
     // init up vector
     camera.up[0] = 0.00000f;
@@ -162,10 +113,10 @@ t_camera init_custom_camera()
 
     /* init view mat4 */
     float view[16] = {
-        0.534815f, 0.00000f, 0.844968f, 0.00000f,
+        0.015268f, 0.00000f, 0.999883f, 0.00000f,
         0.00000f, 1.00000f, 0.00000f, 0.00000f,
-        -0.844968f, 0.00000f, 0.534815f, 0.00000f,
-        1.043934f, 0.00000f, -6.231958f, 1.00000f
+        -0.999883f, 0.00000f, 0.015268f, 0.00000f,
+        1.181691f, 0.00000f, -5.501741f, 1.00000f
     };
     ft_memcpy(camera.view, view, sizeof(view));
 

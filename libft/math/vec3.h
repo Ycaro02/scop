@@ -6,18 +6,14 @@
 /*   By: nfour <nfour@student.42angouleme.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 15:43:13 by nfour             #+#    #+#             */
-/*   Updated: 2024/04/15 17:03:12 by nfour            ###   ########.fr       */
+/*   Updated: 2024/04/16 10:37:15 by nfour            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef DEFINE_VECTOR3_HEADER
 #define DEFINE_VECTOR3_HEADER
 
-#include <sys/types.h>
-
-#define FT_INLINE   static inline __attribute((always_inline))
-#define FT_EPSILON  1e-5f
-
+#include "ft_math.h"
 
 /*
  *	This header file provides macros and structures for handling 3D vectors of various data types.
@@ -114,8 +110,7 @@ DEFINE_VEC3_STRUCT(double)
     } \
 }
 
-/* Bigger math function */
-#include <math.h>
+/* Vec3 float manipulation*/
 
 /* Dot product */
 #define VEC3_DOT(type, a, b) (type)((a.x * b.x) + (a.y * b.y) + (a.z * b.z))
@@ -143,12 +138,9 @@ FT_INLINE void vec3_normalise(t_vec3_float *v) {
     vec3_scale(*v, 1.0f / norm, v);
 }
 
-#define DEG_TO_RADIAN(deg)  (float)(deg * (float)M_PI / 180.0f)
-#define RADIAN_TO_DEG(rad)  (float)(rad * 180.0f / (float)M_PI)
-#define FLOAT_EQUAL(a, b)   (fabs(a - b) < FLT_EPSILON)
-
 /*
     normalise(x) -> norm(x) -> sqrtf(norm2(x)) -> dot(x, x)
 */
+
 
 # endif /* DEFINE_VECTOR3_HEADER */

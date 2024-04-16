@@ -6,14 +6,14 @@
 /*   By: nfour <nfour@student.42angouleme.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 15:43:13 by nfour             #+#    #+#             */
-/*   Updated: 2024/04/14 13:37:17 by nfour            ###   ########.fr       */
+/*   Updated: 2024/04/16 11:03:41 by nfour            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef DEFINE_VECTOR4_HEADER
 #define DEFINE_VECTOR4_HEADER
 
-#include <sys/types.h>
+#include "ft_math.h"
 
 /*
  *	This header file provides macros and structures for handling 3D vectors of various data types.
@@ -46,6 +46,7 @@ typedef struct s_vec4_##type { \
 	type w; \
 } t_vec4_##type;
 
+
 /* Define structure for unsigned int*/
 DEFINE_VEC4_STRUCT(u8)
 DEFINE_VEC4_STRUCT(u16)
@@ -56,7 +57,7 @@ DEFINE_VEC4_STRUCT(u64)
 DEFINE_VEC4_STRUCT(s8)
 DEFINE_VEC4_STRUCT(s16)
 DEFINE_VEC4_STRUCT(s32)
-DEFINE_VEC4_STRUCT(s64)
+DEFINE_VEC4_STRUCT(s64) 
 
 /* Define float/double structure */
 DEFINE_VEC4_STRUCT(float)

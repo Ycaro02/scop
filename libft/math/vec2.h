@@ -6,14 +6,14 @@
 /*   By: nfour <nfour@student.42angouleme.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 15:43:26 by nfour             #+#    #+#             */
-/*   Updated: 2024/04/15 13:31:55 by nfour            ###   ########.fr       */
+/*   Updated: 2024/04/16 10:21:11 by nfour            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef DEFINE_VECTOR2_HEADER
 #define DEFINE_VECTOR2_HEADER
 
-#include <sys/types.h>
+#include "ft_math.h"
 
 /*
  *	This header file provides macros and structures for handling 2D vectors of various data types.
