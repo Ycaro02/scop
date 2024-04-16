@@ -22,7 +22,8 @@
 		"ft_math.h": "c",
 		"vec4.h": "c",
 		"scop.h": "c",
-		"types.h": "c"
+		"types.h": "c",
+		"basic_define.h": "c"
 	},
 	"42header.email": "nfour@student.42angouleme.fr",
 	"42header.username": "nfour"
