@@ -13,17 +13,21 @@ t_camera create_camera(float fov, float aspect_ratio, float near, float far)
     t_camera camera;
 
     /* Initialize position, target and up vector */
+	
+	/* CGLM version */
     // glm_vec3_copy((vec3){0.0f, 0.0f, 3.0f}, camera.position);
     // glm_vec3_copy((vec3){0.0f, 0.0f, -1.0f}, camera.target);
     // glm_vec3_copy((vec3){0.0f, 1.0f, 0.0f}, camera.up);
 
+	/* NEW VERSION*/
 	u32 vec3_size = sizeof(vec3_float);
 	ft_vec_copy(camera.position, (vec3_float){0.0f, 0.0f, 3.0f}, vec3_size);
 	ft_vec_copy(camera.target, (vec3_float){0.0f, 0.0f, -1.0f}, vec3_size);
 	ft_vec_copy(camera.up, (vec3_float){0.0f, 1.0f, 0.0f}, vec3_size);
 
     /* Init identity matrice 4x4 */
-    glm_mat4_identity(camera.model);
+    // glm_mat4_identity(camera.model);
+    mat_identity(camera.model); /* ft version need to rework name */
 
     /* Compute view martice */
     // glm_lookat(camera.position, camera.target, camera.up, camera.view);
@@ -66,15 +70,6 @@ void move_camera_forward(t_camera* camera, float distance)
     glm_vec3_add(camera->target, direction, camera->target);
 
 }
-
-// void vector_test()
-// {
-//     t_vec3_float vec1 = (t_vec3_float){1.0f, 2.0f, 3.0f};
-//     t_vec3_float vec11 = (t_vec3_float){5.0f, 4.0f, 2.0f};
-
-//     VEC3_DOT(float, vec1, vec11);  
-// }
-
 
 /**
  * @brief Move camera backward
