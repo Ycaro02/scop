@@ -3,7 +3,7 @@
 
 
 #include <math.h>
-#include <cglm/cglm.h>
+#include <cglm/cglm.h> /* need to remove */
 
 #include "../libft/libft.h"
 
@@ -13,7 +13,6 @@
 
 #define VERTEX_SHADER_PATH "rsc/shaders/vertex_shader.glsl"
 #define FRAGMENT_SHADER_PATH "rsc/shaders/fragment_shader.glsl"
-
 #define NEW_VERTEX_SHADER "rsc/shaders/new_vertex_shader.glsl"
 
 #define SCREEN_WIDTH 700
@@ -55,9 +54,9 @@ enum e_obj_token {
 
 /* Camera in implementation */
 typedef struct t_camera {
-    vec3 position;
-    vec3 target;
-    vec3 up;
+    vec3_float position;
+    vec3_float target;
+    vec3_float up;
     mat4 view;
     mat4 projection;
 	mat4 model;

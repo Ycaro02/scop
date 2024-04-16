@@ -13,9 +13,14 @@ t_camera create_camera(float fov, float aspect_ratio, float near, float far)
     t_camera camera;
 
     /* Initialize position, target and up vector */
-    glm_vec3_copy((vec3){0.0f, 0.0f, 3.0f}, camera.position);
-    glm_vec3_copy((vec3){0.0f, 0.0f, -1.0f}, camera.target);
-    glm_vec3_copy((vec3){0.0f, 1.0f, 0.0f}, camera.up);
+    // glm_vec3_copy((vec3){0.0f, 0.0f, 3.0f}, camera.position);
+    // glm_vec3_copy((vec3){0.0f, 0.0f, -1.0f}, camera.target);
+    // glm_vec3_copy((vec3){0.0f, 1.0f, 0.0f}, camera.up);
+
+	u32 vec3_size = sizeof(vec3_float);
+	ft_vec_copy(camera.position, (vec3_float){0.0f, 0.0f, 3.0f}, vec3_size);
+	ft_vec_copy(camera.target, (vec3_float){0.0f, 0.0f, -1.0f}, vec3_size);
+	ft_vec_copy(camera.up, (vec3_float){0.0f, 1.0f, 0.0f}, vec3_size);
 
     /* Init identity matrice 4x4 */
     glm_mat4_identity(camera.model);
