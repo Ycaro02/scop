@@ -65,7 +65,7 @@ typedef struct t_camera {
 
 /* Node used only for parse */
 typedef struct s_face_node {
-	t_vec3_u32 	vec;				/* vec3 uint32 for 3 first val */
+	vec3_u32 	vec;				/* vec3 uint32 for 3 first val */
 	u32			*other;				/* uin32_t int array aloc for other value if needed otherwise NULL */
 } t_face_node;
 
@@ -74,18 +74,18 @@ typedef struct s_obj_file {
 	char	*o;				/* The name of the object */
 	char	*mtllib;		/* The name of the material file associated with the object */
 	char	*usemtl;		/* The name of the material to be used for the subsequent faces of the object */
-	t_list	*vertex;		/* The coordinates of a 3D vertex, list of t_vec3_float */
+	t_list	*vertex;		/* The coordinates of a 3D vertex, list of vec3_float */
 	t_list	*vt;			/* The texture coordinates associated with a vertex, list of vec2/vec3 float */
-	t_list	*vn;			/* The coordinates of the normal vector associated with a vertex, list of t_vec3_float */
+	t_list	*vn;			/* The coordinates of the normal vector associated with a vertex, list of vec3_float */
 	t_list	*face;				/* The indices of the vertices composing a face, list t_fnode */
 	u8		smooth;			/* The smoothing group state. 'on' to activate, 'off' to deactivate. 1 for true, otherwise 0*/
 } t_obj_file;
 
 typedef struct s_obj_model {
 	t_camera		cam;			/* camera structure */
-	t_vec3_float	*vertex;		/* vertex array */
+	vec3_float	*vertex;		/* vertex array */
 	u32				v_size;			/* vertex size */
-	t_vec3_u32		*tri_face;		/* face array */
+	vec3_u32		*tri_face;		/* face array */
 	u32				tri_size;		/* face size */
 	GLuint			vao;			/* vertex array object */
 	GLuint			vbo;			/* vertex buffer object */
@@ -94,8 +94,8 @@ typedef struct s_obj_model {
 	// t_obj_file	*obj;		/* obj file structure */
 	// u32			vt_size;		/* texture size */
 	// u32			vn_size;		/* normal size */
-	// t_vec3_float	*vt;		/* texture array */
-	// t_vec3_float	*vn;		/* normal array */
+	// vec3_float	*vt;		/* texture array */
+	// vec3_float	*vn;		/* normal array */
 	// u8			smooth;		/* The smoothing group state. 'on' to activate, 'off' to deactivate. 1 for true, otherwise 0*/
 }	t_obj_model;
 
@@ -105,11 +105,9 @@ char			**load_file(char *path);
 
 /* parser/obj_parse.c */
 t_obj_model		*parse_obj_file(char *path);
-t_vec3_float	*vertex_list_toarray(t_list *lst, u32 lst_size);
 void			free_obj_file(t_obj_file *obj);
 
 /* parser/build_obj_model.c */
-t_vec3_float	*vertex_list_toarray(t_list *lst, u32 lst_size);
 void			display_vertex_lst(t_list *lst);
 void			free_obj_model(t_obj_model *model);
 t_obj_model		*init_obj_model(t_obj_file *obj_file);
@@ -119,9 +117,11 @@ void			init_gl_triangle_array(t_obj_model *model);
 /* parser/parse_line.c  */
 u8				handle_smooth_str(char *str);
 void			free_obj_model(t_obj_model *model);
-t_vec3_float	*line_to_vertex_node(char **line);
 u8				line_to_face(t_obj_file *file, char **line);
-t_vec3_u32		line_to_vec3_u32(char **line, u32 *other_val);
+
+/* to revork */
+void line_to_vec3_u32(char **line, u32 *other_val, vec3_u32 *vec, u8 *error);
+vec3_float		*line_to_vertex_node(char **line);
 
 
 /* main to move */
@@ -137,12 +137,12 @@ void			rotate_camera(t_camera* camera, float angle, vec3 axis);
 t_camera		init_custom_camera();
 
 /*render/mat4*/
-t_vec4_float	*create_mat4(t_vec4_float a, t_vec4_float b, t_vec4_float c, t_vec4_float d);
-t_vec4_float	*create_mat4_identity();
+// vec4_float	*create_mat4(vec4_float a, vec4_float b, vec4_float c, vec4_float d);
+// vec4_float	*create_mat4_identity();
 
 /* render/shader_utils */
 void			set_shader_var_mat4(GLuint shader_id, char *var_name, mat4 data);
-void			set_shader_var_vec4(GLuint shader_id, char *var_name, t_vec4_float vec);
+void			set_shader_var_vec4(GLuint shader_id, char *var_name, vec4_float vec);
 GLuint			load_shader(t_obj_model *model);
 
 #endif /* SCOP_HEADER_H */

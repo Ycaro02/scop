@@ -4,10 +4,6 @@
 #define FT_INLINE   static inline __attribute((always_inline))
 #define FT_EPSILON  1e-5f
 
-#include "vec2.h"
-#include "vec3.h"
-#include "vec4.h"
-
 /* Cast macro */
 #define FT_CAST(type, x) ((type)x)
 

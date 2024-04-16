@@ -13,26 +13,26 @@ t_list *quadra_to_triangle(t_list *face_node_lst)
 
     for (t_list *current = face_node_lst; current; current = current->next) {
 		node = current->content;
-		t_vec3_u32 *triangle = ft_calloc(1, sizeof(t_vec3_u32));
+		vec3_u32 *triangle = ft_calloc(1, sizeof(vec3_u32));
 		if (!triangle) {
 			ft_printf_fd(2, RED"Error: Malloc failed\n"RESET);
 			return (NULL);
 		}
 		/* save first triangle in new list */
-		ft_memcpy(triangle, &node->vec, sizeof(t_vec3_u32));
+		ft_memcpy(triangle, &node->vec, sizeof(vec3_u32));
 		ft_lstadd_back(&triangle_list, ft_lstnew(triangle));
 		if (node->other) {
             u32 other_size = 1; /* hardcode need to count*/
         	/* for each other value build accordate subtriangle and it to new list */
             for (u32 i = 0; i < other_size; i++) {
-            	t_vec3_u32 *sub_triangle = ft_calloc(1, sizeof(t_vec3_u32));
+            	vec3_u32 *sub_triangle = ft_calloc(1, sizeof(vec3_u32));
                 if (!sub_triangle) {
                     ft_printf_fd(2, RED"Error: Malloc failed\n"RESET);
                     return (NULL);
                 }
-				sub_triangle->x = node->vec.x;
+				sub_triangle->x = node->vec[0];
                 if (i == 0) {
-                    sub_triangle->y = node->vec.z;
+                    sub_triangle->y = node->vec[2];
                     sub_triangle->z = node->other[i];
                 } else  {
                     sub_triangle->y = node->other[i - 1];
@@ -45,12 +45,12 @@ t_list *quadra_to_triangle(t_list *face_node_lst)
         }
     }
 
-	check_struct_size("t_vec3_u32", sizeof(t_vec3_u32), 12);
-	check_struct_size("t_vec3_float", sizeof(t_vec3_float), 12);
-	check_struct_size("t_vec3_double", sizeof(t_vec3_double), 24);
+	check_struct_size("vec3_u32", sizeof(vec3_u32), 12);
+	check_struct_size("vec3_float", sizeof(vec3_float), 12);
+	check_struct_size("vec3_double", sizeof(vec3_double), 24);
 	check_struct_size("t_vec4_float", sizeof(t_vec4_float), 16);
     // for (t_list *current = triangle_list; current; current = current->next) {
-    //     t_vec3_u32 *triangle = current->content;
+    //     vec3_u32 *triangle = current->content;
     //     ft_printf_fd(1, ORANGE"Triangle: %u, %u, %u\n"RESET, triangle->x, triangle->y, triangle->z);
     // }
 	return (triangle_list);

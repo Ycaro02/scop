@@ -8,7 +8,7 @@ void  display_vertex_lst(t_list *lst)
 {
 	ft_printf_fd(1, "Vertex list\n");
 	for (t_list *current = lst; current; current = current->next) {
-		t_vec3_float vec = *(t_vec3_float *)current->content;
+		vec3_float vec = *(vec3_float *)current->content;
 		DISPLAY_VEC3(float, vec)
 	}
 }
@@ -43,8 +43,7 @@ t_obj_model *init_obj_model(t_obj_file *obj_file)
 		return (NULL);
 	}
 
-	// model->vertex = vertex_list_toarray(obj_file->vertex, ft_lstsize(obj_file->vertex));
-	model->vertex = list_to_array(obj_file->vertex, ft_lstsize(obj_file->vertex), sizeof(t_vec3_float));
+	model->vertex = list_to_array(obj_file->vertex, ft_lstsize(obj_file->vertex), sizeof(vec3_float));
 	model->v_size = ft_lstsize(obj_file->vertex);
 
 	t_list *triangle_lst = quadra_to_triangle(obj_file->face);
@@ -55,7 +54,7 @@ t_obj_model *init_obj_model(t_obj_file *obj_file)
 	}
 
 	// model->tri_face = triangle_list_to_array(triangle_lst, ft_lstsize(triangle_lst));
-	model->tri_face = list_to_array(triangle_lst, ft_lstsize(triangle_lst), sizeof(t_vec3_u32));
+	model->tri_face = list_to_array(triangle_lst, ft_lstsize(triangle_lst), sizeof(vec3_u32));
 	model->tri_size = ft_lstsize(triangle_lst);
 
 
@@ -66,9 +65,9 @@ t_obj_model *init_obj_model(t_obj_file *obj_file)
 }
 
 void print_vertex_data(t_obj_model *model) {
-    t_vec3_float* bufferData = malloc(sizeof(t_vec3_float) * model->v_size);
+    vec3_float* bufferData = malloc(sizeof(vec3_float) * model->v_size);
 
-    glGetBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(t_vec3_float) * model->v_size, bufferData);
+    glGetBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vec3_float) * model->v_size, bufferData);
 
     for (u32 i = 0; i < model->v_size; i++) {
         ft_printf_fd(1, ORANGE"Vertex %u: x = %f, y = %f, z = %f\n"RESET, i, bufferData[i].x, bufferData[i].y, bufferData[i].z);
@@ -82,7 +81,7 @@ GLuint init_gl_vertex_buffer(t_obj_model *model)
 	GLuint vbo;
 	glGenBuffers(1, &vbo);
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(t_vec3_float) * model->v_size, model->vertex, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vec3_float) * model->v_size, model->vertex, GL_STATIC_DRAW);
 	return (vbo);
 }
 
@@ -90,9 +89,9 @@ GLuint init_gl_vertex_buffer(t_obj_model *model)
  * @brief [ DEBUG ] Print element bufer data (triangle give to opengl)
 */
 void print_elem_data(t_obj_model *model) {
-	t_vec3_u32* bufferData = malloc(sizeof(t_vec3_u32) * model->tri_size);
+	vec3_u32* bufferData = malloc(sizeof(vec3_u32) * model->tri_size);
 
-	glGetBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, sizeof(t_vec3_u32) * model->tri_size, bufferData);
+	glGetBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, sizeof(vec3_u32) * model->tri_size, bufferData);
 
 	for (u32 i = 0; i < model->tri_size; i++) {
 		ft_printf_fd(1, PINK"Element %u: x = %u, y = %u, z = %u\n"RESET, i, bufferData[i].x, bufferData[i].y, bufferData[i].z);
@@ -118,13 +117,13 @@ void init_gl_triangle_array(t_obj_model *model)
     glGenBuffers(1, &model->ebo);
 	/* Bind EBO to GL alement array */
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, model->ebo);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(t_vec3_u32) * model->tri_size, model->tri_face, GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(vec3_u32) * model->tri_size, model->tri_face, GL_STATIC_DRAW);
 	
 	/* print here */
 	print_elem_data(model);
 
  	/* Config new vertex attr */
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(t_vec3_float), (void*)0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(vec3_float), (void*)0);
 	glEnableVertexAttribArray(0);  /* Enable vertex attr */
 	/*print here*/
 	print_vertex_data(model);

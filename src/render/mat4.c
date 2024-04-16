@@ -2,29 +2,29 @@
 
 /**
  * @brief Create a 4x4 matrix from 4 vectors of 4 float 
- * @return pointer on allocated t_vec4_float
+ * @return pointer on allocated vec4_float
 */
-t_vec4_float *create_mat4(t_vec4_float a, t_vec4_float b, t_vec4_float c, t_vec4_float d)
+vec4_float *create_mat4(vec4_float a, vec4_float b, vec4_float c, vec4_float d)
 {
-	t_vec4_float *vec = ft_calloc(4, sizeof(t_vec4_float));
+	vec4_float *vec = ft_calloc(4, sizeof(vec4_float));
 	if (!vec) {
 		ft_printf_fd(2, RED"Error: Malloc failed\n"RESET);
 		return (NULL);
 	}
-	ft_memcpy(&vec[0], &a, sizeof(t_vec4_float));
-	ft_memcpy(&vec[1], &b, sizeof(t_vec4_float));
-	ft_memcpy(&vec[2], &c, sizeof(t_vec4_float));
-	ft_memcpy(&vec[3], &d, sizeof(t_vec4_float));
+	ft_memcpy(&vec[0], &a, sizeof(vec4_float));
+	ft_memcpy(&vec[1], &b, sizeof(vec4_float));
+	ft_memcpy(&vec[2], &c, sizeof(vec4_float));
+	ft_memcpy(&vec[3], &d, sizeof(vec4_float));
 	return (vec);
 }
 
 /**
  * @brief Create a 4x4 identity matrix
- * @return pointer on allocated t_vec4_float
+ * @return pointer on allocated vec4_float
 */
-t_vec4_float *create_mat4_identity()
+vec4_float *create_mat4_identity()
 {
-	t_vec4_float *vec = ft_calloc(4, sizeof(t_vec4_float));
+	vec4_float *vec = ft_calloc(4, sizeof(vec4_float));
 	if (!vec) {
 		ft_printf_fd(2, RED"Error: Malloc failed\n"RESET);
 		return (NULL);

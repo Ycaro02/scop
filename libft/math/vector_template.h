@@ -6,9 +6,12 @@
 /*   By: nfour <nfour@student.42angouleme.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 12:25:07 by nfour             #+#    #+#             */
-/*   Updated: 2024/04/16 12:26:18 by nfour            ###   ########.fr       */
+/*   Updated: 2024/04/16 12:54:50 by nfour            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#ifndef VECTOR_TEMPLATE_HEADER
+#define VECTOR_TEMPLATE_HEADER 1
 
 #include "ft_math.h"
 
@@ -87,6 +90,11 @@ FT_INLINE void ft_vec_copy(void *dest, void *src, u32 size) {
 FT_INLINE void ft_vec_zero(void *vec, u32 size) {
 	ft_bzero(vec, size);
 }
+
+#define CREATE_VEC2(x_val, y_val, vec)					{vec[0] = x_val; vec[1] = y_val} 
+#define CREATE_VEC3(x_val, y_val, z_val, vec)			{vec[0] = x_val; vec[1] = y_val; vec[2] = z_val;}
+#define CREATE_VEC4(x_val, y_val, z_val, w_val, vec)	{vec[0] = x_val; vec[1] = y_val; vec[2] = z_val; vec[3] = w_val;}
+
 
 /**
  * @brief Add two vectors
@@ -200,3 +208,5 @@ FT_INLINE void ft_vec_zero(void *vec, u32 size) {
 	} \
 	ft_printf_fd(1, "\n"); \
 }
+
+#endif /* VECTOR_TEMPLATE_HEADER */

@@ -19,11 +19,11 @@ u8 handle_smooth_str(char *str)
 /**
  * @brief Line to vertex
  * @param line line to parse
- * @return allocated t_vec3_float ptr , NULL if fail
+ * @return allocated vec3_float ptr , NULL if fail
 */
-t_vec3_float *line_to_vertex_node(char **line)
+vec3_float *line_to_vertex_node(char **line)
 {
-	t_vec3_float *vertex = NULL;
+	vec3_float *vertex = NULL;
 	if (double_char_size(line) != 3) {
 		ft_printf_fd(2, RED"Error: Invalid vertex\n"RESET);
 		display_double_char(line);
@@ -36,13 +36,18 @@ t_vec3_float *line_to_vertex_node(char **line)
 		return (NULL);
 	}
 
-	if ((vertex = (t_vec3_float *)malloc(sizeof(t_vec3_float))) == NULL) {
+	if ((vertex = (vec3_float *)malloc(sizeof(vec3_float))) == NULL) {
 		ft_printf_fd(2, RED"Error: Malloc failed\n"RESET);
 		return (NULL);
 	}
-	vertex->x = ft_atof(line[0]);
-	vertex->y = ft_atof(line[1]);
-	vertex->z = ft_atof(line[2]);
+
+	float x = ft_atof(line[0]);
+	float y = ft_atof(line[1]);
+	float z = ft_atof(line[2]);
+	CREATE_VEC3(x, y, z, *vertex);
+	// vertex->x = ft_atof(line[0]);
+	// vertex->y = ft_atof(line[1]);
+	// vertex->z = ft_atof(line[2]);
 	return (vertex);
 }
 
@@ -51,16 +56,17 @@ t_vec3_float *line_to_vertex_node(char **line)
  * @brief Line to vec3_u32
  * @param line line to parse
  * @param other_val ptr on u32, set to the number of other value
- * @return t_vec3_u32
+ * @return vec3_u32
 */
-t_vec3_u32 line_to_vec3_u32(char **line, u32 *other_val)
+void line_to_vec3_u32(char **line, u32 *other_val, vec3_u32 *vec, u8 *error)
 {
-	t_vec3_u32 vec = {0, 0, 0};
+	// vec3_u32 vec = {0, 0, 0};
 	u32 size;
 	if ((size = double_char_size(line)) < 3) {
 		ft_printf_fd(2, RED"Error: Invalid f option\n"RESET);
 		display_double_char(line);
-		return (vec);
+		*error = 1;
+		return ;
 	} else if (size > 3) {
 		*other_val = size - 3;
 	}
@@ -68,12 +74,18 @@ t_vec3_u32 line_to_vec3_u32(char **line, u32 *other_val)
 	if (!str_is_digit(line[0]) || !str_is_digit(line[1]) || !str_is_digit(line[2])) {
 		ft_printf_fd(2, RED"Error: Invalid vertex\n"RESET);
 		display_double_char(line);
-		return (vec);
+		*error = 1;
+		return ;
 	}
 	/* need to check value, maybe count number of vertex/vertice */
-	vec.x = array_to_uint32(line[0]);
-	vec.y = array_to_uint32(line[1]);
-	vec.z = array_to_uint32(line[2]);
+	u32 x = array_to_uint32(line[0]);
+	u32 y = array_to_uint32(line[1]);
+	u32 z = array_to_uint32(line[2]);
+
+	CREATE_VEC3(x, y, z, *vec);
+	// vec[0] = array_to_uint32(line[0]);
+	// vec[1] = array_to_uint32(line[1]);
+	// vec[2] = array_to_uint32(line[2]);
 	return (vec);
 }
 
@@ -89,7 +101,13 @@ u8 line_to_face(t_obj_file *file, char **line)
 {
 	t_face_node *face;
 	u32			other_val = 0;
-	t_vec3_u32	vec = line_to_vec3_u32(line, &other_val);
+	vec3_u32	vec = {0, 0, 0};
+	u8			error = 0;
+	
+	line_to_vec3_u32(line, &other_val, &vec, &error);
+	if (error) {
+		return (FALSE);
+	}
 	
 	face = ft_calloc(1, sizeof(t_face_node));
 	if (!face) {
@@ -105,7 +123,7 @@ u8 line_to_face(t_obj_file *file, char **line)
 			// ft_printf_fd(2, PURPLE" idx: |%u| val: |%u|"RESET, i, face->other[i]);
 		}
 	}
-	face->vec = CREATE_VEC3(u32, vec.x, vec.y, vec.z);
+	face->vec = CREATE_VEC3(vec[0], vec[1], vec[2]);
 	ft_lstadd_back(&file->face, ft_lstnew(face));
 	// ft_printf_fd(1, CYAN"\nFace: ");
 	// DISPLAY_VEC3(u32, face->vec);
