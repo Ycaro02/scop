@@ -82,5 +82,19 @@ FT_INLINE void update_view_matrice(vec3_float eye, vec3_float center, vec3_float
     dest[3][3] = 1.0f;  
 }
 
+FT_INLINE void get_perspective_mat4(float fovy, float aspect, float nearZ, float farZ, mat4_float dest) {
+    float f, fn;
+
+    mat_zero(dest);
+    f  = 1.0f / tanf(fovy * 0.5f);
+    fn = 1.0f / (nearZ - farZ);
+    dest[0][0] = f / aspect;
+    dest[1][1] = f;
+    dest[2][2] = (nearZ + farZ) * fn;
+    dest[2][3] =-1.0f;
+    dest[3][2] = 2.0f * nearZ * farZ * fn;
+}
+
+
 
 #endif /* HANDLE_VEC3_H */

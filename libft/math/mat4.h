@@ -19,4 +19,8 @@ FT_INLINE void mat_identity(vec4_float *mat) {
 	ft_memcpy(mat, &tmp, (sizeof(vec4_float) * 4));
 }
 
+FT_INLINE void mat_zero(mat4_float mat) {
+	ft_bzero(mat, sizeof(mat4_float));
+}
+
 #endif /* MAT_HEADER_H */

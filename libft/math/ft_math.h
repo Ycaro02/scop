@@ -7,5 +7,6 @@
 #include "vector_template.h"
 #include "mat4.h"
 #include "handle_vec3.h"
+#include "float.h"
 
 #endif /* FT_MATH_HEADER_H */

@@ -35,7 +35,7 @@ t_camera create_camera(float fov, float aspect_ratio, float near, float far)
 
     /* Compute projection matrice */
     // glm_perspective(glm_rad(fov), aspect_ratio, near, far, camera.projection);
-    glm_perspective_rh_no(glm_rad(fov), aspect_ratio, near, far, camera.projection);
+    get_perspective_mat4(deg_to_rad(fov), aspect_ratio, near, far, camera.projection);
     return (camera);
 }
 
