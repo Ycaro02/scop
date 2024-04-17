@@ -128,4 +128,23 @@ FT_INLINE void make_rotatation(mat4_float m, float angle, vec3_float axis) {
   m[3][3] = 1.0f;
 }
 
+FT_INLINE void mat4_mult_vec(mat4_float m, vec3_float v, vec4_float dest)
+{
+    vec4_float res;
+    res[0] = m[0][0] * v[0] + m[1][0] * v[1] + m[2][0] * v[2] + m[3][0] * v[3];
+    res[1] = m[0][1] * v[0] + m[1][1] * v[1] + m[2][1] * v[2] + m[3][1] * v[3];
+    res[2] = m[0][2] * v[0] + m[1][2] * v[1] + m[2][2] * v[2] + m[3][2] * v[3];
+    res[3] = m[0][3] * v[0] + m[1][3] * v[1] + m[2][3] * v[2] + m[3][3] * v[3];
+    ft_vec_copy(res, dest, sizeof(vec4_float));
+}
+
+FT_INLINE void mat4_mult_vec3(mat4_float mat, vec3_float v, float last, vec3_float dest) {
+    vec4_float res;
+    
+    CREATE_VEC4(v[0], v[1], v[2], last, res);
+    mat4_mult_vec(mat, res, res);
+
+    CREATE_VEC3(res[0], res[1], res[2], dest);
+}
+
 #endif /* HANDLE_VEC3_H */

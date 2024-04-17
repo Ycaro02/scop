@@ -98,6 +98,8 @@ void rotate_camera(t_camera* camera, float angle, vec3 axis) {
     // glm_rotate_make(rotation, glm_rad(angle), axis);
     make_rotatation(rotation, deg_to_rad(angle), axis);
     glm_mat4_mulv3(rotation, camera->target, 1.0f, camera->target);
+    // mat4_mult_vec3(rotation, camera->target, 1.0f, camera->target);
+
 }
 
 t_camera init_custom_camera() 
