@@ -45,7 +45,7 @@ FT_INLINE void vec3_scale(vec3_float v, float s, vec3_float dest) {
 }
 
 /* Normalise the v vector */
-FT_INLINE void vec3_normalise(vec3_float v) {
+FT_INLINE void vec3_normalize(vec3_float v) {
     float norm = VEC3_NORM(v);
     if (norm <= FT_EPSILON) {
         ft_vec_zero(v, sizeof(vec3_float));
@@ -59,6 +59,27 @@ FT_INLINE void vec3_cross(vec3_float a, vec3_float b, vec3_float dest) {
     dest[0] = a[1] * b[2] - a[2] * b[1];
     dest[1] = a[2] * b[0] - a[0] * b[2];
     dest[2] = a[0] * b[1] - a[1] * b[0];
+}
+
+FT_INLINE void update_view_matrice(vec3_float eye, vec3_float center, vec3_float up, mat4_float dest) {
+    vec3_float f, u, s;
+
+    vec3_sub(center, eye, f);
+    vec3_normalize(f);
+
+    vec3_cross(f, up, s);
+    vec3_normalize(s);
+
+    vec3_cross(s, f, u);
+
+    dest[0][0] = s[0]; dest[0][1] = u[0]; dest[0][2] =-f[0]; 
+    dest[1][0] = s[1]; dest[1][1] = u[1]; dest[1][2] =-f[1]; 
+    dest[2][0] = s[2]; dest[2][1] = u[2]; dest[2][2] =-f[2]; 
+    dest[3][0] =-VEC3_DOT(s, eye);
+    dest[3][1] =-VEC3_DOT(u, eye);
+    dest[3][2] = VEC3_DOT(f, eye);
+    dest[0][3] = dest[1][3] = dest[2][3] = 0.0f;
+    dest[3][3] = 1.0f;  
 }
 
 

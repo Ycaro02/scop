@@ -31,7 +31,7 @@ t_camera create_camera(float fov, float aspect_ratio, float near, float far)
 
     /* Compute view martice */
     // glm_lookat(camera.position, camera.target, camera.up, camera.view);
-    glm_lookat_rh(camera.position, camera.target, camera.up, camera.view);
+    update_view_matrice(camera.position, camera.target, camera.up, camera.view);
 
     /* Compute projection matrice */
     // glm_perspective(glm_rad(fov), aspect_ratio, near, far, camera.projection);
@@ -46,8 +46,8 @@ t_camera create_camera(float fov, float aspect_ratio, float near, float far)
 */
 void update_camera(t_camera* camera, GLuint shader_id) 
 {
-    glm_lookat_rh(camera->position, camera->target, camera->up, camera->view);
-    // glm_lookat(camera->position, camera->target, camera->up, camera->view);
+    // glm_lookat_rh(camera->position, camera->target, camera->up, camera->view);
+    update_view_matrice(camera->position, camera->target, camera->up, camera->view);
 
     set_shader_var_mat4(shader_id, "view", camera->view);
     set_shader_var_mat4(shader_id, "model", camera->model);
@@ -65,7 +65,7 @@ void move_camera_forward(t_camera* camera, float distance)
 
 
     vec3_sub(camera->target, camera->position, direction); /* tocheck */
-    vec3_normalise(direction);
+    vec3_normalize(direction);
     vec3_scale(direction, distance, direction);
     VECTOR_ADD(float, 3, camera->position, direction);
     VECTOR_ADD(float, 3, camera->target, direction);
