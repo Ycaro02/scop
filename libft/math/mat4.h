@@ -1,5 +1,9 @@
-#include "../libft.h"
-#include "vector_template.h"
+#ifndef MAT4_HEADER_H
+#define MAT4_HEADER_H
+
+#include "ft_math.h"
+
+void	*ft_memcpy(void *dest, const void *src, size_t n);
 
 typedef vec4_float mat4_float[4];
 
@@ -14,3 +18,5 @@ FT_INLINE void mat_identity(vec4_float *mat) {
 	mat4_float tmp = MAT4_IDENTITY_INIT;
 	ft_memcpy(mat, &tmp, (sizeof(vec4_float) * 4));
 }
+
+#endif /* MAT_HEADER_H */

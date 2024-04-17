@@ -6,7 +6,7 @@
 /*   By: nfour <nfour@student.42angouleme.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 17:03:53 by nfour             #+#    #+#             */
-/*   Updated: 2024/04/16 17:19:56 by nfour            ###   ########.fr       */
+/*   Updated: 2024/04/17 13:14:04 by nfour            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,10 @@
 #define    FILL_YELLOW		"\033[7;33m"
 #define    FILL_RED			"\033[7;31m"
 #define    FILL_YELBLACK	"\033[40;33m"
+
+
+#define FT_INLINE   static inline __attribute((always_inline))
+#define FT_EPSILON  1e-5f
 
 /* Typedef for integet type */
 typedef uint8_t	 u8;		/* Unsigned int 8 */

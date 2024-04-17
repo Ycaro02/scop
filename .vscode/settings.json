@@ -23,7 +23,8 @@
 		"vec4.h": "c",
 		"scop.h": "c",
 		"types.h": "c",
-		"basic_define.h": "c"
+		"basic_define.h": "c",
+		"vector_template.h": "c"
 	},
 	"42header.email": "nfour@student.42angouleme.fr",
 	"42header.username": "nfour"

@@ -61,13 +61,20 @@ void update_camera(t_camera* camera, GLuint shader_id)
 */
 void move_camera_forward(t_camera* camera, float distance) 
 {
-    vec3 direction;
+    vec3_float direction;
 
-    glm_vec3_sub(camera->target, camera->position, direction);
-    glm_vec3_normalize(direction); /* tocheck */
-    glm_vec3_scale(direction, distance, direction);
-    glm_vec3_add(camera->position, direction, camera->position);
-    glm_vec3_add(camera->target, direction, camera->target);
+
+    vec3_sub(camera->target, camera->position, direction); /* tocheck */
+    vec3_normalise(direction);
+    vec3_scale(direction, distance, direction);
+    VECTOR_ADD(float, 3, camera->position, direction);
+    VECTOR_ADD(float, 3, camera->target, direction);
+
+    // glm_vec3_sub(camera->target, camera->position, direction);
+    // glm_vec3_normalize(direction); /* tocheck */
+    // glm_vec3_scale(direction, distance, direction);
+    // glm_vec3_add(camera->position, direction, camera->position);
+    // glm_vec3_add(camera->target, direction, camera->target);
 
 }
 
