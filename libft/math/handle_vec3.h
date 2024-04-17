@@ -54,12 +54,23 @@ FT_INLINE void vec3_normalize(vec3_float v) {
     vec3_scale(v, (1.0f / norm), v);
 }
 
+/* Normalise the v vector */
+FT_INLINE void vec3_normalize_to(vec3_float v, vec3_float dest) {
+    float norm = VEC3_NORM(v);
+    if (norm <= FT_EPSILON) {
+        ft_vec_zero(dest, sizeof(vec3_float));
+        return;
+    }
+    vec3_scale(v, (1.0f / norm), dest);
+}
+
 /* cross product of vec3 */
 FT_INLINE void vec3_cross(vec3_float a, vec3_float b, vec3_float dest) {
     dest[0] = a[1] * b[2] - a[2] * b[1];
     dest[1] = a[2] * b[0] - a[0] * b[2];
     dest[2] = a[0] * b[1] - a[1] * b[0];
 }
+
 
 FT_INLINE void update_view_matrice(vec3_float eye, vec3_float center, vec3_float up, mat4_float dest) {
     vec3_float f, u, s;
@@ -95,6 +106,26 @@ FT_INLINE void get_perspective_mat4(float fovy, float aspect, float nearZ, float
     dest[3][2] = 2.0f * nearZ * farZ * fn;
 }
 
+FT_INLINE void make_rotatation(mat4_float m, float angle, vec3_float axis) {
+  vec3_float axisn, v, vs;
+  float c;
 
+  c = cosf(angle);
+
+  vec3_normalize_to(axis, axisn);
+  vec3_scale(axisn, 1.0f - c, v);
+  vec3_scale(axisn, sinf(angle), vs);
+
+  vec3_scale(axisn, v[0], m[0]);
+  vec3_scale(axisn, v[1], m[1]);
+  vec3_scale(axisn, v[2], m[2]);
+
+  m[0][0] += c;       m[1][0] -= vs[2];   m[2][0] += vs[1];
+  m[0][1] += vs[2];   m[1][1] += c;       m[2][1] -= vs[0];
+  m[0][2] -= vs[1];   m[1][2] += vs[0];   m[2][2] += c;
+
+  m[0][3] = m[1][3] = m[2][3] = m[3][0] = m[3][1] = m[3][2] = 0.0f;
+  m[3][3] = 1.0f;
+}
 
 #endif /* HANDLE_VEC3_H */

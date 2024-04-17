@@ -95,7 +95,8 @@ void move_camera_backward(t_camera* camera, float distance) {
 */
 void rotate_camera(t_camera* camera, float angle, vec3 axis) {
     mat4 rotation;
-    glm_rotate_make(rotation, glm_rad(angle), axis);
+    // glm_rotate_make(rotation, glm_rad(angle), axis);
+    make_rotatation(rotation, deg_to_rad(angle), axis);
     glm_mat4_mulv3(rotation, camera->target, 1.0f, camera->target);
 }
 
