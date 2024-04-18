@@ -13,28 +13,19 @@ t_camera create_camera(float fov, float aspect_ratio, float near, float far)
     t_camera camera;
 
     /* Initialize position, target and up vector */
-	
-	/* CGLM version */
-    // glm_vec3_copy((vec3){0.0f, 0.0f, 3.0f}, camera.position);
-    // glm_vec3_copy((vec3){0.0f, 0.0f, -1.0f}, camera.target);
-    // glm_vec3_copy((vec3){0.0f, 1.0f, 0.0f}, camera.up);
-
-	/* NEW VERSION*/
 	u32 vec3_size = sizeof(vec3_f32);
 	ft_vec_copy(camera.position, (vec3_f32){0.0f, 0.0f, 3.0f}, vec3_size);
 	ft_vec_copy(camera.target, (vec3_f32){0.0f, 0.0f, -1.0f}, vec3_size);
 	ft_vec_copy(camera.up, (vec3_f32){0.0f, 1.0f, 0.0f}, vec3_size);
 
+
     /* Init identity matrice 4x4 */
-    // glm_mat4_identity(camera.model);
     mat_identity(camera.model); /* ft version need to rework name */
 
     /* Compute view martice */
-    // glm_lookat(camera.position, camera.target, camera.up, camera.view);
     update_view_matrice(camera.position, camera.target, camera.up, camera.view);
 
     /* Compute projection matrice */
-    // glm_perspective(glm_rad(fov), aspect_ratio, near, far, camera.projection);
     get_perspective_mat4(deg_to_rad(fov), aspect_ratio, near, far, camera.projection);
     return (camera);
 }
@@ -46,9 +37,7 @@ t_camera create_camera(float fov, float aspect_ratio, float near, float far)
 */
 void update_camera(t_camera* camera, GLuint shader_id) 
 {
-    // glm_lookat_rh(camera->position, camera->target, camera->up, camera->view);
     update_view_matrice(camera->position, camera->target, camera->up, camera->view);
-
     set_shader_var_mat4(shader_id, "view", camera->view);
     set_shader_var_mat4(shader_id, "model", camera->model);
     set_shader_var_mat4(shader_id, "projection", camera->projection);
@@ -69,13 +58,6 @@ void move_camera_forward(t_camera* camera, float distance)
     vec3_scale(direction, distance, direction);
     VECTOR_ADD(float, 3, camera->position, direction);
     VECTOR_ADD(float, 3, camera->target, direction);
-
-    // glm_vec3_sub(camera->target, camera->position, direction);
-    // glm_vec3_normalize(direction); /* tocheck */
-    // glm_vec3_scale(direction, distance, direction);
-    // glm_vec3_add(camera->position, direction, camera->position);
-    // glm_vec3_add(camera->target, direction, camera->target);
-
 }
 
 /**
@@ -95,8 +77,7 @@ void move_camera_backward(t_camera* camera, float distance) {
 */
 void rotate_camera(t_camera* camera, float angle, vec3_f32 axis) {
     mat4_f32 rotation;
-    // glm_rotate_make(rotation, glm_rad(angle), axis);
-    // glm_mat4_mulv3(rotation, camera->target, 1.0f, camera->target);
+
     make_rotatation(rotation, deg_to_rad(angle), axis);
     mat4_mult_vec3(rotation, camera->target, 1.0f, camera->target);
 
@@ -149,4 +130,19 @@ t_camera init_custom_camera()
     ft_memcpy(camera.model, model, sizeof(model));
 
     return (camera);
+}
+
+
+void rotate_object(t_camera* camera, vec3_f32 rotate_vec, float angle, GLuint shader_id) 
+{
+    mat4_f32 rotation;
+
+    /* Create rotation matrix */
+    make_rotatation(rotation, deg_to_rad(angle), rotate_vec);
+
+    /* Multiply model matrix by rotation matrix */
+    mat_mult(camera->model, rotation, camera->model);
+
+	/* Update shader model matrix */
+	set_shader_var_mat4(shader_id, "model", camera->model);
 }

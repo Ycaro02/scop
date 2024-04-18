@@ -6,7 +6,7 @@
 /*   By: nfour <nfour@student.42angouleme.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 12:14:49 by nfour             #+#    #+#             */
-/*   Updated: 2024/04/18 12:14:49 by nfour            ###   ########.fr       */
+/*   Updated: 2024/04/18 15:12:15 by nfour            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -196,6 +196,23 @@ FT_INLINE void mat4_mult_vec3(mat4_f32 mat, vec3_f32 v, float last, vec3_f32 des
 
     /* Extract the resulting 3-dimensional vector from the 4-dimensional vector */
     CREATE_VEC3(res[0], res[1], res[2], dest);
+}
+
+/* To test */
+FT_INLINE void mat_mult(mat4_f32 a, mat4_f32 b, mat4_f32 dest) {
+	mat4_f32 res;
+	int i, j, k;
+
+	for (i = 0; i < 4; i++) {
+		for (j = 0; j < 4; j++) {
+			res[i][j] = 0.0f;
+			for (k = 0; k < 4; k++) {
+				res[i][j] += a[i][k] * b[k][j];
+			}
+		}
+	}
+
+	ft_memcpy(dest, res, sizeof(mat4_f32));
 }
 
 

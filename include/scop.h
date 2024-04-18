@@ -53,12 +53,12 @@ enum e_obj_token {
 
 /* Camera in implementation */
 typedef struct t_camera {
-    vec3_f32 position;
-    vec3_f32 target;
-    vec3_f32 up;
-    mat4_f32 view;
-    mat4_f32 projection;
-	mat4_f32 model;
+    vec3_f32 position;				/* position vector */
+    vec3_f32 target;				/* target vector */
+    vec3_f32 up;					/* up vector */
+    mat4_f32 view;					/* view matrix */
+    mat4_f32 projection;			/* projection matrix */
+	mat4_f32 model;					/* model matrix */
 } t_camera;
 
 /* Node used only for parse */
@@ -97,6 +97,12 @@ typedef struct s_obj_model {
 	// u8			smooth;		/* The smoothing group state. 'on' to activate, 'off' to deactivate. 1 for true, otherwise 0*/
 }	t_obj_model;
 
+#define S_ANGLE 5.0f
+#define VEC3_ROTATEX (vec3_f32){0.0f, 1.0f, 0.0f}
+#define VEC3_ROTATEY (vec3_f32){1.0f, 0.0f, 0.0f}
+#define VEC3_ROTATEZ (vec3_f32){0.0f, 0.0f, 1.0f}
+
+
 /* parser/load_file.c */
 char			**ft_split_trim(char const *str, char c);
 char			**load_file(char *path);
@@ -118,7 +124,7 @@ void			free_obj_model(t_obj_model *model);
 u8				line_to_face(t_obj_file *file, char **line);
 
 /* to revork */
-void line_to_vec3_u32(char **line, u32 *other_val, vec3_u32 *vec, u8 *error);
+void			line_to_vec3_u32(char **line, u32 *other_val, vec3_u32 *vec, u8 *error);
 vec3_f32		*line_to_vertex_node(char **line);
 
 
@@ -133,6 +139,7 @@ void			move_camera_forward(t_camera* camera, float distance);
 void			move_camera_backward(t_camera* camera, float distance);
 void			rotate_camera(t_camera* camera, float angle, vec3_f32 axis);
 t_camera		init_custom_camera();
+void			rotate_object(t_camera* camera, vec3_f32 rotate_vec, float angle, GLuint shader_id);
 
 /*render/mat4*/
 // vec4_f32	*create_mat4(vec4_f32 a, vec4_f32 b, vec4_f32 c, vec4_f32 d);

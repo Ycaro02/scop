@@ -29,6 +29,9 @@ void display_camera_value(t_camera *cam)
 	ft_printf_fd(1, RESET);
 }
 
+
+
+
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode) 
 {
 	t_obj_model *model = glfwGetWindowUserPointer(window);
@@ -41,37 +44,53 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 		return ;
 	}
 	if (key == GLFW_KEY_W && action >= GLFW_PRESS) {
-		ft_printf_fd(1, "Move camera forward\n");
+		ft_printf_fd(1, GREEN"Move camera forward\n"RESET);
 		move_camera_forward(&model->cam, 0.1f);
 	} else if (key == GLFW_KEY_S && action >= GLFW_PRESS) {
-		ft_printf_fd(1, "Move camera backward\n");
+		ft_printf_fd(1, GREEN"Move camera backward\n"RESET);
 		move_camera_backward(&model->cam, 0.1f);
 	} else if (key == GLFW_KEY_A && action >= GLFW_PRESS) {
-		ft_printf_fd(1, "Rotate horizontal camera +1\n");
-		rotate_camera(&model->cam, 1.0f, (vec3_f32){0, 1, 0});
+		ft_printf_fd(1, CYAN"Rotate horizontal camera +1\n"RESET);
+		rotate_camera(&model->cam, S_ANGLE, (vec3_f32){0, 1, 0});
 	} else if (key == GLFW_KEY_D && action >= GLFW_PRESS) {
-		ft_printf_fd(1, "Rotate horizontal camera -1\n");
-		rotate_camera(&model->cam, -1.0f, (vec3_f32){0, 1, 0});
+		ft_printf_fd(1, CYAN"Rotate horizontal camera -1\n"RESET);
+		rotate_camera(&model->cam, -S_ANGLE, (vec3_f32){0, 1, 0});
 	} else if (key == GLFW_KEY_Q && action >= GLFW_PRESS) {
-		ft_printf_fd(1, "Rotate vertical camera +1\n");
-		rotate_camera(&model->cam, 1.0f, (vec3_f32){1, 0, 0});
+		ft_printf_fd(1, CYAN"Rotate vertical camera +1\n"RESET);
+		rotate_camera(&model->cam, S_ANGLE, (vec3_f32){1, 0, 0});
 	} else if (key == GLFW_KEY_E && action >= GLFW_PRESS) {
-		ft_printf_fd(1, "Rotate vertical camera -1\n");
-		rotate_camera(&model->cam, -1.0f, (vec3_f32){1, 0, 0});
+		ft_printf_fd(1, CYAN"Rotate vertical camera -1\n"RESET);
+		rotate_camera(&model->cam, -S_ANGLE, (vec3_f32){1, 0, 0});
 	} else if (key == GLFW_KEY_R && action >= GLFW_PRESS) {
-		ft_printf_fd(1, "Reset camera\n");
 		model->cam = create_camera(45.0f, (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, 0.1f, 100.0f);
 	} else if (key == GLFW_KEY_ENTER && action >= GLFW_PRESS) {
-		ft_printf_fd(1, "Init custom camera\n");
 		model->cam = init_custom_camera();
 	} else if (key == GLFW_KEY_SPACE && action >= GLFW_PRESS) {
 		display_camera_value(&model->cam);
 	} else if (key == GLFW_KEY_P && action >= GLFW_PRESS) {
-		ft_printf_fd(1, "Change polygon mode\n");
 		fill_mode = !fill_mode;
 		/* This working cause GL_FILL is GL_LINE + 1*/
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE + fill_mode);
+	} else if (key == GLFW_KEY_LEFT && action >= GLFW_PRESS) {
+		ft_printf_fd(1, ORANGE"Rotate object left\n"RESET);
+		rotate_object(&model->cam, VEC3_ROTATEX, S_ANGLE, model->shader_id);
+	} else if (key == GLFW_KEY_RIGHT && action >= GLFW_PRESS) {
+		ft_printf_fd(1, ORANGE"Rotate object right\n"RESET);
+		rotate_object(&model->cam, VEC3_ROTATEX, -S_ANGLE, model->shader_id);
+	} else if (key == GLFW_KEY_UP && action >= GLFW_PRESS) {
+		ft_printf_fd(1, ORANGE"Rotate object up\n"RESET);
+		rotate_object(&model->cam, VEC3_ROTATEY, S_ANGLE, model->shader_id);
+	} else if (key == GLFW_KEY_DOWN && action >= GLFW_PRESS) {
+		ft_printf_fd(1, ORANGE"Rotate object down\n"RESET);
+		rotate_object(&model->cam, VEC3_ROTATEY, -S_ANGLE, model->shader_id);
+	} else if (key == GLFW_KEY_PAGE_UP && action >= GLFW_PRESS) {
+		ft_printf_fd(1, ORANGE"Rotate object z+\n"RESET);
+		rotate_object(&model->cam, VEC3_ROTATEZ, S_ANGLE, model->shader_id);
+	} else if (key == GLFW_KEY_PAGE_DOWN && action >= GLFW_PRESS) {
+		ft_printf_fd(1, ORANGE"Rotate object z-\n"RESET);
+		rotate_object(&model->cam, VEC3_ROTATEZ, -S_ANGLE, model->shader_id);
 	}
+
 
 }
 
