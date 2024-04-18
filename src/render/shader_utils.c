@@ -1,6 +1,6 @@
 #include "../../include/scop.h"
 
-void set_shader_var_vec4(GLuint shader_id, char *var_name, vec4_float vec)
+void set_shader_var_vec4(GLuint shader_id, char *var_name, vec4_f32 vec)
 {
 	glUseProgram(shader_id);
 	
@@ -9,7 +9,7 @@ void set_shader_var_vec4(GLuint shader_id, char *var_name, vec4_float vec)
 
 }
 
-void set_shader_var_mat4(GLuint shader_id, char *var_name, mat4 data)
+void set_shader_var_mat4(GLuint shader_id, char *var_name, mat4_f32 data)
 {
 	glUseProgram(shader_id);
 	

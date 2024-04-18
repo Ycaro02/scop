@@ -41,7 +41,7 @@ void free_obj_file(t_obj_file *obj)
 */
 static u8 add_vertex_node(t_list **list, char **line)
 {
-	vec3_float *vertex = line_to_vertex_node(line);
+	vec3_f32 *vertex = line_to_vertex_node(line);
 	if (!vertex) {
 		return (FALSE);
 	}

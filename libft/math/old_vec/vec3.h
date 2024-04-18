@@ -6,7 +6,7 @@
 /*   By: nfour <nfour@student.42angouleme.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 15:43:13 by nfour             #+#    #+#             */
-/*   Updated: 2024/04/16 10:37:15 by nfour            ###   ########.fr       */
+/*   Updated: 2024/04/18 11:29:09 by nfour            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,15 +122,15 @@ DEFINE_VEC3_STRUCT(double)
 #define VEC3_NORM(type, a)  sqrtf(VEC3_NORM2(type, a))
 
 
-FT_INLINE void vec3_scale(t_vec3_float v, float s, t_vec3_float *dest) {
+FT_INLINE void vec3_scale(t_vec3_f32 v, float s, t_vec3_f32 *dest) {
   dest->x = v.x * s;
   dest->y = v.y * s;
   dest->z = v.z * s;
 }
 
 /* Normalise the v vector */
-FT_INLINE void vec3_normalise(t_vec3_float *v) {
-    float norm = VEC3_NORM(float, ((t_vec3_float)*v));
+FT_INLINE void vec3_normalise(t_vec3_f32 *v) {
+    float norm = VEC3_NORM(float, ((t_vec3_f32)*v));
     if (norm < FT_EPSILON) {
         *v = CREATE_VEC3(float, 0.0f, 0.0f, 0.0f);
         return;

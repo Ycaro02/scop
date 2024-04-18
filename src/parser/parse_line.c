@@ -19,11 +19,11 @@ u8 handle_smooth_str(char *str)
 /**
  * @brief Line to vertex
  * @param line line to parse
- * @return allocated vec3_float ptr , NULL if fail
+ * @return allocated vec3_f32 ptr , NULL if fail
 */
-vec3_float *line_to_vertex_node(char **line)
+vec3_f32 *line_to_vertex_node(char **line)
 {
-	vec3_float *vertex = NULL;
+	vec3_f32 *vertex = NULL;
 	if (double_char_size(line) != 3) {
 		ft_printf_fd(2, RED"Error: Invalid vertex\n"RESET);
 		display_double_char(line);
@@ -36,7 +36,7 @@ vec3_float *line_to_vertex_node(char **line)
 		return (NULL);
 	}
 
-	if ((vertex = (vec3_float *)malloc(sizeof(vec3_float))) == NULL) {
+	if ((vertex = (vec3_f32 *)malloc(sizeof(vec3_f32))) == NULL) {
 		ft_printf_fd(2, RED"Error: Malloc failed\n"RESET);
 		return (NULL);
 	}

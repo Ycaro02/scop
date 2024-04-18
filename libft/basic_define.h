@@ -6,7 +6,7 @@
 /*   By: nfour <nfour@student.42angouleme.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 17:03:53 by nfour             #+#    #+#             */
-/*   Updated: 2024/04/17 13:14:04 by nfour            ###   ########.fr       */
+/*   Updated: 2024/04/18 11:28:17 by nfour            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,14 +45,17 @@
 #define FT_EPSILON  1e-5f
 
 /* Typedef for integet type */
-typedef uint8_t	 u8;		/* Unsigned int 8 */
-typedef uint16_t u16;		/* Unsigned int 16 */	
-typedef uint32_t u32;
-typedef uint64_t u64;
-typedef int8_t	 s8;
-typedef int16_t	 s16;
-typedef int32_t	 s32;
-typedef int64_t	 s64;
+typedef uint8_t	 	u8;		/* Unsigned int 8 */
+typedef uint16_t 	u16;		/* Unsigned int 16 */	
+typedef uint32_t 	u32;
+typedef uint64_t 	u64;
+typedef int8_t	 	s8;
+typedef int16_t	 	s16;
+typedef int32_t	 	s32;
+typedef int64_t	 	s64;
+
+typedef float		f32;
+typedef double		f64;
 
 /* Macro for min max */
 #define GET_MAX(a, b) ((a) >= (b) ? (a) : (b))

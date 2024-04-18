@@ -48,16 +48,16 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 		move_camera_backward(&model->cam, 0.1f);
 	} else if (key == GLFW_KEY_A && action >= GLFW_PRESS) {
 		ft_printf_fd(1, "Rotate horizontal camera +1\n");
-		rotate_camera(&model->cam, 1.0f, (vec3){0, 1, 0});
+		rotate_camera(&model->cam, 1.0f, (vec3_f32){0, 1, 0});
 	} else if (key == GLFW_KEY_D && action >= GLFW_PRESS) {
 		ft_printf_fd(1, "Rotate horizontal camera -1\n");
-		rotate_camera(&model->cam, -1.0f, (vec3){0, 1, 0});
+		rotate_camera(&model->cam, -1.0f, (vec3_f32){0, 1, 0});
 	} else if (key == GLFW_KEY_Q && action >= GLFW_PRESS) {
 		ft_printf_fd(1, "Rotate vertical camera +1\n");
-		rotate_camera(&model->cam, 1.0f, (vec3){1, 0, 0});
+		rotate_camera(&model->cam, 1.0f, (vec3_f32){1, 0, 0});
 	} else if (key == GLFW_KEY_E && action >= GLFW_PRESS) {
 		ft_printf_fd(1, "Rotate vertical camera -1\n");
-		rotate_camera(&model->cam, -1.0f, (vec3){1, 0, 0});
+		rotate_camera(&model->cam, -1.0f, (vec3_f32){1, 0, 0});
 	} else if (key == GLFW_KEY_R && action >= GLFW_PRESS) {
 		ft_printf_fd(1, "Reset camera\n");
 		model->cam = create_camera(45.0f, (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, 0.1f, 100.0f);
@@ -114,8 +114,8 @@ void main_loop(t_obj_model *model, GLFWwindow *win)
         /* clear gl render context*/
         glClear(GL_COLOR_BUFFER_BIT);
 		/* basic test for color */
-		// set_shader_var_vec4(model->shader_id, "myColor", (t_vec4_float){0.0f, 0.7f, 0.7f, 1.0f});
-		set_shader_var_vec4(model->shader_id, "myColor", (vec4_float){0.0f, 0.9f, 0.0f, 1.0f});
+		// set_shader_var_vec4(model->shader_id, "myColor", (t_vec4_f32){0.0f, 0.7f, 0.7f, 1.0f});
+		set_shader_var_vec4(model->shader_id, "myColor", (vec4_f32){0.0f, 0.9f, 0.0f, 1.0f});
 
 		glUseProgram(model->shader_id); /* useless ? */
 		update_camera(&model->cam, model->shader_id);

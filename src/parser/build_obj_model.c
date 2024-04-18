@@ -8,7 +8,7 @@ void  display_vertex_lst(t_list *lst)
 {
 	ft_printf_fd(1, "Vertex list\n");
 	for (t_list *current = lst; current; current = current->next) {
-		vec3_float *vec = (vec3_float *)current->content;
+		vec3_f32 *vec = (vec3_f32 *)current->content;
 		VECTOR_FLOAT_DISPLAY(3, (*vec))
 	}
 }
@@ -43,7 +43,7 @@ t_obj_model *init_obj_model(t_obj_file *obj_file)
 		return (NULL);
 	}
 
-	model->vertex = list_to_array(obj_file->vertex, ft_lstsize(obj_file->vertex), sizeof(vec3_float));
+	model->vertex = list_to_array(obj_file->vertex, ft_lstsize(obj_file->vertex), sizeof(vec3_f32));
 	model->v_size = ft_lstsize(obj_file->vertex);
 
 	t_list *triangle_lst = quadra_to_triangle(obj_file->face);
@@ -65,9 +65,9 @@ t_obj_model *init_obj_model(t_obj_file *obj_file)
 }
 
 void print_vertex_data(t_obj_model *model) {
-    vec3_float* bufferData = malloc(sizeof(vec3_float) * model->v_size);
+    vec3_f32* bufferData = malloc(sizeof(vec3_f32) * model->v_size);
 
-    glGetBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vec3_float) * model->v_size, bufferData);
+    glGetBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vec3_f32) * model->v_size, bufferData);
 
     for (u32 i = 0; i < model->v_size; i++) {
         ft_printf_fd(1, ORANGE"Vertex %u: x = %f, y = %f, z = %f\n"RESET, i, bufferData[i][0], bufferData[i][1], bufferData[i][2]);
@@ -81,7 +81,7 @@ GLuint init_gl_vertex_buffer(t_obj_model *model)
 	GLuint vbo;
 	glGenBuffers(1, &vbo);
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vec3_float) * model->v_size, model->vertex, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vec3_f32) * model->v_size, model->vertex, GL_STATIC_DRAW);
 	return (vbo);
 }
 
@@ -123,7 +123,7 @@ void init_gl_triangle_array(t_obj_model *model)
 	print_elem_data(model);
 
  	/* Config new vertex attr */
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(vec3_float), (void*)0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(vec3_f32), (void*)0);
 	glEnableVertexAttribArray(0);  /* Enable vertex attr */
 	/*print here*/
 	print_vertex_data(model);

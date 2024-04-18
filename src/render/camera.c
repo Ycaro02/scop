@@ -20,10 +20,10 @@ t_camera create_camera(float fov, float aspect_ratio, float near, float far)
     // glm_vec3_copy((vec3){0.0f, 1.0f, 0.0f}, camera.up);
 
 	/* NEW VERSION*/
-	u32 vec3_size = sizeof(vec3_float);
-	ft_vec_copy(camera.position, (vec3_float){0.0f, 0.0f, 3.0f}, vec3_size);
-	ft_vec_copy(camera.target, (vec3_float){0.0f, 0.0f, -1.0f}, vec3_size);
-	ft_vec_copy(camera.up, (vec3_float){0.0f, 1.0f, 0.0f}, vec3_size);
+	u32 vec3_size = sizeof(vec3_f32);
+	ft_vec_copy(camera.position, (vec3_f32){0.0f, 0.0f, 3.0f}, vec3_size);
+	ft_vec_copy(camera.target, (vec3_f32){0.0f, 0.0f, -1.0f}, vec3_size);
+	ft_vec_copy(camera.up, (vec3_f32){0.0f, 1.0f, 0.0f}, vec3_size);
 
     /* Init identity matrice 4x4 */
     // glm_mat4_identity(camera.model);
@@ -61,7 +61,7 @@ void update_camera(t_camera* camera, GLuint shader_id)
 */
 void move_camera_forward(t_camera* camera, float distance) 
 {
-    vec3_float direction;
+    vec3_f32 direction;
 
 
     vec3_sub(camera->target, camera->position, direction); /* tocheck */
@@ -93,12 +93,12 @@ void move_camera_backward(t_camera* camera, float distance) {
  * @param distance distance to move
  * @param axis axis to move
 */
-void rotate_camera(t_camera* camera, float angle, vec3 axis) {
-    mat4 rotation;
+void rotate_camera(t_camera* camera, float angle, vec3_f32 axis) {
+    mat4_f32 rotation;
     // glm_rotate_make(rotation, glm_rad(angle), axis);
+    // glm_mat4_mulv3(rotation, camera->target, 1.0f, camera->target);
     make_rotatation(rotation, deg_to_rad(angle), axis);
-    glm_mat4_mulv3(rotation, camera->target, 1.0f, camera->target);
-    // mat4_mult_vec3(rotation, camera->target, 1.0f, camera->target);
+    mat4_mult_vec3(rotation, camera->target, 1.0f, camera->target);
 
 }
 

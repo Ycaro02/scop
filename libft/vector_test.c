@@ -46,8 +46,8 @@ void test_vector_div_float() {
 
 void test_vector_float_display() {
     vec2_float a = {1.0f, 2.0f};
-	vec3_float b = {1.0f, 2.0f, 3.0f};
-	vec4_float c = {1.0f, 2.0f, 3.0f, 4.0f};
+	vec3_f32 b = {1.0f, 2.0f, 3.0f};
+	vec4_f32 c = {1.0f, 2.0f, 3.0f, 4.0f};
 
     VECTOR_FLOAT_DISPLAY(2, a);
 	VECTOR_FLOAT_DISPLAY(3, b);

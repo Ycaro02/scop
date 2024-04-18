@@ -10,6 +10,8 @@ ASCII_NAME		=	${NAME}
 
 OPENGL_LIB= -lglfw -lGL -lm -L//usr/lib/x86_64-linux-gnu/
 
+MODEL_42 = rsc/model/42.obj
+
 
 ARGS			=	rsc/42.obj
 
@@ -67,6 +69,10 @@ fclean:		clean
 clean_lib:
 	@$(MAKE_LIBFT) fclean
 	@$(MAKE_LIST) fclean
+
+test: $(NAME)
+	@printf "$(YELLOW)Test $(NAME)$(RESET)\n"
+	@./$(NAME) $(MODEL_42)
 
 re:			fclean all
 

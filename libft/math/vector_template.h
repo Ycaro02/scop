@@ -6,7 +6,7 @@
 /*   By: nfour <nfour@student.42angouleme.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 12:25:07 by nfour             #+#    #+#             */
-/*   Updated: 2024/04/16 12:54:50 by nfour            ###   ########.fr       */
+/*   Updated: 2024/04/18 11:29:28 by nfour            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,14 +63,14 @@ DEFINE_VECTOR_STRUCT(s64, 3)
 DEFINE_VECTOR_STRUCT(s64, 4) 
 
 /* Define vec float structure */
-DEFINE_VECTOR_STRUCT(float, 2)
-DEFINE_VECTOR_STRUCT(float, 3)
-DEFINE_VECTOR_STRUCT(float, 4)
+DEFINE_VECTOR_STRUCT(f32, 2)
+DEFINE_VECTOR_STRUCT(f32, 3)
+DEFINE_VECTOR_STRUCT(f32, 4)
 
 /* Define vec double structure */
-DEFINE_VECTOR_STRUCT(double, 2)
-DEFINE_VECTOR_STRUCT(double, 3)
-DEFINE_VECTOR_STRUCT(double, 4)
+DEFINE_VECTOR_STRUCT(f64, 2)
+DEFINE_VECTOR_STRUCT(f64, 3)
+DEFINE_VECTOR_STRUCT(f64, 4)
 
 /**
  * @brief Copy vector
