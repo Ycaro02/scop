@@ -6,7 +6,7 @@
 /*   By: nfour <nfour@student.42angouleme.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 12:14:49 by nfour             #+#    #+#             */
-/*   Updated: 2024/04/18 15:12:15 by nfour            ###   ########.fr       */
+/*   Updated: 2024/04/18 15:50:12 by nfour            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,7 +130,7 @@ FT_INLINE void make_rotatation(mat4_f32 m, float angle, vec3_f32 axis) {
     vec3_f32 axisn, v, vs;
     float c;
 
-    /* Calculate the cosine of the angle */
+    /* Compute the cosine of the angle */
     c = cosf(angle);
 
     /* Normalize the axis of rotation */ 

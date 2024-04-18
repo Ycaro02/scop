@@ -13,11 +13,9 @@ t_camera create_camera(float fov, float aspect_ratio, float near, float far)
     t_camera camera;
 
     /* Initialize position, target and up vector */
-	u32 vec3_size = sizeof(vec3_f32);
-	ft_vec_copy(camera.position, (vec3_f32){0.0f, 0.0f, 3.0f}, vec3_size);
-	ft_vec_copy(camera.target, (vec3_f32){0.0f, 0.0f, -1.0f}, vec3_size);
-	ft_vec_copy(camera.up, (vec3_f32){0.0f, 1.0f, 0.0f}, vec3_size);
-
+	CREATE_VEC3(0.0f, 0.0f, 3.0f, camera.position);
+	CREATE_VEC3(0.0f, 0.0f, -1.0f, camera.target);
+	CREATE_VEC3(0.0f, 1.0f, 0.0f, camera.up);
 
     /* Init identity matrice 4x4 */
     mat_identity(camera.model); /* ft version need to rework name */
@@ -52,7 +50,6 @@ void move_camera_forward(t_camera* camera, float distance)
 {
     vec3_f32 direction;
 
-
     vec3_sub(camera->target, camera->position, direction); /* tocheck */
     vec3_normalize(direction);
     vec3_scale(direction, distance, direction);
@@ -83,56 +80,43 @@ void rotate_camera(t_camera* camera, float angle, vec3_f32 axis) {
 
 }
 
+/* Hard code camera postition */
 t_camera init_custom_camera() 
 {
     t_camera camera;
 
-    // init cam position
-    camera.position[0] = 5.483057f;
-    camera.position[1] = 0.00000f;
-    camera.position[2] = 1.265557f;
+	/* init camera position */
+	CREATE_VEC3(5.483057f, 0.00000f, 1.265557f, camera.position);
+	/* init camera target */
+	CREATE_VEC3(-3.340549f, 0.00000f, 1.130818f, camera.target);
+	/* init up vector */
+	CREATE_VEC3(0.00000f, 1.00000f, 0.00000f, camera.up);
 
-    // init cam target
-    camera.target[0] = -3.340549f;
-    camera.target[1] = 0.00000f;
-    camera.target[2] = 1.130818f;
+	/* init view mat4 */
+	CREATE_VEC4(0.015268f, 0.00000f, 0.999883f, 0.00000f, camera.view[0]);
+	CREATE_VEC4(0.00000f, 1.00000f, 0.00000f, 0.00000f, camera.view[1]);
+	CREATE_VEC4(-0.999883f, 0.00000f, 0.015268f, 0.00000f, camera.view[2]);
+	CREATE_VEC4(1.181691f, 0.00000f, -5.501741f, 1.00000f, camera.view[3]);
 
-    // init up vector
-    camera.up[0] = 0.00000f;
-    camera.up[1] = 1.00000f;
-    camera.up[2] = 0.00000f;
-
-    /* init view mat4 */
-    float view[16] = {
-        0.015268f, 0.00000f, 0.999883f, 0.00000f,
-        0.00000f, 1.00000f, 0.00000f, 0.00000f,
-        -0.999883f, 0.00000f, 0.015268f, 0.00000f,
-        1.181691f, 0.00000f, -5.501741f, 1.00000f
-    };
-    ft_memcpy(camera.view, view, sizeof(view));
-
-    /* init proj mat4 */
-    float projection[16] = {
-        2.414213f, 0.00000f, 0.00000f, 0.00000f,
-        0.00000f, 2.414213f, 0.00000f, 0.00000f,
-        0.00000f, 0.00000f, -1.002002f, -1.00000f,
-        0.00000f, 0.00000f, -0.200200f, 0.00000f
-    };
-    ft_memcpy(camera.projection, projection, sizeof(projection));
+	/* init projection mat4 */
+	CREATE_VEC4(2.414213f, 0.00000f, 0.00000f, 0.00000f, camera.projection[0]);
+	CREATE_VEC4(0.00000f, 2.414213f, 0.00000f, 0.00000f, camera.projection[1]);
+	CREATE_VEC4(0.00000f, 0.00000f, -1.002002f, -1.00000f, camera.projection[2]);
+	CREATE_VEC4(0.00000f, 0.00000f, -0.200200f, 0.00000f, camera.projection[3]);
 
     /* init model mat4 */
-    float model[16] = {
-        1.00000f, 0.00000f, 0.00000f, 0.00000f,
-        0.00000f, 1.00000f, 0.00000f, 0.00000f,
-        0.00000f, 0.00000f, 1.00000f, 0.00000f,
-        0.00000f, 0.00000f, 0.00000f, 1.00000f
-    };
-    ft_memcpy(camera.model, model, sizeof(model));
+	mat_identity(camera.model);
 
     return (camera);
 }
 
-
+/**
+ * @brief Rotate object
+ * @param camera camera context
+ * @param rotate_vec vector used to rotate
+ * @param angle angle used to rotate
+ * @param shader_id shader id for update model matrix
+*/
 void rotate_object(t_camera* camera, vec3_f32 rotate_vec, float angle, GLuint shader_id) 
 {
     mat4_f32 rotation;
