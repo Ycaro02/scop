@@ -1,3 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   float.h                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: nfour <nfour@student.42angouleme.fr>       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/04/18 12:15:06 by nfour             #+#    #+#             */
+/*   Updated: 2024/04/18 12:15:24 by nfour            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#ifndef FT_FLOAT_HEADER_H
+#define FT_FLOAT_HEADER_H 1
+
 #include "ft_math.h"
 
 /* Check float eqauel without epsilon */
@@ -14,3 +29,5 @@ FT_INLINE float deg_to_rad(float deg) {
 FT_INLINE float rad_to_deg(float rad) {
 	return (float)(rad * 180.0f / (float)M_PI);
 }
+
+#endif /* FT_FLOAT_HEADER_H */

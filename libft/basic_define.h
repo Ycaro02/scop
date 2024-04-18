@@ -6,7 +6,7 @@
 /*   By: nfour <nfour@student.42angouleme.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 17:03:53 by nfour             #+#    #+#             */
-/*   Updated: 2024/04/18 11:28:17 by nfour            ###   ########.fr       */
+/*   Updated: 2024/04/18 12:13:25 by nfour            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
  *                        DEFINE		                            *
  ********************************************************************/
 /* bool */
-#define    FALSE   0
+#define    FALSE  	0
 #define    TRUE 	1
 
 /* pointer size */
@@ -40,32 +40,29 @@
 #define    FILL_RED			"\033[7;31m"
 #define    FILL_YELBLACK	"\033[40;33m"
 
-
+/* Inline function */
 #define FT_INLINE   static inline __attribute((always_inline))
-#define FT_EPSILON  1e-5f
 
 /* Typedef for integet type */
-typedef uint8_t	 	u8;		/* Unsigned int 8 */
-typedef uint16_t 	u16;		/* Unsigned int 16 */	
-typedef uint32_t 	u32;
-typedef uint64_t 	u64;
-typedef int8_t	 	s8;
-typedef int16_t	 	s16;
-typedef int32_t	 	s32;
-typedef int64_t	 	s64;
+typedef uint8_t	 	u8;			/* Unsigned int 8 bits */
+typedef uint16_t 	u16;		/* Unsigned int 16 bits */	
+typedef uint32_t 	u32;		/* Unsigned int 32 bits */
+typedef uint64_t 	u64;		/* Unsigned int 64 bits */
+typedef int8_t	 	s8;			/* Signed int 8 bits */
+typedef int16_t	 	s16;		/* Signed int 16 bits */
+typedef int32_t	 	s32;		/* Signed int 32 bits */
+typedef int64_t	 	s64;		/* Signed int 64 bits */
 
-typedef float		f32;
-typedef double		f64;
+/* Typedef for float type */
+typedef float		f32;		/* Float 32 bits */
+typedef double		f64;		/* Float 64 bits */
 
 /* Macro for min max */
 #define GET_MAX(a, b) ((a) >= (b) ? (a) : (b))
 #define GET_MIN(a, b) ((a) <= (b) ? (a) : (b))
 
 /* Macro for ABS diff */
-
 #define MINUS_IN_S64(a, b) ((s64)((s64)(a) - (s64)(b)))
-
 #define INT_ABS_DIFF(a, b) (MINUS_IN_S64(a, b) < 0 ? MINUS_IN_S64(a, b) * -1 : MINUS_IN_S64(a, b))
-
 
  #endif /* BASIC_DEF_TYPE_HEADER */

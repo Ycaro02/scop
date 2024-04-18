@@ -26,7 +26,10 @@
 		"basic_define.h": "c",
 		"vector_template.h": "c",
 		"xmmintrin.h": "c",
-		"emmintrin.h": "c"
+		"emmintrin.h": "c",
+		"ft_math_define.h": "c",
+		"handle_vec3.h": "c",
+		"float.h": "c"
 	},
 	"42header.email": "nfour@student.42angouleme.fr",
 	"42header.username": "nfour"
