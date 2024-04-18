@@ -90,31 +90,32 @@ void print_elem_data(t_obj_model *model) {
 }
 
 
+void build_color_vec(u32 idx, vec3_f32 vec) {
+	u8 mod_3 = idx % 3;
+
+	if (mod_3 == 0) {
+		ft_vec_copy(vec, RED_VEC3F, sizeof(vec3_f32));
+	} else if (mod_3 == 1) {
+		ft_vec_copy(vec, GREEN_VEC3F, sizeof(vec3_f32));
+	} else {
+		ft_vec_copy(vec, BLUE_VEC3F, sizeof(vec3_f32));
+	}
+}
+
+/**
+ * @brief Hard build color for each triangle
+ * @param model obj model
+*/
 void hard_build_color(t_obj_model *model)
 {
-	float r = 1.0f, g = 0.0f, b = 0.0f;
 	model->colors = malloc(model->tri_size * sizeof(vec3_f32));
 
-
-	if (!model->colors)
+	if (!model->colors) {
+		ft_printf_fd(2, RED"Error: Malloc failed\n"RESET);
 		return ;
+	}
 	for (u32 i = 0; i < model->tri_size; i++) {
-		CREATE_VEC3(r, g, b, model->colors[i]);
-		if (i % 3 == 0) {
-			r = 1.0f;
-			g = 0.0f;
-			b = 0.0f;
-		} else if (i % 3 == 1) {
-			r = 0.0f;
-			g = 1.0f;
-			b = 0.0f;
-		} else {
-			r = 0.0f;
-			g = 0.0f;
-			b = 1.0f;
-		}
-		ft_printf_fd(1, "Vec de [%d]:", i);
-		ft_printf_fd(1, "r: %f, g: %f, b: %f\n", model->colors[i][0], model->colors[i][1], model->colors[i][2]);
+		build_color_vec(i, model->colors[i]);
 	}
 }
 
