@@ -93,6 +93,7 @@ typedef struct s_obj_model {
 	GLuint			vbo;			/* vertex buffer object */
 	GLuint			ebo;			/* element buffer object */
 	GLuint			shader_id;		/* shader program id */
+	vec3_f32		*colors;		/* color array */
 	// t_obj_file	*obj;		/* obj file structure */
 	// u32			vt_size;		/* texture size */
 	// u32			vn_size;		/* normal size */

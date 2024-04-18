@@ -100,6 +100,47 @@ void print_elem_data(t_obj_model *model) {
 }
 
 
+void hard_build_color(t_obj_model *model)
+{
+	float r = 1.0f, g = 0.0f, b = 0.0f;
+	vec3_f32 *colors = malloc(model->tri_size * sizeof(vec3_f32));
+
+
+	if (!colors)
+		return ;
+	for (u32 i = 0; i < model->tri_size; i++) {
+		CREATE_VEC3(r, g, b, colors[i]);
+		if (i % 3 == 0) {
+			r = 1.0f;
+			g = 0.0f;
+			b = 0.0f;
+		} else if (i % 3 == 1) {
+			r = 0.0f;
+			g = 1.0f;
+			b = 0.0f;
+		} else {
+			r = 0.0f;
+			g = 0.0f;
+			b = 1.0f;
+		}
+	}
+
+	model->colors = colors;
+
+}
+
+void init_color_buffer(t_obj_model *model)
+{
+	/* create and fill vbo */
+	hard_build_color(model);
+
+	GLuint color_vbo;
+	glGenBuffers(1, &color_vbo);
+	/* Bind vbo to GL array */
+	glBindBuffer(GL_ARRAY_BUFFER, color_vbo);
+	glBufferData(GL_ARRAY_BUFFER, TRIANGLE_DSIZE(model), model->colors, GL_STATIC_DRAW);
+}
+
 /**
  * @brief Init gl triangle array
  * @param model obj model
@@ -123,9 +164,17 @@ void init_gl_triangle_array(t_obj_model *model)
 	/* print here */
 	print_elem_data(model);
 
- 	/* Config new vertex attr */
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(vec3_f32), (void*)0);
-	glEnableVertexAttribArray(0);  /* Enable vertex attr */
+	/* Test new config with colors */
+	    /* Config new vertex attr for vertices */
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(vec3_f32), (void*)0);
+    glEnableVertexAttribArray(0);  /* Enable vertex attr */
+
+    /* Config new vertex attr for colors */
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(vec3_f32), (void*)12);
+    glEnableVertexAttribArray(1);  /* Enable color attr */
+ 	/* OLD  Config new vertex attr */
+	// glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(vec3_f32), (void*)0);
+	// glEnableVertexAttribArray(0);  /* Enable vertex attr */
 	/*print here*/
 	print_vertex_data(model);
 
