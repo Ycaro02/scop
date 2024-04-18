@@ -75,16 +75,6 @@ void print_vertex_data(t_obj_model *model) {
     free(bufferData);
 }
 
-GLuint init_gl_vertex_buffer(t_obj_model *model)
-{
-	/* create and fill vbo */
-	GLuint vbo;
-	glGenBuffers(1, &vbo);
-	glBindBuffer(GL_ARRAY_BUFFER, vbo);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vec3_f32) * model->v_size, model->vertex, GL_STATIC_DRAW);
-	return (vbo);
-}
-
 /**
  * @brief [ DEBUG ] Print element bufer data (triangle give to opengl)
 */
@@ -103,13 +93,13 @@ void print_elem_data(t_obj_model *model) {
 void hard_build_color(t_obj_model *model)
 {
 	float r = 1.0f, g = 0.0f, b = 0.0f;
-	vec3_f32 *colors = malloc(model->tri_size * sizeof(vec3_f32));
+	model->colors = malloc(model->tri_size * sizeof(vec3_f32));
 
 
-	if (!colors)
+	if (!model->colors)
 		return ;
 	for (u32 i = 0; i < model->tri_size; i++) {
-		CREATE_VEC3(r, g, b, colors[i]);
+		CREATE_VEC3(r, g, b, model->colors[i]);
 		if (i % 3 == 0) {
 			r = 1.0f;
 			g = 0.0f;
@@ -123,22 +113,31 @@ void hard_build_color(t_obj_model *model)
 			g = 0.0f;
 			b = 1.0f;
 		}
+		ft_printf_fd(1, "Vec de [%d]:", i);
+		ft_printf_fd(1, "r: %f, g: %f, b: %f\n", model->colors[i][0], model->colors[i][1], model->colors[i][2]);
 	}
-
-	model->colors = colors;
-
 }
 
-void init_color_buffer(t_obj_model *model)
+GLuint init_color_buffer(t_obj_model *model)
 {
-	/* create and fill vbo */
-	hard_build_color(model);
-
 	GLuint color_vbo;
+
+	hard_build_color(model);
 	glGenBuffers(1, &color_vbo);
 	/* Bind vbo to GL array */
 	glBindBuffer(GL_ARRAY_BUFFER, color_vbo);
-	glBufferData(GL_ARRAY_BUFFER, TRIANGLE_DSIZE(model), model->colors, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, model->tri_size * sizeof(vec3_f32), model->colors, GL_STATIC_DRAW);
+	return (color_vbo);
+}
+
+GLuint init_gl_vertex_buffer(t_obj_model *model)
+{
+	/* create and fill vbo */
+	GLuint vbo;
+	glGenBuffers(1, &vbo);
+	glBindBuffer(GL_ARRAY_BUFFER, vbo);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vec3_f32) * model->v_size, model->vertex, GL_STATIC_DRAW);
+	return (vbo);
 }
 
 /**
@@ -155,30 +154,29 @@ void init_gl_triangle_array(t_obj_model *model)
 	/* init Vertex Buffer Object */
 	model->vbo = init_gl_vertex_buffer(model);
 
+	GLuint color_vbo = init_color_buffer(model);
+
     /* create and fill ebo Element Buffer Objects */
     glGenBuffers(1, &model->ebo);
 	/* Bind EBO to GL alement array */
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, model->ebo);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, TRIANGLE_DSIZE(model), model->tri_face, GL_STATIC_DRAW);
-	
-	/* print here */
-	print_elem_data(model);
+	// print_elem_data(model);
 
-	/* Test new config with colors */
-	    /* Config new vertex attr for vertices */
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(vec3_f32), (void*)0);
-    glEnableVertexAttribArray(0);  /* Enable vertex attr */
+	/* Bind the vertex buffer */
+	glBindBuffer(GL_ARRAY_BUFFER, model->vbo);
+	/* Config new vertex attr for vertices */
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(vec3_f32), (void*)0);
+	glEnableVertexAttribArray(0);  /* Enable vertex attr */
+	/* Bind the color buffer */
+	glBindBuffer(GL_ARRAY_BUFFER, color_vbo);
+	/* Config new vertex attr for colors */
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(vec3_f32), (void*)0);
+	glEnableVertexAttribArray(1);  /* Enable color attr */
 
-    /* Config new vertex attr for colors */
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(vec3_f32), (void*)12);
-    glEnableVertexAttribArray(1);  /* Enable color attr */
- 	/* OLD  Config new vertex attr */
-	// glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(vec3_f32), (void*)0);
-	// glEnableVertexAttribArray(0);  /* Enable vertex attr */
-	/*print here*/
-	print_vertex_data(model);
+
+	// print_vertex_data(model);
 
     /* Unlink vao */
     glBindVertexArray(0);
-
 }
