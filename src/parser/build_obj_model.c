@@ -99,6 +99,7 @@ void print_elem_data(t_obj_model *model) {
 	free(bufferData);
 }
 
+
 /**
  * @brief Init gl triangle array
  * @param model obj model
@@ -117,7 +118,7 @@ void init_gl_triangle_array(t_obj_model *model)
     glGenBuffers(1, &model->ebo);
 	/* Bind EBO to GL alement array */
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, model->ebo);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(vec3_u32) * model->tri_size, model->tri_face, GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, TRIANGLE_DSIZE(model), model->tri_face, GL_STATIC_DRAW);
 	
 	/* print here */
 	print_elem_data(model);

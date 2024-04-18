@@ -51,6 +51,10 @@ enum e_obj_token {
 */
 #define TOKEN_FACE	"f"
 
+/* Triangle data size */
+#define TRIANGLE_DSIZE(model) (u32)(sizeof(vec3_u32) * model->tri_size)
+
+
 /* Camera in implementation */
 typedef struct t_camera {
     vec3_f32 position;				/* position vector */
