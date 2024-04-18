@@ -12,7 +12,6 @@
 
 #define VERTEX_SHADER_PATH "rsc/shaders/vertex_shader.glsl"
 #define FRAGMENT_SHADER_PATH "rsc/shaders/fragment_shader.glsl"
-#define NEW_VERTEX_SHADER "rsc/shaders/new_vertex_shader.glsl"
 
 #define SCREEN_WIDTH 700
 #define SCREEN_HEIGHT 700

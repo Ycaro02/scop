@@ -40,7 +40,7 @@ char *load_shader_file(char *path)
 
 GLuint load_shader(t_obj_model *model)
 {
-	char *vertex_shader = load_shader_file(NEW_VERTEX_SHADER);
+	char *vertex_shader = load_shader_file(VERTEX_SHADER_PATH);
 	char *fragment_shader = load_shader_file(FRAGMENT_SHADER_PATH);
 	
 	/* create shader */
