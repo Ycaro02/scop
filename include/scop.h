@@ -9,6 +9,7 @@
 #include "../glad_gen/include/glad/gl.h" /* include glad header before glfw3 */
 #include "../include/glfw3.h"
 #include "../libft/libft.h"
+#include "../libft/parse_flag/parse_flag.h"
 
 #define VERTEX_SHADER_PATH "rsc/shaders/vertex_shader.glsl"
 #define FRAGMENT_SHADER_PATH "rsc/shaders/fragment_shader.glsl"
@@ -93,8 +94,16 @@ typedef struct s_obj_model {
 	GLuint			ebo;			/* element buffer object */
 	GLuint			shader_id;		/* shader program id */
 	mat4_f32		rotation;		/* model rotation matrix */
+	u32				status;			/* model rotation state */
 }	t_obj_model;
 
+
+enum model_status {
+	STATUS_NONE=0,
+	STATUS_ROTATE_X=(1 << 0),
+	STATUS_ROTATE_Y=(1 << 1),
+	STATUS_ROTATE_Z=(1 << 2),
+};
 
 // t_obj_file	*obj;		/* obj file structure */
 // u32			vt_size;		/* texture size */

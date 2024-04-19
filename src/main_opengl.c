@@ -99,6 +99,9 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	/* Rotate object Z down */
 	else if (key == GLFW_KEY_PAGE_DOWN && action >= GLFW_PRESS) {
 		rotate_object_around_center(model, VEC3_ROTATEZ, -ROTATE_ANGLE, model->shader_id);
+	} else if (key == GLFW_KEY_R && action >= GLFW_PRESS) {
+		reverse_flag(&model->status, STATUS_ROTATE_X);
+		// model->rotate = !model->rotate;
 	}
 
 
@@ -140,20 +143,17 @@ void main_loop(t_obj_model *model, GLFWwindow *win)
 {
     while (!glfwWindowShouldClose(win)) {
         /* clear gl render context*/
-        glClear(GL_COLOR_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		// auto_y_rotate(model->cam.model, 0.02f);
 
 
-		/* 
-		if (m->rotate) {
+		if (has_flag(model->status, STATUS_ROTATE_X)) {
 			rotate_object_around_center(model, VEC3_ROTATEX, 2.0f, model->shader_id);
 		} else {
 			set_shader_var_mat4(model->shader_id, "model", model->rotation);
 		}
-		*/
 		
-		rotate_object_around_center(model, VEC3_ROTATEX, 2.0f, model->shader_id);
 	    // set_shader_var_mat4(model->shader_id, "model", model->rotation);
 
 		/* Use the shader */
@@ -199,6 +199,7 @@ int main(int argc, char **argv)
 
 	/* Init camera structure */
 	model->cam = create_camera(45.0f, (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, 0.1f, 100.0f);
+	model->status = STATUS_ROTATE_X;
 
     win = init_openGL_context(model);
     if (!win) {

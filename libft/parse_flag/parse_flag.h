@@ -73,14 +73,14 @@ void    display_flags(char *all_flag, int flags);
  *	@param flags pointer on flags
  *	@param flag_val flag value to set
 */
-void    set_flag(int *flags, int flag_val);
+void set_flag(u32 *flags, u32 flag_val);
 
 /**
  *	@brief Unset flag, disable target flag_val in flags
  *	@param flags pointer on flags
  *	@param flag_val flag value to unset
 */
-void    unset_flag(int *flags, int flag_val);
+void unset_flag(u32 *flags, u32 flag_val);
 
 /**
  *	@brief Check if flag_val is enable in flags
@@ -88,10 +88,14 @@ void    unset_flag(int *flags, int flag_val);
  *	@param flag_val flag value to check
  *	@return 1 if flag_val is enable in flags, 0 otherwise
 */
-int8_t  has_flag(int flags, int flag_val);
+int8_t  has_flag(u32 flags, u32 flag_val);
 
 /* has flag wrapper */
-int8_t  flag_already_present(int flags, int flag_val);
+int8_t  flag_already_present(u32 flags, u32 flag_val);
+
+
+void	reverse_flag(u32 *flags, u32 flag_val);
+
 
 /****************************/
 /*		Handle Option		*/
