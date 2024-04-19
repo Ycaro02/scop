@@ -6,7 +6,7 @@
 #    By: nfour <nfour@student.42angouleme.fr>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/11 16:54:20 by nfour             #+#    #+#              #
-#    Updated: 2024/04/12 09:32:25 by nfour            ###   ########.fr        #
+#    Updated: 2024/04/19 16:47:25 by nfour            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -77,6 +77,7 @@ PARSE_FLAG_STR	=	parse_flag.c \
 STACK_STRING_DIR	=	stack_string
 
 STACK_STRING_SRC	=	stack_string.c \
+						sstring_gnl.c\
 
 
 MATH_DIR			=	math

@@ -68,4 +68,7 @@ void		pop_sstring(t_sstring *sstr);
 */
 void        concat_sstring(t_sstring *sstr, char *str);
 
+
+int	ft_get_next_line(int fd, t_sstring *line);
+
 #endif /* STACK_STRING_H */

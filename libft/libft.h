@@ -6,7 +6,7 @@
 /*   By: nfour <nfour@student.42angouleme.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 15:43:41 by nfour             #+#    #+#             */
-/*   Updated: 2024/04/19 22:29:55 by nfour            ###   ########.fr       */
+/*   Updated: 2024/04/19 16:28:36 by nfour            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 #include "printf_fd/ft_printf.h"
 #include "list/linked_list.h"
 
-#define BUFFER_SIZE INT_MAX
+#define BUFFER_SIZE 1
 #define OUT_OF_UINT32 (uint64_t)(UINT32_MAX + 1)
 
 /* Libft */

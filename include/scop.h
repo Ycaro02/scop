@@ -10,6 +10,8 @@
 #include "../include/glfw3.h"
 #include "../libft/libft.h"
 #include "../libft/parse_flag/parse_flag.h"
+#include "../libft/stack_string/stack_string.h"
+
 
 #define VERTEX_SHADER_PATH "rsc/shaders/vertex_shader.glsl"
 #define FRAGMENT_SHADER_PATH "rsc/shaders/fragment_shader.glsl"

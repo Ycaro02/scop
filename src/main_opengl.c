@@ -137,7 +137,8 @@ GLFWwindow *init_openGL_context(t_obj_model *model)
 
 	/* Enable multisampling for antialiasing */
     glEnable(GL_MULTISAMPLE);
-
+	/* Enable depth testing */
+	glEnable(GL_DEPTH_TEST);
 
 	/* Enable blending */
     glEnable(GL_BLEND);
@@ -154,7 +155,7 @@ void main_loop(t_obj_model *model, GLFWwindow *win)
 {
     while (!glfwWindowShouldClose(win)) {
         /* clear gl render context*/
-        glClear(GL_COLOR_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		// auto_y_rotate(model->cam.model, 0.02f);
 
