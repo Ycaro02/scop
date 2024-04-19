@@ -141,15 +141,29 @@ GLFWwindow *init_openGL_context(t_obj_model *model)
 
 
 
+void auto_y_rotate(mat4_f32 dest, float amount)
+{
+    mat4_f32 rotation;
+
+    mat_identity(rotation);
+    rotation[0][0] = cosf(amount);
+    rotation[0][2] = sinf(amount);
+    rotation[2][0] = -sinf(amount);
+    rotation[2][2] = cosf(amount);
+
+    mat_mult(dest, rotation, dest);
+}
+
+
 void main_loop(t_obj_model *model, GLFWwindow *win) 
 {
     while (!glfwWindowShouldClose(win)) {
         /* clear gl render context*/
         glClear(GL_COLOR_BUFFER_BIT);
-		/* basic test for color */
-		// set_shader_var_vec4(model->shader_id, "myColor", (t_vec4_f32){0.0f, 0.7f, 0.7f, 1.0f});
-		set_shader_var_vec4(model->shader_id, "myColor", (vec4_f32){0.0f, 0.9f, 0.0f, 1.0f});
 
+		auto_y_rotate(model->cam.model, 0.02f);
+
+		/* Use the shader */
 		glUseProgram(model->shader_id); /* useless ? */
 		update_camera(&model->cam, model->shader_id);
 		glBindVertexArray(model->vao);

@@ -113,23 +113,29 @@ t_camera init_custom_camera()
     t_camera camera;
 
     /* init camera position */
-    CREATE_VEC3(11.782312f, 0.00000f, 1.361747f, camera.position);
+    CREATE_VEC3(23.756206f, 0.00000f, 2.155274f, camera.position);
     /* init camera target */
-    CREATE_VEC3(2.958718f, 0.00000f, 1.227008f, camera.target);
+    CREATE_VEC3(14.963508f, 0.00000f, 1.405361f, camera.target);
     /* init up vector */
     CREATE_VEC3(0.00000f, 1.00000f, 0.00000f, camera.up);
 
-    /* init view mat4 */
-    CREATE_VEC4(0.015268f, 0.00000f, 0.999883f, 0.00000f, camera.view[0]);
-    CREATE_VEC4(0.00000f, 1.00000f, 0.00000f, 0.00000f, camera.view[1]);
-    CREATE_VEC4(-0.999883f, 0.00000f, 0.015268f, 0.00000f, camera.view[2]);
-    CREATE_VEC4(1.181690f, 0.00000f, -11.801730f, 1.00000f, camera.view[3]);
+    /* Set camera view matrix */
+    mat4_f32 view = {
+        {0.084979f, 0.00000f, 0.996382f, 0.00000f},
+        {0.00000f, 1.000000f, 0.00000f, 0.00000f},
+        {-0.996382f, 0.00000f, 0.084979f, 0.00000f},
+        {0.128682f, 0.00000f, -23.853427f, 1.00000f}
+    };
+    ft_memcpy(camera.view, view, sizeof(view));
 
-    /* init projection mat4 */
-    CREATE_VEC4(2.414213f, 0.00000f, 0.00000f, 0.00000f, camera.projection[0]);
-    CREATE_VEC4(0.00000f, 2.414213f, 0.00000f, 0.00000f, camera.projection[1]);
-    CREATE_VEC4(0.00000f, 0.00000f, -1.002002f, -1.00000f, camera.projection[2]);
-    CREATE_VEC4(0.00000f, 0.00000f, -0.200200f, 0.00000f, camera.projection[3]);
+    /* Set camera.rojection matrix */
+    mat4_f32 projection = {
+        {2.414213f, 0.00000f, 0.00000f, 0.00000f},
+        {0.00000f, 2.414213f, 0.00000f, 0.00000f},
+        {0.00000f, 0.00000f, -1.002002f, -1.00000f},
+        {0.00000f, 0.00000f, -0.200200f, 0.00000f}
+    };
+    ft_memcpy(camera.projection, projection, sizeof(projection));
 
     /* init model mat4 */
 	mat_identity(camera.model);
