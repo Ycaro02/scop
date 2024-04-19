@@ -92,13 +92,32 @@ void print_elem_data(t_obj_model *model) {
 }
 
 
+
+/**
+ *	@brief Get random number % max
+ *	@param max max value
+*/
+u32     gener_u32(u32 max)
+{
+    u32 res = 0;
+	int fd = open("/dev/urandom", O_RDONLY); 
+	if (fd != -1) {
+		char buff[4] = {0};
+		int len = read(fd, &buff, 4);
+		if (len != -1) {
+            res = (*(u32 *)buff);
+            close(fd);
+		}
+	}
+	return (res % max);
+}
+
 /**
  * @brief Hard build color for each triangle
  * @param model obj model
 */
-void hard_build_color(t_obj_model *model)
+void hard_build_color(t_obj_model *model) 
 {
-    /* Define an array of colors */
 	vec3_f32 colors[] = {
 		{1.0f, 0.0f, 0.0f},  /* Red */
 		{0.0f, 1.0f, 0.0f},  /* Green */
@@ -131,7 +150,9 @@ void hard_build_color(t_obj_model *model)
 		{0.3f, 0.3f, 0.3f},  /* Dark Grey */
 		{0.6f, 0.4f, 0.2f}   /* Bronze */
 	};
-    u32 num_colors = 30;
+	/* Usefull trick */
+    u32 num_colors = sizeof(colors) / sizeof(colors[0]);
+	u32 color_id = 0;
 
     model->colors = malloc(model->tri_size * sizeof(vec3_f32));
 
@@ -141,7 +162,10 @@ void hard_build_color(t_obj_model *model)
     }
     for (u32 i = 0; i < model->tri_size; i++) {
         /* Assign a color to the triangle based on its index */
-        ft_vec_copy(model->colors[i], colors[i % num_colors], sizeof(vec3_f32));
+		if (i % 3 == 0) {
+			color_id = gener_u32(num_colors);
+		}
+        ft_vec_copy(model->colors[i], colors[color_id], sizeof(vec3_f32));
     }
 }
 

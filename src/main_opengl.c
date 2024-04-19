@@ -114,6 +114,10 @@ GLFWwindow *init_openGL_context(t_obj_model *model)
 
     if (!glfwInit())
         return (NULL);
+
+	/* Enable 4x antialiasing */
+    glfwWindowHint(GLFW_SAMPLES, 8);
+
     win = glfwCreateWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "OpenGL Window", NULL, NULL);
     if (!win) {
         return (NULL);
@@ -122,7 +126,6 @@ GLFWwindow *init_openGL_context(t_obj_model *model)
 
 	/* Set the user pointer to the model, can get it with glfwGetWindowUserPointer(win); */
 	glfwSetWindowUserPointer(win, model);
-
 	glfwSetKeyCallback(win, key_callback);
 
  	if (!(version = gladLoaderLoadGL())) {
@@ -132,9 +135,17 @@ GLFWwindow *init_openGL_context(t_obj_model *model)
         return NULL;
     }
 
+	/* Enable multisampling for antialiasing */
+    glEnable(GL_MULTISAMPLE);
+
+
+	/* Enable blending */
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
 	glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-	glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
-	ft_printf_fd(1, "GL %d.%d\n", GLAD_VERSION_MAJOR(version), GLAD_VERSION_MINOR(version));
+	// glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
+	ft_printf_fd(1, "Glad Version %d.%d\n", GLAD_VERSION_MAJOR(version), GLAD_VERSION_MINOR(version));
     return (win);
 }
 
@@ -143,7 +154,7 @@ void main_loop(t_obj_model *model, GLFWwindow *win)
 {
     while (!glfwWindowShouldClose(win)) {
         /* clear gl render context*/
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT);
 
 		// auto_y_rotate(model->cam.model, 0.02f);
 
