@@ -66,7 +66,7 @@ int flag_value_long_format(t_flag_context *flag_c, char *full_name)
  *	@param long_option long option or short option
  *	@return opt_node if found, NULL otherwise
 */
-static void *check_for_flag(char* programe_name, char *str, t_flag_context *flag_c, int *flags, int8_t *error, uint8_t long_option)
+static void *check_for_flag(char* programe_name, char *str, t_flag_context *flag_c, u32 *flags, int8_t *error, uint8_t long_option)
 {
     t_opt_node	*opt = NULL;
     int			tmp_value = 0;
@@ -211,7 +211,7 @@ int search_opt_value(char **argv, int *i, t_opt_node *opt, uint8_t long_format_b
 */
 int parse_flag(int argc, char **argv, t_flag_context *flag_c, int8_t *error)
 {
-    int flags = 0;
+    u32 flags = 0;
     t_opt_node *opt = NULL;
 	uint8_t long_format_bool = CHAR_FORMAT;
 

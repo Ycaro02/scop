@@ -149,7 +149,7 @@ static u8 handle_line_by_token(t_obj_file *file, char **line, u16 token)
 			line_to_face(file, line);
 			break;
 		default:
-			ft_printf_fd(2, RED"Error: Invalid token %s\n"RESET, line[0]);
+			ft_printf_fd(2, PURPLE"Default case line %s\n"RESET, line[0]);
 			// display_double_char(line);
 			return (FALSE);
 	}
@@ -157,6 +157,16 @@ static u8 handle_line_by_token(t_obj_file *file, char **line, u16 token)
 }
 
 
+
+vec3_f32 *vec3_f32_new(float x, float y, float z)
+{
+	vec3_f32 *vec = (vec3_f32 *)malloc(sizeof(vec3_f32));
+	if (vec == NULL) {
+		return (NULL);
+	}
+	CREATE_VEC3(x, y, z, (*vec));
+	return (vec);
+}
 
 /**
  * @brief Parse obj file
@@ -173,6 +183,9 @@ t_obj_model *parse_obj_file(char *path)
 	if ((file = load_file(path)) == NULL) {
 		return (0);
 	}
+
+	/* Ugly hard first line */
+	ft_lstadd_front(&obj.vertex, ft_lstnew(vec3_f32_new(0.0f, 0.0f, 0.0f)));
 
 	for (u32 i = 0; file[i]; ++i) {
 		// ft_printf_fd(1, YELLOW"\nLine %d:"RESET" "BLUE"|%s|"RESET, i, file[i]);
