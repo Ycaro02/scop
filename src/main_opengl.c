@@ -155,13 +155,16 @@ void auto_y_rotate(mat4_f32 dest, float amount)
 }
 
 
+
+
 void main_loop(t_obj_model *model, GLFWwindow *win) 
 {
     while (!glfwWindowShouldClose(win)) {
         /* clear gl render context*/
         glClear(GL_COLOR_BUFFER_BIT);
 
-		auto_y_rotate(model->cam.model, 0.02f);
+		// auto_y_rotate(model->cam.model, 0.02f);
+		rotate_object(&model->cam, VEC3_ROTATEX, 2.0f, model->shader_id);
 
 		/* Use the shader */
 		glUseProgram(model->shader_id); /* useless ? */

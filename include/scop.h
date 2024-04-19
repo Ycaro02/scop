@@ -108,6 +108,8 @@ typedef struct s_obj_model {
 #define VEC3_ROTATEZ (vec3_f32){0.0f, 0.0f, 1.0f}
 
 
+void rotate_object_around_center(t_obj_model* m, vec3_f32 rotate_vec, float angle, GLuint shader_id);
+
 /* parser/load_file.c */
 char			**ft_split_trim(char const *str, char c);
 char			**load_file(char *path);

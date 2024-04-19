@@ -163,3 +163,65 @@ void rotate_object(t_camera* camera, vec3_f32 rotate_vec, float angle, GLuint sh
 	/* Update shader model matrix */
 	set_shader_var_mat4(shader_id, "model", camera->model);
 }
+
+
+void get_obj_center(t_obj_model* m, vec3_f32 center) {
+	vec3_f32 total = {0.0f};
+
+	for (u32 i = 0; i < m->tri_size; i++) {
+		total[0] += m->tri_face[i][0];
+		total[1] += m->tri_face[i][1];
+		total[2] += m->tri_face[i][2];
+	}
+
+	center[0] = total[0] / m->tri_size;
+	center[1] = total[1] / m->tri_size;
+	center[2] = total[2] / m->tri_size;
+}
+
+void make_translation(mat4_f32 mat, vec3_f32 translation) {
+	mat_identity(mat);
+	mat[3][0] = translation[0];
+	mat[3][1] = translation[1];
+	mat[3][2] = translation[2];
+}
+
+
+void mat_mult_translation(mat4_f32 mat, vec3_f32 translation) {
+	mat4_f32 translation_mat;
+	make_translation(translation_mat, translation);
+	mat_mult(translation_mat, mat, mat);
+}
+
+void vec3_negate(vec3_f32 dest, vec3_f32 vec) {
+	dest[0] = -vec[0];
+	dest[1] = -vec[1];
+	dest[2] = -vec[2];
+}
+
+void rotate_object_around_center(t_obj_model* m, vec3_f32 rotate_vec, float angle, GLuint shader_id) 
+{
+    // Étape 1 : Trouver le centre de l'objet
+    vec3_f32 obj_center;
+    vec3_f32 obj_center_neg;
+    get_obj_center(m, obj_center);
+
+	ft_printf_fd(2, "center: %f %f %f\n", obj_center[0], obj_center[1], obj_center[2]);
+
+    vec3_negate(obj_center_neg, obj_center);
+    // Étape 2 : Translater l'objet pour que son centre soit à l'origine
+    mat4_f32 translation_to_origin;
+    make_translation(translation_to_origin, obj_center_neg);
+
+    // Étape 3 : Appliquer la rotation
+    mat4_f32 rotation;
+    make_rotation(rotation, deg_to_rad(angle), rotate_vec);
+
+    // Mettre à jour la matrice de modèle de l'objet
+    mat_mult(translation_to_origin, m->cam.model, m->cam.model);    // Translater à l'origine
+    mat_mult(rotation, m->cam.model, m->cam.model);                 // Appliquer la rotation
+    mat_mult_translation(m->cam.model, obj_center);             // Translater de retour au centre
+
+    // Étape 4 : Mettre à jour la matrice de modèle dans le shader
+    set_shader_var_mat4(shader_id, "model", m->cam.model);
+}
