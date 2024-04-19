@@ -93,14 +93,15 @@ typedef struct s_obj_model {
 	GLuint			ebo;			/* element buffer object */
 	GLuint			shader_id;		/* shader program id */
 	mat4_f32		rotation;		/* model rotation matrix */
-
-	// t_obj_file	*obj;		/* obj file structure */
-	// u32			vt_size;		/* texture size */
-	// u32			vn_size;		/* normal size */
-	// vec3_f32	*vt;		/* texture array */
-	// vec3_f32	*vn;		/* normal array */
-	// u8			smooth;		/* The smoothing group state. 'on' to activate, 'off' to deactivate. 1 for true, otherwise 0*/
 }	t_obj_model;
+
+
+// t_obj_file	*obj;		/* obj file structure */
+// u32			vt_size;		/* texture size */
+// u32			vn_size;		/* normal size */
+// vec3_f32	*vt;		/* texture array */
+// vec3_f32	*vn;		/* normal array */
+// u8			smooth;		/* The smoothing group state. 'on' to activate, 'off' to deactivate. 1 for true, otherwise 0*/
 
 #define ROTATE_ANGLE 4.0f
 #define CAM_MOVE_ANGLE 1.0f

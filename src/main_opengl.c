@@ -78,27 +78,27 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	} 
 	/* Rotate object left*/
 	else if (key == GLFW_KEY_LEFT && action >= GLFW_PRESS) {
-		rotate_object(model, VEC3_ROTATEX, ROTATE_ANGLE, model->shader_id);
+		rotate_object_around_center(model, VEC3_ROTATEX, ROTATE_ANGLE, model->shader_id);
 	} 
 	/* Rotate object right*/
 	else if (key == GLFW_KEY_RIGHT && action >= GLFW_PRESS) {
-		rotate_object(model, VEC3_ROTATEX, -ROTATE_ANGLE, model->shader_id);
+		rotate_object_around_center(model, VEC3_ROTATEX, -ROTATE_ANGLE, model->shader_id);
 	} 
 	/* Rotate object up*/
 	else if (key == GLFW_KEY_UP && action >= GLFW_PRESS) {
-		rotate_object(model, VEC3_ROTATEY, ROTATE_ANGLE, model->shader_id);
+		rotate_object_around_center(model, VEC3_ROTATEY, ROTATE_ANGLE, model->shader_id);
 	} 
 	/* Rotate object down*/
 	else if (key == GLFW_KEY_DOWN && action >= GLFW_PRESS) {
-		rotate_object(model, VEC3_ROTATEY, -ROTATE_ANGLE, model->shader_id);
+		rotate_object_around_center(model, VEC3_ROTATEY, -ROTATE_ANGLE, model->shader_id);
 	} 
 	/* Rotate object Z up */
 	else if (key == GLFW_KEY_PAGE_UP && action >= GLFW_PRESS) {
-		rotate_object(model, VEC3_ROTATEZ, ROTATE_ANGLE, model->shader_id);
+		rotate_object_around_center(model, VEC3_ROTATEZ, ROTATE_ANGLE, model->shader_id);
 	} 
 	/* Rotate object Z down */
 	else if (key == GLFW_KEY_PAGE_DOWN && action >= GLFW_PRESS) {
-		rotate_object(model, VEC3_ROTATEZ, -ROTATE_ANGLE, model->shader_id);
+		rotate_object_around_center(model, VEC3_ROTATEZ, -ROTATE_ANGLE, model->shader_id);
 	}
 
 
@@ -130,27 +130,10 @@ GLFWwindow *init_openGL_context(t_obj_model *model)
     }
 
 	glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-	// glClearColor(0.2f, 0.3f, 0.3f, 1.0f);// glClearColor(200.0f, 0.0f, 0.0f, 1.0f);
+	glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
 	ft_printf_fd(1, "GL %d.%d\n", GLAD_VERSION_MAJOR(version), GLAD_VERSION_MINOR(version));
     return (win);
 }
-
-
-
-void auto_y_rotate(mat4_f32 dest, float amount)
-{
-    mat4_f32 rotation;
-
-    mat_identity(rotation);
-    rotation[0][0] = cosf(amount);
-    rotation[0][2] = sinf(amount);
-    rotation[2][0] = -sinf(amount);
-    rotation[2][2] = cosf(amount);
-
-    mat_mult(dest, rotation, dest);
-}
-
-
 
 
 void main_loop(t_obj_model *model, GLFWwindow *win) 
@@ -160,7 +143,18 @@ void main_loop(t_obj_model *model, GLFWwindow *win)
         glClear(GL_COLOR_BUFFER_BIT);
 
 		// auto_y_rotate(model->cam.model, 0.02f);
-		rotate_object(model, VEC3_ROTATEX, 2.0f, model->shader_id);
+
+
+		/* 
+		if (m->rotate) {
+			rotate_object_around_center(model, VEC3_ROTATEX, 2.0f, model->shader_id);
+		} else {
+			set_shader_var_mat4(model->shader_id, "model", model->rotation);
+		}
+		*/
+		
+		rotate_object_around_center(model, VEC3_ROTATEX, 2.0f, model->shader_id);
+	    // set_shader_var_mat4(model->shader_id, "model", model->rotation);
 
 		/* Use the shader */
 		glUseProgram(model->shader_id); /* useless ? */

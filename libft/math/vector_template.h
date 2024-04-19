@@ -6,7 +6,7 @@
 /*   By: nfour <nfour@student.42angouleme.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 12:25:07 by nfour             #+#    #+#             */
-/*   Updated: 2024/04/18 11:29:28 by nfour            ###   ########.fr       */
+/*   Updated: 2024/04/19 21:01:44 by nfour            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -201,12 +201,12 @@ FT_INLINE void ft_vec_zero(void *vec, u32 size) {
 #define VECTOR_UINT_DISPLAY(nb_field, vec) \
 { \
 	u32 idx = 0; \
-	ft_printf_fd(1, "vec uint: "); \
+	ft_printf_fd(1, "vec uint: "ORANGE); \
 	while (idx < nb_field) { \
 		ft_printf_fd(1, "%u, ", vec[idx]); \
 		++idx; \
 	} \
-	ft_printf_fd(1, "\n"); \
+	ft_printf_fd(1, RESET"\n"); \
 }
 
 #endif /* VECTOR_TEMPLATE_HEADER */

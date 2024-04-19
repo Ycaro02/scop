@@ -57,8 +57,10 @@ t_obj_model *init_obj_model(t_obj_file *obj_file)
 	model->tri_face = list_to_array(triangle_lst, ft_lstsize(triangle_lst), sizeof(vec3_u32));
 	model->tri_size = ft_lstsize(triangle_lst);
 
-
-	// load_shader();
+	// for (t_list *current = triangle_lst; current; current = current->next) {
+	// 	vec3_u32 *vec = (vec3_u32 *)current->content;
+	// 	VECTOR_UINT_DISPLAY(3, (*vec))
+	// }
 
 	free_obj_file(obj_file);
 	return (model);
@@ -90,33 +92,57 @@ void print_elem_data(t_obj_model *model) {
 }
 
 
-void build_color_vec(u32 idx, vec3_f32 vec) {
-	u8 mod_3 = idx % 3;
-
-	if (mod_3 == 0) {
-		ft_vec_copy(vec, RED_VEC3F, sizeof(vec3_f32));
-	} else if (mod_3 == 1) {
-		ft_vec_copy(vec, GREEN_VEC3F, sizeof(vec3_f32));
-	} else {
-		ft_vec_copy(vec, BLUE_VEC3F, sizeof(vec3_f32));
-	}
-}
-
 /**
  * @brief Hard build color for each triangle
  * @param model obj model
 */
 void hard_build_color(t_obj_model *model)
 {
-	model->colors = malloc(model->tri_size * sizeof(vec3_f32));
+    /* Define an array of colors */
+	vec3_f32 colors[] = {
+		{1.0f, 0.0f, 0.0f},  /* Red */
+		{0.0f, 1.0f, 0.0f},  /* Green */
+		{0.0f, 0.0f, 1.0f},  /* Blue */
+		{1.0f, 1.0f, 0.0f},  /* Yellow */
+		{1.0f, 0.0f, 1.0f},  /* Magenta */
+		{0.0f, 1.0f, 1.0f},  /* Cyan */
+		{1.0f, 0.5f, 0.0f},  /* Orange */
+		{0.5f, 0.0f, 0.5f},  /* Purple */
+		{0.5f, 0.5f, 0.5f},  /* Grey */
+		{0.0f, 0.5f, 0.0f},  /* Dark Green */
+		{0.5f, 0.0f, 0.0f},  /* Dark Red */
+		{0.0f, 0.0f, 0.5f},  /* Dark Blue */
+		{0.5f, 0.5f, 0.0f},  /* Olive */
+		{0.5f, 0.0f, 1.0f},  /* Violet */
+		{0.0f, 0.5f, 0.5f},  /* Teal */
+		{0.5f, 0.5f, 1.0f},  /* Light Blue */
+		{1.0f, 0.5f, 0.5f},  /* Light Red */
+		{0.5f, 1.0f, 0.5f},  /* Light Green */
+		{1.0f, 1.0f, 0.5f},  /* Light Yellow */
+		{0.5f, 1.0f, 1.0f},  /* Light Cyan */
+		{1.0f, 0.5f, 1.0f},  /* Pink */
+		{0.7f, 0.3f, 0.3f},  /* Brown */
+		{0.3f, 0.7f, 0.3f},  /* Forest Green */
+		{0.3f, 0.3f, 0.7f},  /* Navy Blue */
+		{0.7f, 0.7f, 0.3f},  /* Khaki */
+		{0.7f, 0.3f, 0.7f},  /* Fuchsia */
+		{0.3f, 0.7f, 0.7f},  /* Aqua */
+		{0.7f, 0.7f, 0.7f},  /* Light Grey */
+		{0.3f, 0.3f, 0.3f},  /* Dark Grey */
+		{0.6f, 0.4f, 0.2f}   /* Bronze */
+	};
+    u32 num_colors = 30;
 
-	if (!model->colors) {
-		ft_printf_fd(2, RED"Error: Malloc failed\n"RESET);
-		return ;
-	}
-	for (u32 i = 0; i < model->tri_size; i++) {
-		build_color_vec(i, model->colors[i]);
-	}
+    model->colors = malloc(model->tri_size * sizeof(vec3_f32));
+
+    if (!model->colors) {
+        ft_printf_fd(2, RED"Error: Malloc failed\n"RESET);
+        return ;
+    }
+    for (u32 i = 0; i < model->tri_size; i++) {
+        /* Assign a color to the triangle based on its index */
+        ft_vec_copy(model->colors[i], colors[i % num_colors], sizeof(vec3_f32));
+    }
 }
 
 GLuint init_color_buffer(t_obj_model *model)

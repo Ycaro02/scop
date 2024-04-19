@@ -152,18 +152,32 @@ void rotate_object(t_obj_model *model, vec3_f32 rotate_vec, float angle, GLuint 
 }
 
 
+// void get_obj_center(t_obj_model* m, vec3_f32 center) {
+// 	vec3_f32 total = {0.0f};
+
+// 	for (u32 i = 0; i < m->tri_size; i++) {
+// 		total[0] += m->tri_face[i][0];
+// 		total[1] += m->tri_face[i][1];
+// 		total[2] += m->tri_face[i][2];
+// 	}
+
+// 	center[0] = total[0] / m->tri_size;
+// 	center[1] = total[1] / m->tri_size;
+// 	center[2] = total[2] / m->tri_size;
+// }
+
 void get_obj_center(t_obj_model* m, vec3_f32 center) {
-	vec3_f32 total = {0.0f};
+    vec3_f32 total = {0.0f};
 
-	for (u32 i = 0; i < m->tri_size; i++) {
-		total[0] += m->tri_face[i][0];
-		total[1] += m->tri_face[i][1];
-		total[2] += m->tri_face[i][2];
-	}
+    for (u32 i = 0; i < m->v_size; i++) {
+        total[0] += m->vertex[i][0];
+        total[1] += m->vertex[i][1];
+        total[2] += m->vertex[i][2];
+    }
 
-	center[0] = total[0] / m->tri_size;
-	center[1] = total[1] / m->tri_size;
-	center[2] = total[2] / m->tri_size;
+    center[0] = total[0] / m->v_size;
+    center[1] = total[1] / m->v_size;
+    center[2] = total[2] / m->v_size;
 }
 
 void make_translation(mat4_f32 mat, vec3_f32 translation) {
@@ -193,7 +207,7 @@ void rotate_object_around_center(t_obj_model* m, vec3_f32 rotate_vec, float angl
     vec3_f32 obj_center_neg;
     get_obj_center(m, obj_center);
 
-	ft_printf_fd(2, "center: %f %f %f\n", obj_center[0], obj_center[1], obj_center[2]);
+	// ft_printf_fd(2, "center: %f %f %f\n", obj_center[0], obj_center[1], obj_center[2]);
 
     vec3_negate(obj_center_neg, obj_center);
     // Étape 2 : Translater l'objet pour que son centre soit à l'origine
