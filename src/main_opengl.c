@@ -22,10 +22,6 @@ void display_camera_value(t_camera *cam)
 	for (u32 i = 0; i < 4; i++) {
 		ft_printf_fd(1, "%f %f %f %f\n", cam->projection[i][0], cam->projection[i][1], cam->projection[i][2], cam->projection[i][3]);
 	}
-	ft_printf_fd(1, "Camera model: \n");
-	for (u32 i = 0; i < 4; i++) {
-		ft_printf_fd(1, "%f %f %f %f\n", cam->model[i][0], cam->model[i][1], cam->model[i][2], cam->model[i][3]);
-	}
 	ft_printf_fd(1, RESET);
 }
 
@@ -68,7 +64,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	}
 	/* Reset cam */
 	else if (key == GLFW_KEY_ENTER && action >= GLFW_PRESS) {
-		model->cam = init_custom_camera();
+		reset_camera(model);
 	} 
 	/* Display cam data */
 	else if (key == GLFW_KEY_SPACE && action >= GLFW_PRESS) {
@@ -82,27 +78,27 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	} 
 	/* Rotate object left*/
 	else if (key == GLFW_KEY_LEFT && action >= GLFW_PRESS) {
-		rotate_object(&model->cam, VEC3_ROTATEX, ROTATE_ANGLE, model->shader_id);
+		rotate_object(model, VEC3_ROTATEX, ROTATE_ANGLE, model->shader_id);
 	} 
 	/* Rotate object right*/
 	else if (key == GLFW_KEY_RIGHT && action >= GLFW_PRESS) {
-		rotate_object(&model->cam, VEC3_ROTATEX, -ROTATE_ANGLE, model->shader_id);
+		rotate_object(model, VEC3_ROTATEX, -ROTATE_ANGLE, model->shader_id);
 	} 
 	/* Rotate object up*/
 	else if (key == GLFW_KEY_UP && action >= GLFW_PRESS) {
-		rotate_object(&model->cam, VEC3_ROTATEY, ROTATE_ANGLE, model->shader_id);
+		rotate_object(model, VEC3_ROTATEY, ROTATE_ANGLE, model->shader_id);
 	} 
 	/* Rotate object down*/
 	else if (key == GLFW_KEY_DOWN && action >= GLFW_PRESS) {
-		rotate_object(&model->cam, VEC3_ROTATEY, -ROTATE_ANGLE, model->shader_id);
+		rotate_object(model, VEC3_ROTATEY, -ROTATE_ANGLE, model->shader_id);
 	} 
 	/* Rotate object Z up */
 	else if (key == GLFW_KEY_PAGE_UP && action >= GLFW_PRESS) {
-		rotate_object(&model->cam, VEC3_ROTATEZ, ROTATE_ANGLE, model->shader_id);
+		rotate_object(model, VEC3_ROTATEZ, ROTATE_ANGLE, model->shader_id);
 	} 
 	/* Rotate object Z down */
 	else if (key == GLFW_KEY_PAGE_DOWN && action >= GLFW_PRESS) {
-		rotate_object(&model->cam, VEC3_ROTATEZ, -ROTATE_ANGLE, model->shader_id);
+		rotate_object(model, VEC3_ROTATEZ, -ROTATE_ANGLE, model->shader_id);
 	}
 
 
@@ -164,7 +160,7 @@ void main_loop(t_obj_model *model, GLFWwindow *win)
         glClear(GL_COLOR_BUFFER_BIT);
 
 		// auto_y_rotate(model->cam.model, 0.02f);
-		rotate_object(&model->cam, VEC3_ROTATEX, 2.0f, model->shader_id);
+		rotate_object(model, VEC3_ROTATEX, 2.0f, model->shader_id);
 
 		/* Use the shader */
 		glUseProgram(model->shader_id); /* useless ? */
@@ -203,6 +199,9 @@ int main(int argc, char **argv)
 		ft_printf_fd(2, "Error parse 42.obj\n");
 		return (1);
 	}
+
+	/* init model rotation mat4 */
+	mat_identity(model->rotation);
 
 	/* Init camera structure */
 	model->cam = create_camera(45.0f, (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, 0.1f, 100.0f);

@@ -54,14 +54,13 @@ enum e_obj_token {
 #define TRIANGLE_DSIZE(model) (u32)(sizeof(vec3_u32) * model->tri_size)
 
 
-/* Camera in implementation */
+/* Camera structure */
 typedef struct t_camera {
     vec3_f32 position;				/* position vector */
     vec3_f32 target;				/* target vector */
     vec3_f32 up;					/* up vector */
     mat4_f32 view;					/* view matrix */
     mat4_f32 projection;			/* projection matrix */
-	mat4_f32 model;					/* model matrix */
 } t_camera;
 
 /* Node used only for parse */
@@ -76,23 +75,25 @@ typedef struct s_obj_file {
 	char	*mtllib;		/* The name of the material file associated with the object */
 	char	*usemtl;		/* The name of the material to be used for the subsequent faces of the object */
 	t_list	*vertex;		/* The coordinates of a 3D vertex, list of vec3_f32 */
+	t_list	*face;			/* The indices of the vertices composing a face, list t_fnode */
 	t_list	*vt;			/* The texture coordinates associated with a vertex, list of vec2/vec3 float */
 	t_list	*vn;			/* The coordinates of the normal vector associated with a vertex, list of vec3_f32 */
-	t_list	*face;				/* The indices of the vertices composing a face, list t_fnode */
 	u8		smooth;			/* The smoothing group state. 'on' to activate, 'off' to deactivate. 1 for true, otherwise 0*/
 } t_obj_file;
 
 typedef struct s_obj_model {
 	t_camera		cam;			/* camera structure */
-	vec3_f32	*vertex;		/* vertex array */
+	vec3_f32		*vertex;		/* vertex array, give to openGL context */
 	u32				v_size;			/* vertex size */
-	vec3_u32		*tri_face;		/* face array */
+	vec3_u32		*tri_face;		/* face array, give to openGL context, each vector is a triangle, each point represent index of vertex to link */
 	u32				tri_size;		/* face size */
+	vec3_f32		*colors;		/* color array, give to openGL context, one for each triangle vertex */
 	GLuint			vao;			/* vertex array object */
 	GLuint			vbo;			/* vertex buffer object */
 	GLuint			ebo;			/* element buffer object */
 	GLuint			shader_id;		/* shader program id */
-	vec3_f32		*colors;		/* color array */
+	mat4_f32		rotation;		/* model rotation matrix */
+
 	// t_obj_file	*obj;		/* obj file structure */
 	// u32			vt_size;		/* texture size */
 	// u32			vn_size;		/* normal size */
@@ -145,9 +146,9 @@ void			update_camera(t_camera* camera, GLuint shader_id);
 void			move_camera_forward(t_camera* camera, float distance);
 void			move_camera_backward(t_camera* camera, float distance);
 void 			rotate_camera(t_camera* camera, float angle, vec3_f32 axis);
-t_camera		init_custom_camera();
-void			rotate_object(t_camera* camera, vec3_f32 rotate_vec, float angle, GLuint shader_id);
-void move_camera_up(t_camera* camera, float distance) ;
+void 			reset_camera(t_obj_model *model);
+void			rotate_object(t_obj_model *model, vec3_f32 rotate_vec, float angle, GLuint shader_id);
+void			move_camera_up(t_camera* camera, float distance) ;
 /*render/mat4*/
 // vec4_f32	*create_mat4(vec4_f32 a, vec4_f32 b, vec4_f32 c, vec4_f32 d);
 // vec4_f32	*create_mat4_identity();
