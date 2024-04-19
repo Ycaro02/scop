@@ -4,7 +4,7 @@
 
 #include <math.h>
 
-// #include <cglm/cglm.h> /* need to remove */
+#include <cglm/cglm.h> /* need to remove */
 
 #include "../glad_gen/include/glad/gl.h" /* include glad header before glfw3 */
 #include "../include/glfw3.h"
@@ -101,7 +101,8 @@ typedef struct s_obj_model {
 	// u8			smooth;		/* The smoothing group state. 'on' to activate, 'off' to deactivate. 1 for true, otherwise 0*/
 }	t_obj_model;
 
-#define S_ANGLE 5.0f
+#define ROTATE_ANGLE 4.0f
+#define CAM_MOVE_ANGLE 1.0f
 #define VEC3_ROTATEX (vec3_f32){0.0f, 1.0f, 0.0f}
 #define VEC3_ROTATEY (vec3_f32){1.0f, 0.0f, 0.0f}
 #define VEC3_ROTATEZ (vec3_f32){0.0f, 0.0f, 1.0f}
@@ -141,10 +142,10 @@ t_camera		create_camera(float fov, float aspect_ratio, float near, float far);
 void			update_camera(t_camera* camera, GLuint shader_id);
 void			move_camera_forward(t_camera* camera, float distance);
 void			move_camera_backward(t_camera* camera, float distance);
-void			rotate_camera(t_camera* camera, float angle, vec3_f32 axis);
+void 			rotate_camera(t_camera* camera, float angle, vec3_f32 axis);
 t_camera		init_custom_camera();
 void			rotate_object(t_camera* camera, vec3_f32 rotate_vec, float angle, GLuint shader_id);
-
+void move_camera_up(t_camera* camera, float distance) ;
 /*render/mat4*/
 // vec4_f32	*create_mat4(vec4_f32 a, vec4_f32 b, vec4_f32 c, vec4_f32 d);
 // vec4_f32	*create_mat4_identity();
