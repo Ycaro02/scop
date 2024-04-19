@@ -77,7 +77,7 @@ char	**ft_split_trim(char const *str, char c)
 
 char	**load_file(char *path)
 {
-	char	*line;
+	t_sstring line;
 	char	*map;
 	int		fd;
 	char	**dest;
@@ -89,17 +89,18 @@ char	**load_file(char *path)
 		return (NULL);
 	}
 
-	line = "";
+	clear_sstring(&line);
 	map = ft_strdup("");
-	while (line)
-	{
-		line = get_next_line(fd);
-		if (line == NULL || line[0] == '\0' || line[0] == '\n')
+	while (1) {
+		// line = get_next_line(fd);
+		int ret = ft_get_next_line(fd, &line);
+		if (ret == 0)
 			break ;
-		map = ft_strjoin_gnl(map, line);
-		free(line);
+		map = ft_strjoin_free(map, line.data, 'f');
+		clear_sstring(&line);
+		// ft_printf_fd(1, "map: %s\n", map);
 	}
-	free(line);
+	// free(line);
 	close(fd);
 	dest = ft_split_trim(map, '\n');
 	free(map);
