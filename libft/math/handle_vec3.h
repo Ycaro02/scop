@@ -6,7 +6,7 @@
 /*   By: nfour <nfour@student.42angouleme.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 12:14:33 by nfour             #+#    #+#             */
-/*   Updated: 2024/04/18 15:19:36 by nfour            ###   ########.fr       */
+/*   Updated: 2024/04/20 15:18:27 by nfour            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,6 +116,18 @@ FT_INLINE void vec3_cross(vec3_f32 a, vec3_f32 b, vec3_f32 dest) {
     dest[0] = a[1] * b[2] - a[2] * b[1];
     dest[1] = a[2] * b[0] - a[0] * b[2];
     dest[2] = a[0] * b[1] - a[1] * b[0];
+}
+
+
+/**
+ * @brief Negate a vector
+ * @param dest destination vector
+ * @param vec vector to negate
+*/
+FT_INLINE void vec3_negate(vec3_f32 dest, vec3_f32 vec) {
+	dest[0] = -vec[0];
+	dest[1] = -vec[1];
+	dest[2] = -vec[2];
 }
 
 #define RED_VEC3F (vec3_f32){1.0f, 0.0f, 0.0f}

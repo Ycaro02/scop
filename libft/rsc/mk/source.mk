@@ -6,7 +6,7 @@
 #    By: nfour <nfour@student.42angouleme.fr>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/11 16:54:20 by nfour             #+#    #+#              #
-#    Updated: 2024/04/20 11:29:22 by nfour            ###   ########.fr        #
+#    Updated: 2024/04/20 15:16:17 by nfour            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -61,6 +61,7 @@ LIBFT_SRC 	=	ft_memset.c \
 				handle_double_char_array.c\
 				ft_atof.c\
 				ft_split_trim.c\
+				check_struct_size.c\
 
 
 PRINTF_FD_DIR	=	printf_fd

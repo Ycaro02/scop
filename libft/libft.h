@@ -6,7 +6,7 @@
 /*   By: nfour <nfour@student.42angouleme.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 15:43:41 by nfour             #+#    #+#             */
-/*   Updated: 2024/04/20 11:29:01 by nfour            ###   ########.fr       */
+/*   Updated: 2024/04/20 15:15:58 by nfour            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,15 @@ u8		str_is_float(char *str);
 float	ft_atof(char *str);
 
 char	**ft_split_trim(char const *str, char c);
+
+
+/**
+ * @brief Check if the size of a struct is the same as the wanted size
+ * @param str_test name of the struct
+ * @param struct_size size of the struct
+ * @param wanted_size wanted size of the struct
+*/
+void check_struct_size(char *str_test, u32 struct_size, u32 wanted_size);
 
 /* Math */
 uint32_t abs_diff(uint32_t a, uint32_t b);

@@ -6,7 +6,7 @@
 /*   By: nfour <nfour@student.42angouleme.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 12:14:49 by nfour             #+#    #+#             */
-/*   Updated: 2024/04/19 18:09:06 by nfour            ###   ########.fr       */
+/*   Updated: 2024/04/20 15:23:04 by nfour            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,13 +28,13 @@ typedef vec4_f32 mat4_f32[4];
 								{0.0f, 0.0f, 0.0f, 1.0f}}
 
 /* Get identity matrice in mat */
-FT_INLINE void mat_identity(vec4_f32 *mat) {
+FT_INLINE void mat4_identity(vec4_f32 *mat) {
 	mat4_f32 tmp = MAT4_IDENTITY_INIT;
 	ft_memcpy(mat, &tmp, (sizeof(vec4_f32) * 4));
 }
 
 /* Call ft_bzero on mat4x4 float */
-FT_INLINE void mat_zero(mat4_f32 mat) {
+FT_INLINE void mat4_zero(mat4_f32 mat) {
 	ft_bzero(mat, sizeof(mat4_f32));
 }
 
@@ -51,7 +51,7 @@ FT_INLINE void mat_zero(mat4_f32 mat) {
  * @param[in] up up vector
  * @param[out] dest Destination matrix
 */
-FT_INLINE void update_view_matrice(vec3_f32 eye, vec3_f32 center, vec3_f32 up, mat4_f32 dest) {
+FT_INLINE void update_view_mat4(vec3_f32 eye, vec3_f32 center, vec3_f32 up, mat4_f32 dest) {
     vec3_f32 f, u, s;
 
 	/*	Compute the the forward vector f by subtracting the eye vector 
@@ -98,11 +98,11 @@ FT_INLINE void update_view_matrice(vec3_f32 eye, vec3_f32 center, vec3_f32 up, m
  * @param[in] farZ Far clipping plane distance.
  * @param[out] dest Destination matrix to store the resulting perspective matrix.
  */
-FT_INLINE void get_perspective_mat4(float fovy, float aspect, float nearZ, float farZ, mat4_f32 dest) {
+FT_INLINE void mat4_perspective(float fovy, float aspect, float nearZ, float farZ, mat4_f32 dest) {
     float f, fn;
 
     /* Initialize the destination matrix to zero */
-    mat_zero(dest);
+    mat4_zero(dest);
 
     /* Calculate the cotangent of the field of view divided by 2 */
     f  = 1.0f / tanf(fovy * 0.5f);
@@ -126,7 +126,7 @@ FT_INLINE void get_perspective_mat4(float fovy, float aspect, float nearZ, float
  * @param[in] angle Angle of rotation in radians.
  * @param[in] axis Axis of rotation.
  */
-FT_INLINE void make_rotation(mat4_f32 m, float angle, vec3_f32 axis) {
+FT_INLINE void mat4_rotate(mat4_f32 m, float angle, vec3_f32 axis) {
     vec3_f32 axisn, v, vs;
     float c;
 
@@ -198,8 +198,13 @@ FT_INLINE void mat4_mult_vec3(mat4_f32 mat, vec3_f32 v, float last, vec3_f32 des
     CREATE_VEC3(res[0], res[1], res[2], dest);
 }
 
-/* To test */
-FT_INLINE void mat_mult(mat4_f32 a, mat4_f32 b, mat4_f32 dest) {
+/**
+ * @brief Mult mat4 by mat4.
+ * @param a[in] first operand matrix
+ * @param b[in] second operand matrix
+ * @param dest[out] Destination matrix
+*/
+FT_INLINE void mat4_mult(mat4_f32 a, mat4_f32 b, mat4_f32 dest) {
   float a00 = a[0][0], a01 = a[0][1], a02 = a[0][2], a03 = a[0][3],
 		a10 = a[1][0], a11 = a[1][1], a12 = a[1][2], a13 = a[1][3],
 		a20 = a[2][0], a21 = a[2][1], a22 = a[2][2], a23 = a[2][3],
@@ -226,6 +231,30 @@ FT_INLINE void mat_mult(mat4_f32 a, mat4_f32 b, mat4_f32 dest) {
 	dest[3][1] = a01 * b30 + a11 * b31 + a21 * b32 + a31 * b33;
 	dest[3][2] = a02 * b30 + a12 * b31 + a22 * b32 + a32 * b33;
 	dest[3][3] = a03 * b30 + a13 * b31 + a23 * b32 + a33 * b33;
+}
+
+/**
+ * @brief Create a translation matrix
+ * @param[in/out] mat matrix to update
+ * @param[in] translation translation vector
+*/
+FT_INLINE void mat4_translattion(mat4_f32 mat, vec3_f32 translation) {
+	mat4_identity(mat);
+	mat[3][0] = translation[0];
+	mat[3][1] = translation[1];
+	mat[3][2] = translation[2];
+}
+
+/**
+ * @brief Multiply mat and translated matrix
+ * @param[in/out] mat matrix to update
+ * @param[in] translation translation vector
+ * 
+*/
+FT_INLINE void mat4_mult_translation(mat4_f32 mat, vec3_f32 translation) {
+	mat4_f32 translation_mat;
+	mat4_translattion(translation_mat, translation);
+	mat4_mult(translation_mat, mat, mat);
 }
 
 

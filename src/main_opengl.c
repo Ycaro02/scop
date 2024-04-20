@@ -1,33 +1,16 @@
 #include "../include/scop.h"
 
-void check_struct_size(char *str_test, u32 struct_size, u32 wanted_size)
-{
-	if (struct_size == wanted_size) {
-		ft_printf_fd(1, GREEN"sizeof(%s) == %u)\n"RESET, str_test, wanted_size);
-	} else {
-		ft_printf_fd(1, RED"sizeof(%s) != %u)\n"RESET, str_test, wanted_size);
-	}
-}
-
-void display_camera_value(t_camera *cam)
-{
-	ft_printf_fd(1, CYAN"Camera position: %f %f %f\n", cam->position[0], cam->position[1], cam->position[2]);
-	ft_printf_fd(1, "Camera target: %f %f %f\n", cam->target[0], cam->target[1], cam->target[2]);
-	ft_printf_fd(1, "Camera up: %f %f %f\n", cam->up[0], cam->up[1], cam->up[2]);
-	ft_printf_fd(1, "Camera view: \n");
-	for (u32 i = 0; i < 4; i++) {
-		ft_printf_fd(1, "%f %f %f %f\n", cam->view[i][0], cam->view[i][1], cam->view[i][2], cam->view[i][3]);
-	}
-	ft_printf_fd(1, "Camera projection: \n");
-	for (u32 i = 0; i < 4; i++) {
-		ft_printf_fd(1, "%f %f %f %f\n", cam->projection[i][0], cam->projection[i][1], cam->projection[i][2], cam->projection[i][3]);
-	}
-	ft_printf_fd(1, RESET);
-}
 
 
 
-
+/**
+ * @brief Set key callback for the window
+ * @param window 
+ * @param key keycode receive from glfw
+ * @param scancode unused
+ * @param action action receive from glfw	
+ * @param mode unused
+*/
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode) 
 {
 	(void)scancode, (void)mode;
@@ -101,12 +84,14 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 		rotate_object_around_center(model, VEC3_ROTATEZ, -ROTATE_ANGLE, model->shader_id);
 	} else if (key == GLFW_KEY_R && action >= GLFW_PRESS) {
 		reverse_flag(&model->status, STATUS_ROTATE_X);
-		// model->rotate = !model->rotate;
 	}
-
-
 }
 
+/**
+ * @brief Initialize the openGL context
+ * @param model model structure
+ * @return GLFWwindow* return the window struct pointer
+*/
 GLFWwindow *init_openGL_context(t_obj_model *model) 
 {
     GLFWwindow *win;
@@ -150,30 +135,26 @@ GLFWwindow *init_openGL_context(t_obj_model *model)
     return (win);
 }
 
-
+/**
+ * @brief Main loop of the program
+ * @param model model structure
+ * @param win window structure
+*/
 void main_loop(t_obj_model *model, GLFWwindow *win) 
 {
     while (!glfwWindowShouldClose(win)) {
         /* clear gl render context*/
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-		// auto_y_rotate(model->cam.model, 0.02f);
-
-
 		if (has_flag(model->status, STATUS_ROTATE_X)) {
 			rotate_object_around_center(model, VEC3_ROTATEX, 2.0f, model->shader_id);
 		} else {
 			set_shader_var_mat4(model->shader_id, "model", model->rotation);
 		}
-		
-	    // set_shader_var_mat4(model->shader_id, "model", model->rotation);
-
 		/* Use the shader */
 		glUseProgram(model->shader_id); /* useless ? */
 		update_camera(&model->cam, model->shader_id);
 		glBindVertexArray(model->vao);
 		glDrawElements(GL_TRIANGLES, (model->tri_size * 3), GL_UNSIGNED_INT, 0);
-		
 		/* unbind vertex array */
 		glBindVertexArray(0);
 		/* swap buff to display */
@@ -183,6 +164,11 @@ void main_loop(t_obj_model *model, GLFWwindow *win)
     }
 }
 
+/**
+ * @brief Destroy glfw and free the model
+ * @param win window struct
+ * @param model model struct
+*/
 static void glfw_destroy(GLFWwindow *win, t_obj_model *model)
 {
 
@@ -202,7 +188,6 @@ int main(int argc, char **argv)
 	t_obj_model	*model;
     
 
-
 	if (argc != 2) { /* need to check file */
 		ft_printf_fd(2, "Usage: %s <obj_file>\n", argv[0]);
 		return (1);
@@ -215,7 +200,7 @@ int main(int argc, char **argv)
 	}
 
 	/* init model rotation mat4 */
-	mat_identity(model->rotation);
+	mat4_identity(model->rotation);
 
 	/* Init camera structure */
 	model->cam = create_camera(45.0f, (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, 0.1f, 100.0f);

@@ -155,6 +155,7 @@ t_list			*quadra_to_triangle(t_list *face_node_lst);
 /* render/camera */
 t_camera		create_camera(float fov, float aspect_ratio, float near, float far);
 void			update_camera(t_camera* camera, GLuint shader_id);
+void			display_camera_value(t_camera *cam);
 void			move_camera_forward(t_camera* camera, float distance);
 void			move_camera_backward(t_camera* camera, float distance);
 void 			rotate_camera(t_camera* camera, float angle, vec3_f32 axis);

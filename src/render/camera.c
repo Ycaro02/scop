@@ -1,6 +1,26 @@
 #include "../../include/scop.h"
 
 /**
+ * @brief Display camera value
+ * @param cam camera structure
+*/
+void display_camera_value(t_camera *cam)
+{
+	ft_printf_fd(1, CYAN"Camera position: %f %f %f\n", cam->position[0], cam->position[1], cam->position[2]);
+	ft_printf_fd(1, "Camera target: %f %f %f\n", cam->target[0], cam->target[1], cam->target[2]);
+	ft_printf_fd(1, "Camera up: %f %f %f\n", cam->up[0], cam->up[1], cam->up[2]);
+	ft_printf_fd(1, "Camera view: \n");
+	for (u32 i = 0; i < 4; i++) {
+		ft_printf_fd(1, "%f %f %f %f\n", cam->view[i][0], cam->view[i][1], cam->view[i][2], cam->view[i][3]);
+	}
+	ft_printf_fd(1, "Camera projection: \n");
+	for (u32 i = 0; i < 4; i++) {
+		ft_printf_fd(1, "%f %f %f %f\n", cam->projection[i][0], cam->projection[i][1], cam->projection[i][2], cam->projection[i][3]);
+	}
+	ft_printf_fd(1, RESET);
+}
+
+/**
  * @brief Create a new camera
  * @param fov field of view
  * @param aspect_ratio aspect ratio
@@ -25,10 +45,10 @@ t_camera create_camera(float fov, float aspect_ratio, float near, float far)
     CREATE_VEC3(0.00000f, 1.00000f, 0.00000f, camera.up);
 
     /* Compute view martice */
-    update_view_matrice(camera.position, camera.target, camera.up, camera.view);
+    update_view_mat4(camera.position, camera.target, camera.up, camera.view);
 
     /* Compute projection matrice */
-    get_perspective_mat4(deg_to_rad(fov), aspect_ratio, near, far, camera.projection);
+    mat4_perspective(deg_to_rad(fov), aspect_ratio, near, far, camera.projection);
     return (camera);
 }
 
@@ -39,7 +59,7 @@ t_camera create_camera(float fov, float aspect_ratio, float near, float far)
 */
 void update_camera(t_camera* camera, GLuint shader_id) 
 {
-    update_view_matrice(camera->position, camera->target, camera->up, camera->view);
+    update_view_mat4(camera->position, camera->target, camera->up, camera->view);
     set_shader_var_mat4(shader_id, "view", camera->view);
     // set_shader_var_mat4(shader_id, "model", camera->model); /* need to be updated */
     set_shader_var_mat4(shader_id, "projection", camera->projection);
@@ -80,7 +100,7 @@ void rotate_camera(t_camera* camera, float angle, vec3_f32 axis) {
     mat4_f32 rotation;
 
     /* Create rotation matrix */
-	make_rotation(rotation, deg_to_rad(angle), axis);
+	mat4_rotate(rotation, deg_to_rad(angle), axis);
 
     /* Rotate the direction vector from the position to the target */
     vec3_f32 direction;
@@ -129,9 +149,9 @@ void reset_camera(t_obj_model *model)
     CREATE_VEC3(0.00000f, 1.00000f, 0.00000f, camera->up);
 
     /* init model rotation mat4 */
-	mat_identity(model->rotation);
+	mat4_identity(model->rotation);
 
-	update_view_matrice(camera->position, camera->target, camera->up, camera->view);
+	update_view_mat4(camera->position, camera->target, camera->up, camera->view);
 }
 
 
@@ -147,10 +167,10 @@ void rotate_object(t_obj_model *model, vec3_f32 rotate_vec, float angle, GLuint 
     mat4_f32 rotation;
 
     /* Create rotation matrix */
-    make_rotation(rotation, deg_to_rad(angle), rotate_vec);
+    mat4_rotate(rotation, deg_to_rad(angle), rotate_vec);
 
     /* Multiply model matrix by rotation matrix */
-    mat_mult(rotation, model->rotation, model->rotation);
+    mat4_mult(rotation, model->rotation, model->rotation);
 
 	/* Update shader model matrix */
 	set_shader_var_mat4(shader_id, "model", model->rotation);
@@ -175,40 +195,7 @@ void get_obj_center(t_obj_model* m, vec3_f32 center) {
     center[2] = total[2] / m->v_size;
 }
 
-/**
- * @brief Create a translation matrix
- * @param mat matrix to update
- * @param translation translation vector
-*/
-void make_translation(mat4_f32 mat, vec3_f32 translation) {
-	mat_identity(mat);
-	mat[3][0] = translation[0];
-	mat[3][1] = translation[1];
-	mat[3][2] = translation[2];
-}
 
-/**
- * @brief Multiply mat and translated matrix
- * @param mat matrix to update
- * @param translation translation vector
- * 
-*/
-void mat_mult_translation(mat4_f32 mat, vec3_f32 translation) {
-	mat4_f32 translation_mat;
-	make_translation(translation_mat, translation);
-	mat_mult(translation_mat, mat, mat);
-}
-
-/**
- * @brief Negate a vector
- * @param dest destination vector
- * @param vec vector to negate
-*/
-void vec3_negate(vec3_f32 dest, vec3_f32 vec) {
-	dest[0] = -vec[0];
-	dest[1] = -vec[1];
-	dest[2] = -vec[2];
-}
 
 /**
  * @brief Rotate object around center
@@ -227,15 +214,15 @@ void rotate_object_around_center(t_obj_model* m, vec3_f32 rotate_vec, float angl
     vec3_negate(obj_center_neg, obj_center);
 
 	/* Translate position, place computed center at the origin */
-    make_translation(translation_to_origin, obj_center_neg);
+    mat4_translattion(translation_to_origin, obj_center_neg);
 
     /* Apply rotate */
-    make_rotation(rotation, deg_to_rad(angle), rotate_vec);
+    mat4_rotate(rotation, deg_to_rad(angle), rotate_vec);
 
     /* Update obj model */
-    mat_mult(translation_to_origin, m->rotation, m->rotation);		/* Origin translate */
-    mat_mult(rotation, m->rotation, m->rotation);					/* Apply rotate */
-    mat_mult_translation(m->rotation, obj_center);					/* Translate back */
+    mat4_mult(translation_to_origin, m->rotation, m->rotation);		/* Origin translate */
+    mat4_mult(rotation, m->rotation, m->rotation);					/* Apply rotate */
+    mat4_mult_translation(m->rotation, obj_center);					/* Translate back */
 
     /* Update model matrix in shader */
     set_shader_var_mat4(shader_id, "model", m->rotation);
