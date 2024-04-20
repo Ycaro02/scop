@@ -6,7 +6,7 @@
 /*   By: nfour <nfour@student.42angouleme.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 15:43:41 by nfour             #+#    #+#             */
-/*   Updated: 2024/04/19 16:28:36 by nfour            ###   ########.fr       */
+/*   Updated: 2024/04/20 11:29:01 by nfour            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,10 +81,15 @@ u32		double_char_size(char **array);
 u8		str_is_float(char *str);
 float	ft_atof(char *str);
 
+char	**ft_split_trim(char const *str, char c);
+
 /* Math */
 uint32_t abs_diff(uint32_t a, uint32_t b);
 uint32_t max_uint32(uint32_t a, uint32_t b);
 uint32_t min_uint32(uint32_t a, uint32_t b);
+
+
+
 
 /* Use ft_memcpy in mat4 */
 #include "math/ft_math.h"

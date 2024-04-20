@@ -124,8 +124,8 @@ enum model_status {
 void rotate_object_around_center(t_obj_model* m, vec3_f32 rotate_vec, float angle, GLuint shader_id);
 
 /* parser/load_file.c */
-char			**ft_split_trim(char const *str, char c);
-char			**load_file(char *path);
+// char			**ft_split_trim(char const *str, char c);
+// char			**load_file(char *path);
 
 /* parser/obj_parse.c */
 t_obj_model		*parse_obj_file(char *path);

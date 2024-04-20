@@ -180,7 +180,7 @@ t_obj_model *parse_obj_file(char *path)
 	uint16_t token = 0;
 
 	ft_bzero(&obj, sizeof(t_obj_file));
-	if ((file = load_file(path)) == NULL) {
+	if ((file = sstring_load_file(path)) == NULL) {
 		return (0);
 	}
 

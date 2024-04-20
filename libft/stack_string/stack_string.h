@@ -12,6 +12,8 @@
 /* Buffer size of stack string */
 #define SSTRING_MAX 1024
 
+#define OUT_OF_SSTRING 1025
+
 /**
  * Stack string structure
 */
@@ -22,6 +24,9 @@ typedef struct s_stack_string
 }	t_stack_string;
 
 typedef t_stack_string t_sstring;
+
+
+char **sstring_load_file(char *path);
 
 /**
  * @brief Create an empty stack string

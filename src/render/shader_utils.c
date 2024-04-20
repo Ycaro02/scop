@@ -19,7 +19,7 @@ void set_shader_var_mat4(GLuint shader_id, char *var_name, mat4_f32 data)
 
 char *load_shader_file(char *path)
 {
-	char **file = load_file(path);
+	char **file = sstring_load_file(path);
 	char *shader_src = ft_strdup("");
 
 
@@ -34,7 +34,7 @@ char *load_shader_file(char *path)
 
 	free_double_char(file);
 
-	ft_printf_fd(1, "Shader src: %s\n", shader_src);
+	// ft_printf_fd(1, "Shader src: %s\n", shader_src);
 	return (shader_src);
 }
 
@@ -76,8 +76,8 @@ GLuint load_shader(t_obj_model *model)
 	glUseProgram(model->shader_id);
 
 	/* delete shader tocheck */
-	// glDeleteShader(frag_vertex_shader);
-	// glDeleteShader(frag_pixel_shader);
+	glDeleteShader(frag_vertex_shader);
+	glDeleteShader(frag_pixel_shader);
 
 	/* delete ressource */
 	free(vertex_shader);
