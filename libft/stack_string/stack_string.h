@@ -26,7 +26,6 @@ typedef struct s_stack_string
 typedef t_stack_string t_sstring;
 
 
-char **sstring_load_file(char *path);
 
 /**
  * @brief Create an empty stack string
@@ -73,7 +72,12 @@ void		pop_sstring(t_sstring *sstr);
 */
 void        concat_sstring(t_sstring *sstr, char *str);
 
-
-int	ft_get_next_line(int fd, t_sstring *line);
+/**
+ * @brief Load a file using stack string for read
+ * @param path The path to the file to load
+ * @return A double allocated char array 
+ * containing the file content with each line as a string and without newline character
+*/
+char **sstring_load_file(char *path);
 
 #endif /* STACK_STRING_H */
