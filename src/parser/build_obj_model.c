@@ -25,6 +25,9 @@ void free_obj_model(t_obj_model *model)
 	if (model->tri_face) {
 		free(model->tri_face);
 	}
+	if (model->colors) {
+		free(model->colors);
+	}
 	free(model);
 }
 
@@ -56,6 +59,8 @@ t_obj_model *init_obj_model(t_obj_file *obj_file)
 	// model->tri_face = triangle_list_to_array(triangle_lst, ft_lstsize(triangle_lst));
 	model->tri_face = list_to_array(triangle_lst, ft_lstsize(triangle_lst), sizeof(vec3_u32));
 	model->tri_size = ft_lstsize(triangle_lst);
+
+	ft_lstclear(&triangle_lst, free);
 
 	// for (t_list *current = triangle_lst; current; current = current->next) {
 	// 	vec3_u32 *vec = (vec3_u32 *)current->content;
@@ -152,7 +157,7 @@ void hard_build_color(t_obj_model *model)
 	};
 	/* Usefull trick */
     u32 num_colors = sizeof(colors) / sizeof(colors[0]);
-	u32 color_id = 0;
+	static u32 color_id = 0;
 
     model->colors = malloc(model->tri_size * sizeof(vec3_f32));
 
@@ -163,7 +168,10 @@ void hard_build_color(t_obj_model *model)
     for (u32 i = 0; i < model->tri_size; i++) {
         /* Assign a color to the triangle based on its index */
 		if (i % 3 == 0) {
-			color_id = gener_u32(num_colors);
+			++color_id;
+			if (color_id >= num_colors) {
+				color_id = 0;
+			}
 		}
         ft_vec_copy(model->colors[i], colors[color_id], sizeof(vec3_f32));
     }

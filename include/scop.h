@@ -4,7 +4,7 @@
 
 #include <math.h>
 
-#include <cglm/cglm.h> /* need to remove */
+// #include <cglm/cglm.h> /* need to remove */
 
 #include "../glad_gen/include/glad/gl.h" /* include glad header before glfw3 */
 #include "../include/glfw3.h"
@@ -108,10 +108,10 @@ enum model_status {
 };
 
 // t_obj_file	*obj;		/* obj file structure */
-// u32			vt_size;		/* texture size */
-// u32			vn_size;		/* normal size */
-// vec3_f32	*vt;		/* texture array */
-// vec3_f32	*vn;		/* normal array */
+// u32			vt_size;	/* texture size */
+// u32			vn_size;	/* normal size */
+// vec3_f32	*vt;			/* texture array */
+// vec3_f32	*vn;			/* normal array */
 // u8			smooth;		/* The smoothing group state. 'on' to activate, 'off' to deactivate. 1 for true, otherwise 0*/
 
 #define ROTATE_ANGLE 4.0f
