@@ -8,10 +8,10 @@ CFLAGS			=	-Wall -Wextra -Werror -O3 -g
 ASCII_NAME		=	${NAME}
 
 
-OPENGL_LIB= -lglfw -lGL -lm -L//usr/lib/x86_64-linux-gnu/
+OPENGL_LIB		= -lglfw -lGL -lm -L//usr/lib/x86_64-linux-gnu/
 
-MODEL_42 = rsc/model/42.obj
-
+MODEL_42		= rsc/model/42.obj
+VALGRIND_TEST	= valgrind --suppressions=rsc/vsupp/vsupp.supp --leak-check=full --show-leak-kinds=all ./scop rsc/model/42.obj
 
 ARGS			=	rsc/42.obj
 
@@ -73,6 +73,9 @@ clean_lib:
 test: $(NAME)
 	@printf "$(YELLOW)Test $(NAME)$(RESET)\n"
 	@./$(NAME) $(MODEL_42)
+
+vtest: $(NAME)
+	@$(VALGRIND_TEST)
 
 re:			fclean all
 

@@ -22,9 +22,9 @@ SRCS			=	parser/obj_parse.c\
 
 # SRCS_BONUS		=	main_bonus.c
 
-MAKE_LIBFT		=	make -s -C libft
+MAKE_LIBFT		=	make -s -C libft -j
 
-MAKE_LIST		=	make -s -C libft/list
+MAKE_LIST		=	make -s -C libft/list -j
 
 LIBFT			= 	libft/libft.a
 

@@ -183,11 +183,17 @@ void main_loop(t_obj_model *model, GLFWwindow *win)
     }
 }
 
-static void glfw_destroy(GLFWwindow *win)
+static void glfw_destroy(GLFWwindow *win, t_obj_model *model)
 {
+
+	ft_printf_fd(2, RED"Destroying glfw\n"RESET);
+	glBindVertexArray(0);
+	glDeleteVertexArrays(1, &model->vao);
+	glDeleteProgram(model->shader_id);
 	gladLoaderUnloadGL();
 	glfwDestroyWindow(win);
 	glfwTerminate();
+	free_obj_model(model);
 }
 
 int main(int argc, char **argv)
@@ -195,6 +201,8 @@ int main(int argc, char **argv)
     GLFWwindow	*win;
 	t_obj_model	*model;
     
+
+
 	if (argc != 2) { /* need to check file */
 		ft_printf_fd(2, "Usage: %s <obj_file>\n", argv[0]);
 		return (1);
@@ -228,7 +236,6 @@ int main(int argc, char **argv)
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
     main_loop(model, win);
-	free_obj_model(model);
-	glfw_destroy(win);
+	glfw_destroy(win, model);
 	return (0);
 }
