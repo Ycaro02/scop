@@ -136,6 +136,7 @@ void handle_input(GLFWwindow* window)
 	if (!window) {
 		return ;
 	}
+
  	
 	/* Now useless can pass model in handle input entry */
 	model = glfwGetWindowUserPointer(window);
