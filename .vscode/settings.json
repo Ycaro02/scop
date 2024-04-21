@@ -29,7 +29,8 @@
 		"emmintrin.h": "c",
 		"ft_math_define.h": "c",
 		"handle_vec3.h": "c",
-		"float.h": "c"
+		"float.h": "c",
+		"stb_image.h": "c"
 	},
 	"42header.email": "nfour@student.42angouleme.fr",
 	"42header.username": "nfour"

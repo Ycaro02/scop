@@ -121,7 +121,7 @@ u32     gener_u32(u32 max)
  * @brief Hard build color for each triangle
  * @param model obj model
 */
-void hard_build_color(t_obj_model *model) 
+u8 hard_build_color(t_obj_model *model) 
 {
 	vec3_f32 colors[] = {
 		{1.0f, 0.0f, 0.0f},  /* Red */
@@ -157,45 +157,107 @@ void hard_build_color(t_obj_model *model)
 	};
 	/* Usefull trick */
     u32 num_colors = sizeof(colors) / sizeof(colors[0]);
-	static u32 color_id = 0;
 
-    model->colors = malloc(model->tri_size * sizeof(vec3_f32));
-
+    model->colors = malloc(model->v_size * sizeof(vec3_f32));
     if (!model->colors) {
         ft_printf_fd(2, RED"Error: Malloc failed\n"RESET);
-        return ;
+        return (FALSE);
     }
-    for (u32 i = 0; i < model->tri_size; i++) {
-        /* Assign a color to the triangle based on its index */
-		if (i % 3 == 0) {
-			++color_id;
-			if (color_id >= num_colors) {
-				color_id = 0;
-			}
-		}
-        ft_vec_copy(model->colors[i], colors[color_id], sizeof(vec3_f32));
+    for (u32 i = 0; i < model->v_size; i++) {
+        ft_vec_copy(model->colors[i], colors[i % num_colors], sizeof(vec3_f32));
     }
+
+	return (TRUE);
 }
 
-GLuint init_color_buffer(t_obj_model *model)
-{
-	GLuint color_vbo;
+/* GOOOD FOR TEEEA*/
+// u8 build_texCoords(t_obj_model *model) 
+// {
+//     model->texture_coord = malloc(model->v_size * sizeof(vec2_f32));
 
-	hard_build_color(model);
-	glGenBuffers(1, &color_vbo);
-	/* Bind vbo to GL array */
-	glBindBuffer(GL_ARRAY_BUFFER, color_vbo);
-	glBufferData(GL_ARRAY_BUFFER, model->tri_size * sizeof(vec3_f32), model->colors, GL_STATIC_DRAW);
-	return (color_vbo);
+//     if (!model->texture_coord) {
+//         ft_printf_fd(2, RED"Error: Malloc failed\n"RESET);
+//         return (FALSE);
+//     }
+
+//     for (u32 i = 0; i < model->v_size; i++) {
+//         /* Assign a texture coordinate to each vertex based on its position */
+//         vec3_f32 vertex;
+//         ft_memcpy(vertex, model->vertex[i], sizeof(vec3_f32));
+//         vec2_f32 texCoord = { vertex[0], vertex[1] }; // Project onto the xy plane
+//         ft_vec_copy(model->texture_coord[i], &texCoord, sizeof(vec2_f32));
+//     }
+
+//     return (TRUE);
+// }
+
+
+u8 build_texCoords(t_obj_model *model) 
+{
+    model->texture_coord = malloc(model->v_size * sizeof(vec2_f32));
+
+    if (!model->texture_coord) {
+        ft_printf_fd(2, RED"Error: Malloc failed\n"RESET);
+        return (FALSE);
+    }
+
+    for (u32 i = 0; i < model->v_size; i++) {
+        /* Assign a texture coordinate to each vertex based on its position */
+        vec3_f32 vertex;
+        ft_memcpy(vertex, model->vertex[i], sizeof(vec3_f32));
+
+        // Convert the vertex position to spherical coordinates
+        float r = sqrt(vertex[0]*vertex[0] + vertex[1]*vertex[1] + vertex[2]*vertex[2]);
+        float theta = atan2(vertex[1], vertex[0]); // azimuthal angle
+        float phi = acos(vertex[2] / r); // polar angle
+
+        // Use the spherical coordinates as texture coordinates
+        vec2_f32 texCoord = { theta / (2.0f * M_PI), phi / M_PI };
+        ft_vec_copy(model->texture_coord[i], &texCoord, sizeof(vec2_f32));
+    }
+
+    return (TRUE);
 }
 
-GLuint init_gl_vertex_buffer(t_obj_model *model)
+// u8 build_texCoords(t_obj_model *model) 
+// {
+//     model->texture_coord = malloc(model->v_size * sizeof(vec2_f32));
+
+//     if (!model->texture_coord) {
+//         ft_printf_fd(2, RED"Error: Malloc failed\n"RESET);
+//         return (FALSE);
+//     }
+
+// vec2_f32 texCoords[6][4] = {
+//     { {0.0f, 0.0f}, {1.0f, 0.0f}, {1.0f, 1.0f}, {0.0f, 1.0f} }, // Face 1
+//     { {0.0f, 0.0f}, {1.0f, 0.0f}, {1.0f, 1.0f}, {0.0f, 1.0f} }, // Face 2
+//     { {0.0f, 0.0f}, {1.0f, 0.0f}, {1.0f, 1.0f}, {0.0f, 1.0f} }, // Face 3
+//     { {0.0f, 0.0f}, {1.0f, 0.0f}, {1.0f, 1.0f}, {0.0f, 1.0f} }, // Face 4
+//     { {0.0f, 0.0f}, {1.0f, 0.0f}, {1.0f, 1.0f}, {0.0f, 1.0f} }, // Face 5
+//     { {0.0f, 0.0f}, {1.0f, 0.0f}, {1.0f, 1.0f}, {0.0f, 1.0f} }  // Face 6
+// };
+
+// for (u32 i = 0; i < model->v_size; i++) {
+//     u32 face = i / 4; // Each face of the cube has 4 vertices
+//     u32 vertex = i % 4;
+//     ft_vec_copy(model->texture_coord[i], &texCoords[face][vertex], sizeof(vec2_f32));
+// }
+//     return (TRUE);
+// }
+/**
+ * @brief Create VBO
+ * @param size size of the buffer
+ * @param data data to fill the buffer
+ * @return vbo uint value
+*/
+GLuint create_VBO(u32 size, void *data)
 {
+	GLuint	vbo;
+
 	/* create and fill vbo */
-	GLuint vbo;
 	glGenBuffers(1, &vbo);
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vec3_f32) * model->v_size, model->vertex, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, size, data, GL_STATIC_DRAW);
 	return (vbo);
 }
 
@@ -211,13 +273,19 @@ void init_gl_triangle_array(t_obj_model *model)
     glBindVertexArray(model->vao);
 
 	/* init Vertex Buffer Object */
-	model->vbo = init_gl_vertex_buffer(model);
+	model->vbo = create_VBO((sizeof(vec3_f32) * model->v_size), model->vertex);
 
-	GLuint color_vbo = init_color_buffer(model);
+	/* Hard build color for each vertex */
+	hard_build_color(model);
+	GLuint color_vbo = create_VBO(model->v_size * sizeof(vec3_f32), model->colors);
+
+	build_texCoords(model);
+	GLuint texCoords_vbo = create_VBO(model->v_size * sizeof(vec2_f32), model->texture_coord);
 
     /* create and fill ebo Element Buffer Objects */
     glGenBuffers(1, &model->ebo);
-	/* Bind EBO to GL alement array */
+	
+	/* Bind EBO to GL element array */
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, model->ebo);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, TRIANGLE_DSIZE(model), model->tri_face, GL_STATIC_DRAW);
 	// print_elem_data(model);
@@ -227,15 +295,23 @@ void init_gl_triangle_array(t_obj_model *model)
 	/* Config new vertex attr for vertices */
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(vec3_f32), (void*)0);
 	glEnableVertexAttribArray(0);  /* Enable vertex attr */
+	
 	/* Bind the color buffer */
 	glBindBuffer(GL_ARRAY_BUFFER, color_vbo);
+	
 	/* Config new vertex attr for colors */
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(vec3_f32), (void*)0);
 	glEnableVertexAttribArray(1);  /* Enable color attr */
-
-
 	// print_vertex_data(model);
+
+	/* Config texture attr for vertex */
+	glBindBuffer(GL_ARRAY_BUFFER, texCoords_vbo);
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(vec2_f32), (void*)0);
+	glEnableVertexAttribArray(2);
 
     /* Unlink vao */
     glBindVertexArray(0);
+
+
+
 }

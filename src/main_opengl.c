@@ -1,5 +1,77 @@
 #include "../include/scop.h"
 
+#define STB_IMAGE_IMPLEMENTATION
+#include "../../lib/stb/stb_image.h"
+
+// #define STB_IMAGE_RESIZE_IMPLEMENTATION
+// #include "../../lib/stb/deprecated/stb_image_resize.h"
+
+
+GLuint init_openGL_texture(t_obj_model* model, u8 *data, u32 width, u32 height)
+{
+	GLuint texture;
+	glGenTextures(1, &texture);
+	glBindTexture(GL_TEXTURE_2D, texture);
+	/* Set the texture wrapping parameters */
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	// Set texture wrapping to GL_REPEAT (usually basic wrapping method)
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	/* Set texture filtering parameters */
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);	// Set texture filtering to GL_LINEAR
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	/* Load the texture */
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+	glGenerateMipmap(GL_TEXTURE_2D);
+
+
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, texture);
+
+	GLuint texture_loc = glGetUniformLocation(model->shader_id, "texture1");
+	glUniform1i(texture_loc, 0);
+
+	return (texture);
+}
+
+// u8 *resize_image(u8 *data, int oldWidth, int oldHeight, int newWidth, int newHeight) {
+//     u8 *newData = malloc(newWidth * newHeight * 4); // assuming 4 bytes per pixel
+//     if (!newData) {
+//         printf("Failed to allocate memory for resized image\n");
+//         return NULL;
+//     }
+
+//     if (!stbir_resize_uint8(data, oldWidth, oldHeight, 0, newData, newWidth, newHeight, 0, 4)) {
+//         printf("Failed to resize image\n");
+//         free(newData);
+//         return NULL;
+//     }
+
+//     return newData;
+// }
+
+/**
+ * @brief Load a texture from a file
+ * @param path path to the texture file
+ * @return u8* return the texture data
+*/
+u8 *brut_load_texture(char *path, t_obj_model *model)
+{
+	int width, height, nrChannels;
+	u8 *data = stbi_load(path, &width, &height, &nrChannels, 0);
+
+	if (!data) {
+		ft_printf_fd(2, RED"Error: Failed to load texture\n"RESET);
+		return (NULL);
+	}
+	ft_printf_fd(1, "Texture loaded: %s\n", path);
+
+	// u8 *newd = resize_image(data, width, height, 128, 128); //
+	
+	init_openGL_texture(model, data, width, height);
+	return (data);
+}
+
+
+
 /**
  * @brief Initialize the openGL context
  * @return GLFWwindow* return the window struct pointer
@@ -8,6 +80,7 @@ GLFWwindow *init_openGL_context()
 {
     GLFWwindow *win;
 	int version = 0;
+	
 
     if (!glfwInit())
         return (NULL);
@@ -153,6 +226,8 @@ int main(int argc, char **argv)
 	model->shader_id = load_shader(model);
 	init_gl_triangle_array(model);
 	ft_printf_fd(1, CYAN"Triangle number: %u\n"RESET, model->tri_size);
+
+	brut_load_texture("kitten_img.bmp", model);
 
     main_loop(model, win);
 	glfw_destroy(win, model);

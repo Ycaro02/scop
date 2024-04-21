@@ -112,6 +112,7 @@ typedef struct s_obj_model {
 	mat4_f32		rotation;		/* model rotation matrix */
 	u32				status;			/* model rotation state */
 	GLFWwindow		*win_ptr;		/* window pointer */
+	vec2_f32		*texture_coord;	/* texture coordinates associated with a vertex */
 }	t_obj_model;
 
 
