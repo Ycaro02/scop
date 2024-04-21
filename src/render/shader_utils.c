@@ -2,8 +2,6 @@
 
 void set_shader_var_vec4(GLuint shader_id, char *var_name, vec4_f32 vec)
 {
-	glUseProgram(shader_id);
-	
 	GLint var_loc = glGetUniformLocation(shader_id, var_name);
 	glUniform4f(var_loc, vec[0], vec[1], vec[2], vec[3]);
 
@@ -11,8 +9,6 @@ void set_shader_var_vec4(GLuint shader_id, char *var_name, vec4_f32 vec)
 
 void set_shader_var_mat4(GLuint shader_id, char *var_name, mat4_f32 data)
 {
-	glUseProgram(shader_id);
-	
 	GLint var_loc = glGetUniformLocation(shader_id, var_name);
 	glUniformMatrix4fv(var_loc, 1, GL_FALSE, (GLfloat *)data);
 }

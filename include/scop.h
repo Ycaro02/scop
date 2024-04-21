@@ -1,7 +1,6 @@
 #ifndef SCOP_HEADER_H
 #define SCOP_HEADER_H
 
-
 #include <math.h>
 
 // #include <cglm/cglm.h> /* need to remove */
@@ -21,6 +20,16 @@
 /* Window size */
 #define SCREEN_WIDTH 700
 #define SCREEN_HEIGHT 700
+
+#define CAM_ZOOM 1.0f				/* Zoom/Unzoom value */
+#define CAM_MOVE_HORIZONTAL 1.0f	/* Move camera horizontal value */
+#define CAM_UP_DOWN 0.1f			/* Move camera up/down value */
+
+#define ROTATE_ANGLE 4.0f			/* Rotate obj angle when arrow pressed */
+
+#define VEC3_ROTATEX (vec3_f32){1.0f, 0.0f, 0.0f}
+#define VEC3_ROTATEY (vec3_f32){0.0f, 1.0f, 0.0f}
+#define VEC3_ROTATEZ (vec3_f32){0.0f, 0.0f, 1.0f}
 
 /* Enum for obj token accepted */
 enum e_obj_token {
@@ -106,10 +115,16 @@ typedef struct s_obj_model {
 }	t_obj_model;
 
 
+/* Key repeat */
+#define SINGLE_PRESS	0
+#define REPEAT			1
+
+
 /* Key action structure */
 typedef struct s_key_action {
     int key;							/* key code */
     void (*action)(t_obj_model *model);	/* action to do, function ptr void (t_obj_model *model)*/
+	u8	repeat;							/* auto repeat until key release */
 } t_key_action;
 
 /* Enum for model status */
@@ -126,12 +141,6 @@ enum model_status {
 // vec3_f32	*vt;			/* texture array */
 // vec3_f32	*vn;			/* normal array */
 // u8			smooth;		/* The smoothing group state. 'on' to activate, 'off' to deactivate. 1 for true, otherwise 0*/
-
-#define ROTATE_ANGLE 4.0f
-#define CAM_MOVE_ANGLE 1.0f
-#define VEC3_ROTATEX (vec3_f32){0.0f, 1.0f, 0.0f}
-#define VEC3_ROTATEY (vec3_f32){1.0f, 0.0f, 0.0f}
-#define VEC3_ROTATEZ (vec3_f32){0.0f, 0.0f, 1.0f}
 
 
 
@@ -178,7 +187,6 @@ void			set_shader_var_vec4(GLuint shader_id, char *var_name, vec4_f32 vec);
 GLuint			load_shader(t_obj_model *model);
 
 /* win_event/key_callback.c */
-void			key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
-
+void			handle_input(GLFWwindow* window);
 
 #endif /* SCOP_HEADER_H */

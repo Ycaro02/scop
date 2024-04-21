@@ -1,52 +1,55 @@
 #include "../../include/scop.h"
 
-/* Escapte Key : GLFW_KEY_ESCAPE */
+/* Escapte Key : ESC */
 void act_escape(t_obj_model *model) {
     glfwSetWindowShouldClose(model->win_ptr, GL_TRUE);
 }
 
-/* Zoom */
+
+
+/* Zoom : W */
 void act_zoom(t_obj_model *model) {
-    move_camera_forward(&model->cam, 1.0f);
+    move_camera_forward(&model->cam, CAM_ZOOM);
 }
 
-/* Unzoom */
+/* Unzoom : S */
 void act_unzoom(t_obj_model *model) {
-    move_camera_backward(&model->cam, 1.0f);
+    move_camera_backward(&model->cam, CAM_ZOOM);
 }
 
-/* Rotate horizontal camera +1 */
-void act_rotate_horizontal_plus(t_obj_model *model) {
-    rotate_camera(&model->cam, CAM_MOVE_ANGLE, VEC3_ROTATEX);
+/* Rotate camera left : A */
+void act_rotate_camera_left(t_obj_model *model) {
+	rotate_camera(&model->cam, CAM_MOVE_HORIZONTAL, VEC3_ROTATEY);
 }
 
-/* Rotate horizontal camera -1 */
-void act_rotate_horizontal_minus(t_obj_model *model) {
-    rotate_camera(&model->cam, -CAM_MOVE_ANGLE, VEC3_ROTATEX);
+/* Rotate camera right D */
+void act_rotate_camera_right(t_obj_model *model) {
+    rotate_camera(&model->cam, -CAM_MOVE_HORIZONTAL, VEC3_ROTATEY);
 }
 
-/* Up camera */
+/* Up camera : E */
 void act_up_camera(t_obj_model *model) {
-    move_camera_up(&model->cam, 1.0f);
+    move_camera_up(&model->cam, CAM_UP_DOWN);
 }
 
-/* Down camera */
+/* Down camera : Q */
 void act_down_camera(t_obj_model *model) {
-    move_camera_up(&model->cam, -1.0f);
+    move_camera_up(&model->cam, -CAM_UP_DOWN);
 }
 
-/* Reset cam */
+/* Reset cam : ENTER */
 void act_reset_camera(t_obj_model *model) {
     reset_camera(model);
 }
 
-/* Display cam data */
+/* Display cam data : SPACE */
 void act_display_camera_value(t_obj_model *model) {
     display_camera_value(&model->cam);
 }
 
-/* Change polygon mode */
+/* Change polygon mode : P */
 void act_change_polygon_mode(t_obj_model *model) {
+	/* To store in context structure */
     static u8 fill_mode = 1;
 	
 	(void)model;
@@ -54,35 +57,46 @@ void act_change_polygon_mode(t_obj_model *model) {
     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE + fill_mode);
 }
 
-/* Rotate object left */
+/* Rotate object left : LEFT */
 void act_rotate_object_left(t_obj_model *model) {
 	rotate_object_around_center(model, VEC3_ROTATEX, ROTATE_ANGLE, model->shader_id);
 }
 
-/* Rotate object right */
+/* Rotate object right : RIGHT */
 void act_rotate_object_right(t_obj_model *model) {
 	rotate_object_around_center(model, VEC3_ROTATEX, -ROTATE_ANGLE, model->shader_id);
 }
 
-/* Rotate object up */
+/* Rotate object up : UP */
 void act_rotate_object_up(t_obj_model *model) {
 	rotate_object_around_center(model, VEC3_ROTATEY, ROTATE_ANGLE, model->shader_id);
 }
 
-/* Rotate object down */
+/* Rotate object down : DOWN */
 void act_rotate_object_down(t_obj_model *model) {
 	rotate_object_around_center(model, VEC3_ROTATEY, -ROTATE_ANGLE, model->shader_id);
 }
 
-/* Rotate object Z up */
+/* Rotate object Z up : PAGE UP*/
 void act_rotate_object_z_up(t_obj_model *model) {
 	rotate_object_around_center(model, VEC3_ROTATEZ, ROTATE_ANGLE, model->shader_id);
 }
 
-/* Stop/Start auto X rotation */
-void act_stop_start_auto_x_rotation(t_obj_model *model) {
+/* Stop/Start auto X rotation : R */
+void act_stop_start_x_rotation(t_obj_model *model) {
 	reverse_flag(&model->status, STATUS_ROTATE_X);
 }
+
+/* Stop/Start auto Y rotation : T */
+void act_stop_start_y_rotation(t_obj_model *model) {
+	reverse_flag(&model->status, STATUS_ROTATE_Y);
+}
+
+/* Stop/Start auto Z rotation : Y */
+void act_stop_start_z_rotation(t_obj_model *model) {
+	reverse_flag(&model->status, STATUS_ROTATE_Z);
+}
+
 
 /**
  * @brief Set key callback for the window
@@ -92,37 +106,50 @@ void act_stop_start_auto_x_rotation(t_obj_model *model) {
  * @param action action receive from glfw	
  * @param mode unused
 */
-void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode)
+void handle_input(GLFWwindow* window)
 {
-	(void)scancode, (void)mode;
+	/* To store in context structure */
+	static u8		previous_state[GLFW_KEY_LAST] = {0};
+	// (void)scancode, (void)mode, (void)key, (void)action;
 	t_key_action	key_actions[] = {
-		{GLFW_KEY_ESCAPE, act_escape},
-		{GLFW_KEY_W, act_zoom},
-		{GLFW_KEY_S, act_unzoom},
-		{GLFW_KEY_A, act_rotate_horizontal_plus},
-		{GLFW_KEY_D, act_rotate_horizontal_minus},
-		{GLFW_KEY_Q, act_up_camera},
-		{GLFW_KEY_E, act_down_camera},
-		{GLFW_KEY_ENTER, act_reset_camera},
-		{GLFW_KEY_SPACE, act_display_camera_value},
-		{GLFW_KEY_P, act_change_polygon_mode},
-		{GLFW_KEY_LEFT, act_rotate_object_left},
-		{GLFW_KEY_RIGHT, act_rotate_object_right},
-		{GLFW_KEY_UP, act_rotate_object_up},
-		{GLFW_KEY_DOWN, act_rotate_object_down},
-		{GLFW_KEY_PAGE_UP, act_rotate_object_z_up},
-		{GLFW_KEY_R, act_stop_start_auto_x_rotation},
+		{GLFW_KEY_ESCAPE, act_escape, SINGLE_PRESS},
+		{GLFW_KEY_W, act_zoom, REPEAT},
+		{GLFW_KEY_S, act_unzoom, REPEAT},
+		{GLFW_KEY_A, act_rotate_camera_left, REPEAT},
+		{GLFW_KEY_D, act_rotate_camera_right, REPEAT},
+		{GLFW_KEY_Q, act_up_camera, REPEAT},
+		{GLFW_KEY_E, act_down_camera, REPEAT},
+		{GLFW_KEY_ENTER, act_reset_camera, SINGLE_PRESS},
+		{GLFW_KEY_SPACE, act_display_camera_value, SINGLE_PRESS},
+		{GLFW_KEY_P, act_change_polygon_mode, SINGLE_PRESS},
+		{GLFW_KEY_LEFT, act_rotate_object_left, REPEAT},
+		{GLFW_KEY_RIGHT, act_rotate_object_right, REPEAT},
+		{GLFW_KEY_UP, act_rotate_object_up, REPEAT},
+		{GLFW_KEY_DOWN, act_rotate_object_down, REPEAT},
+		{GLFW_KEY_PAGE_UP, act_rotate_object_z_up, REPEAT},
+		{GLFW_KEY_R, act_stop_start_y_rotation, SINGLE_PRESS},
+		{GLFW_KEY_T, act_stop_start_x_rotation, SINGLE_PRESS},
+		{GLFW_KEY_Y, act_stop_start_z_rotation, SINGLE_PRESS},
 	};
 	t_obj_model  	*model = NULL;
 	u32 			max = (sizeof(key_actions) / sizeof(t_key_action));
 	if (!window) {
 		return ;
 	}
-	
+
 	model = glfwGetWindowUserPointer(window);
 	for (u32 i = 0; i < max; i++) {
-		if (key_actions[i].key == key && action >= GLFW_PRESS) {
+        int currentState = glfwGetKey(window, key_actions[i].key);
+
+		/* if not repeat key and key pressed and previous state not key_pressed */
+		if (!key_actions[i].repeat) {
+			if (currentState == GLFW_PRESS \
+				&& previous_state[key_actions[i].key] != (u8)GLFW_PRESS) {
+				key_actions[i].action(model);
+			}
+		} else if (currentState == GLFW_PRESS) { /* If repeat and key pressed */
 			key_actions[i].action(model);
 		}
+        previous_state[key_actions[i].key] = currentState;
 	}
 }
