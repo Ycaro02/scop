@@ -110,7 +110,6 @@ void handle_input(GLFWwindow* window)
 {
 	/* To store in context structure */
 	static u8		previous_state[GLFW_KEY_LAST] = {0};
-	// (void)scancode, (void)mode, (void)key, (void)action;
 	t_key_action	key_actions[] = {
 		{GLFW_KEY_ESCAPE, act_escape, SINGLE_PRESS},
 		{GLFW_KEY_W, act_zoom, REPEAT},
@@ -133,23 +132,24 @@ void handle_input(GLFWwindow* window)
 	};
 	t_obj_model  	*model = NULL;
 	u32 			max = (sizeof(key_actions) / sizeof(t_key_action));
+	int				state = GLFW_RELEASE;
 	if (!window) {
 		return ;
 	}
-
+ 	
+	/* Now useless can pass model in handle input entry */
 	model = glfwGetWindowUserPointer(window);
 	for (u32 i = 0; i < max; i++) {
-        int currentState = glfwGetKey(window, key_actions[i].key);
+        state = glfwGetKey(window, key_actions[i].key);
 
-		/* if not repeat key and key pressed and previous state not key_pressed */
-		if (!key_actions[i].repeat) {
-			if (currentState == GLFW_PRESS \
-				&& previous_state[key_actions[i].key] != (u8)GLFW_PRESS) {
+		if (!key_actions[i].repeat) { /* if not repeat key */ 
+			if (state == GLFW_PRESS \
+				&& previous_state[key_actions[i].key] != (u8)GLFW_PRESS) { /* and key pressed and previous state not key_pressed */
 				key_actions[i].action(model);
 			}
-		} else if (currentState == GLFW_PRESS) { /* If repeat and key pressed */
+		} else if (state == GLFW_PRESS) { /* If repeat and key pressed */
 			key_actions[i].action(model);
 		}
-        previous_state[key_actions[i].key] = currentState;
+        previous_state[key_actions[i].key] = state;
 	}
 }
