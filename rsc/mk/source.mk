@@ -12,7 +12,6 @@ ALL_SRC_DIR		=	$(OBJ_DIR) $(addprefix $(OBJ_DIR)/, $(SUB_SRC_DIR))
 MAIN_MANDATORY 	=	main_opengl.c
 
 SRCS			=	parser/obj_parse.c\
-					parser/load_file.c\
 					parser/parse_line.c\
 					parser/build_obj_model.c\
 					parser/face_handling.c\

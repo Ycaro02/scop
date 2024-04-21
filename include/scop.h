@@ -12,13 +12,17 @@
 #include "../libft/parse_flag/parse_flag.h"
 #include "../libft/stack_string/stack_string.h"
 
-
+/* Vertex shader source path */
 #define VERTEX_SHADER_PATH "rsc/shaders/vertex_shader.glsl"
+
+/* Fragment shader source path */
 #define FRAGMENT_SHADER_PATH "rsc/shaders/fragment_shader.glsl"
 
+/* Window size */
 #define SCREEN_WIDTH 700
 #define SCREEN_HEIGHT 700
 
+/* Enum for obj token accepted */
 enum e_obj_token {
 	ENUM_UNKNOWN=0,
 	ENUM_COMMENT=(1 << 0),
@@ -59,31 +63,32 @@ enum e_obj_token {
 
 /* Camera structure */
 typedef struct t_camera {
-    vec3_f32 position;				/* position vector */
-    vec3_f32 target;				/* target vector */
-    vec3_f32 up;					/* up vector */
-    mat4_f32 view;					/* view matrix */
-    mat4_f32 projection;			/* projection matrix */
+    vec3_f32		position;			/* position vector */
+    vec3_f32		target;				/* target vector */
+    vec3_f32		up;					/* up vector */
+    mat4_f32		view;				/* view matrix */
+    mat4_f32		projection;			/* projection matrix */
 } t_camera;
 
 /* Node used only for parse */
 typedef struct s_face_node {
-	vec3_u32 	vec;				/* vec3 uint32 for 3 first val */
-	u32			*other;				/* uin32_t int array aloc for other value if needed otherwise NULL */
+	vec3_u32 		vec;				/* vec3 uint32 for 3 first val */
+	u32				*other;				/* uin32_t int array aloc for other value if needed otherwise NULL */
 } t_face_node;
 
 /* Brut parsing structure */
 typedef struct s_obj_file {
-	char	*o;				/* The name of the object */
-	char	*mtllib;		/* The name of the material file associated with the object */
-	char	*usemtl;		/* The name of the material to be used for the subsequent faces of the object */
-	t_list	*vertex;		/* The coordinates of a 3D vertex, list of vec3_f32 */
-	t_list	*face;			/* The indices of the vertices composing a face, list t_fnode */
-	t_list	*vt;			/* The texture coordinates associated with a vertex, list of vec2/vec3 float */
-	t_list	*vn;			/* The coordinates of the normal vector associated with a vertex, list of vec3_f32 */
-	u8		smooth;			/* The smoothing group state. 'on' to activate, 'off' to deactivate. 1 for true, otherwise 0*/
+	char			*o;				/* The name of the object */
+	char			*mtllib;		/* The name of the material file associated with the object */
+	char			*usemtl;		/* The name of the material to be used for the subsequent faces of the object */
+	t_list			*vertex;		/* The coordinates of a 3D vertex, list of vec3_f32 */
+	t_list			*face;			/* The indices of the vertices composing a face, list t_fnode */
+	t_list			*vt;			/* The texture coordinates associated with a vertex, list of vec2/vec3 float */
+	t_list			*vn;			/* The coordinates of the normal vector associated with a vertex, list of vec3_f32 */
+	u8				smooth;			/* The smoothing group state. 'on' to activate, 'off' to deactivate. 1 for true, otherwise 0*/
 } t_obj_file;
 
+/* Model structure */
 typedef struct s_obj_model {
 	t_camera		cam;			/* camera structure */
 	vec3_f32		*vertex;		/* vertex array, give to openGL context */
@@ -101,11 +106,13 @@ typedef struct s_obj_model {
 }	t_obj_model;
 
 
-typedef struct {
-    int key;
-    void (*action)(t_obj_model *model);
+/* Key action structure */
+typedef struct s_key_action {
+    int key;							/* key code */
+    void (*action)(t_obj_model *model);	/* action to do, function ptr void (t_obj_model *model)*/
 } t_key_action;
 
+/* Enum for model status */
 enum model_status {
 	STATUS_NONE=0,
 	STATUS_ROTATE_X=(1 << 0),
@@ -127,11 +134,6 @@ enum model_status {
 #define VEC3_ROTATEZ (vec3_f32){0.0f, 0.0f, 1.0f}
 
 
-void rotate_object_around_center(t_obj_model* m, vec3_f32 rotate_vec, float angle, GLuint shader_id);
-
-/* parser/load_file.c */
-// char			**ft_split_trim(char const *str, char c);
-// char			**load_file(char *path);
 
 /* parser/obj_parse.c */
 t_obj_model		*parse_obj_file(char *path);
@@ -168,9 +170,7 @@ void 			rotate_camera(t_camera* camera, float angle, vec3_f32 axis);
 void 			reset_camera(t_obj_model *model);
 void			rotate_object(t_obj_model *model, vec3_f32 rotate_vec, float angle, GLuint shader_id);
 void			move_camera_up(t_camera* camera, float distance) ;
-/*render/mat4*/
-// vec4_f32	*create_mat4(vec4_f32 a, vec4_f32 b, vec4_f32 c, vec4_f32 d);
-// vec4_f32	*create_mat4_identity();
+void			rotate_object_around_center(t_obj_model* m, vec3_f32 rotate_vec, float angle, GLuint shader_id);
 
 /* render/shader_utils */
 void			set_shader_var_mat4(GLuint shader_id, char *var_name, mat4_f32 data);
