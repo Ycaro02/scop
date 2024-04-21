@@ -115,9 +115,9 @@ typedef struct s_obj_model {
 }	t_obj_model;
 
 
-/* Key repeat */
-#define SINGLE_PRESS	0
-#define REPEAT			1
+/* Key repeat, key_action->repeat field */
+#define SINGLE_PRESS	0			/* key action will be done only once */
+#define REPEAT			1			/* key action will be done until key release */
 
 
 /* Key action structure */
@@ -187,6 +187,6 @@ void			set_shader_var_vec4(GLuint shader_id, char *var_name, vec4_f32 vec);
 GLuint			load_shader(t_obj_model *model);
 
 /* win_event/key_callback.c */
-void			handle_input(GLFWwindow* window);
+void			handle_input(t_obj_model *model);
 
 #endif /* SCOP_HEADER_H */

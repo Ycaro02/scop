@@ -106,7 +106,7 @@ void act_stop_start_z_rotation(t_obj_model *model) {
  * @param action action receive from glfw	
  * @param mode unused
 */
-void handle_input(GLFWwindow* window)
+void handle_input(t_obj_model *model)
 {
 	/* To store in context structure */
 	static u8		previous_state[GLFW_KEY_LAST] = {0};
@@ -130,18 +130,11 @@ void handle_input(GLFWwindow* window)
 		{GLFW_KEY_T, act_stop_start_x_rotation, SINGLE_PRESS},
 		{GLFW_KEY_Y, act_stop_start_z_rotation, SINGLE_PRESS},
 	};
-	t_obj_model  	*model = NULL;
 	u32 			max = (sizeof(key_actions) / sizeof(t_key_action));
-	int				state = GLFW_RELEASE;
-	if (!window) {
-		return ;
-	}
-
+	s32				state = GLFW_RELEASE;
  	
-	/* Now useless can pass model in handle input entry */
-	model = glfwGetWindowUserPointer(window);
 	for (u32 i = 0; i < max; i++) {
-        state = glfwGetKey(window, key_actions[i].key);
+        state = glfwGetKey(model->win_ptr, key_actions[i].key);
 
 		if (!key_actions[i].repeat) { /* if not repeat key */ 
 			if (state == GLFW_PRESS \

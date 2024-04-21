@@ -2,10 +2,9 @@
 
 /**
  * @brief Initialize the openGL context
- * @param model model structure
  * @return GLFWwindow* return the window struct pointer
 */
-GLFWwindow *init_openGL_context(t_obj_model *model) 
+GLFWwindow *init_openGL_context() 
 {
     GLFWwindow *win;
 	int version = 0;
@@ -13,25 +12,30 @@ GLFWwindow *init_openGL_context(t_obj_model *model)
     if (!glfwInit())
         return (NULL);
 
-	/* Enable 4x antialiasing */
+	/* Enable 8x antialiasing */
     glfwWindowHint(GLFW_SAMPLES, 8);
 
     win = glfwCreateWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "OpenGL Window", NULL, NULL);
     if (!win) {
         return (NULL);
     }
+
+	/* Init openGL context on current thread */
     glfwMakeContextCurrent(win);
 
-	/* Set the user pointer to the model, can get it with glfwGetWindowUserPointer(win); */
-	glfwSetWindowUserPointer(win, model);
-	// glfwSetKeyCallback(win, key_callback);
+	/* 
+	 * Load all openGL function pointer with glad
+	 * gladLoaderLoadGLLoader returns the version of glad
+	*/
 
  	if (!(version = gladLoaderLoadGL())) {
         ft_printf_fd(2, "Error: Failed to initialize Glad\n");
         glfwDestroyWindow(win);
         glfwTerminate();
-        return NULL;
+        return (NULL);
     }
+
+	ft_printf_fd(1, ORANGE"Glad Version %d.%d\n"RESET, GLAD_VERSION_MAJOR(version), GLAD_VERSION_MINOR(version));
 
 	/* Enable multisampling for antialiasing */
     glEnable(GL_MULTISAMPLE);
@@ -43,8 +47,7 @@ GLFWwindow *init_openGL_context(t_obj_model *model)
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-	// glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
-	ft_printf_fd(1, "Glad Version %d.%d\n", GLAD_VERSION_MAJOR(version), GLAD_VERSION_MINOR(version));
+	glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
     return (win);
 }
 
@@ -92,7 +95,7 @@ void main_loop(t_obj_model *model, GLFWwindow *win)
 		glfwSwapBuffers(win);
         /* Event handling */
         glfwPollEvents();
-		handle_input(win);
+		handle_input(model);
     }
 }
 
@@ -136,10 +139,8 @@ int main(int argc, char **argv)
 
 	/* Init camera structure */
 	model->cam = create_camera(45.0f, (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, 0.1f, 100.0f);
-	
 
-
-    win = init_openGL_context(model);
+    win = init_openGL_context();
     if (!win) {
         ft_printf_fd(2, "Error: init_openGL_context\n");
         glfwTerminate();
@@ -151,10 +152,7 @@ int main(int argc, char **argv)
 	model->win_ptr = win;
 	model->shader_id = load_shader(model);
 	init_gl_triangle_array(model);
-	
-	ft_printf_fd(1, "tri_size: %u\n", model->tri_size);
-	/* set this with event handle */
-	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	ft_printf_fd(1, CYAN"Triangle number: %u\n"RESET, model->tri_size);
 
     main_loop(model, win);
 	glfw_destroy(win, model);
