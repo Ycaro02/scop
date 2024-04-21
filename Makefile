@@ -40,7 +40,7 @@ ifeq ($(shell [ -f ${LIBFT} ] && echo 0 || echo 1), 1)
 endif
 
 $(OBJ_DIR):
-	mkdir $(ALL_DIR)
+	mkdir $(ALL_SRC_DIR)
 # @$(ASCII_ART) $(ASCII_NAME)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c

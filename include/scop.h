@@ -97,8 +97,14 @@ typedef struct s_obj_model {
 	GLuint			shader_id;		/* shader program id */
 	mat4_f32		rotation;		/* model rotation matrix */
 	u32				status;			/* model rotation state */
+	GLFWwindow		*win_ptr;		/* window pointer */
 }	t_obj_model;
 
+
+typedef struct {
+    int key;
+    void (*action)(t_obj_model *model);
+} t_key_action;
 
 enum model_status {
 	STATUS_NONE=0,
@@ -170,5 +176,9 @@ void			move_camera_up(t_camera* camera, float distance) ;
 void			set_shader_var_mat4(GLuint shader_id, char *var_name, mat4_f32 data);
 void			set_shader_var_vec4(GLuint shader_id, char *var_name, vec4_f32 vec);
 GLuint			load_shader(t_obj_model *model);
+
+/* win_event/key_callback.c */
+void			key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
+
 
 #endif /* SCOP_HEADER_H */

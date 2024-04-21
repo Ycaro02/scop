@@ -2,11 +2,12 @@ OBJ_DIR			=	obj
 
 SRC_DIR 		=	src
 
-PARSER_DIR		=	parser
+SUB_SRC_DIR		=	parser\
+					render\
+					glad\
+					win_event
 
-GLAD_DIR		=	glad
-
-RENDER_DIR		=	render
+ALL_SRC_DIR		=	$(OBJ_DIR) $(addprefix $(OBJ_DIR)/, $(SUB_SRC_DIR))
 
 MAIN_MANDATORY 	=	main_opengl.c
 
@@ -17,6 +18,7 @@ SRCS			=	parser/obj_parse.c\
 					parser/face_handling.c\
 					render/camera.c\
 					render/shader_utils.c\
+					win_event/key_callback.c\
 					glad/gl.c\
 
 
@@ -33,8 +35,6 @@ LIST			= 	libft/list/linked_list.a
 OBJS 			= $(addprefix $(OBJ_DIR)/, $(SRCS:.c=.o))
 
 RM			=	rm -rf
-
-ALL_DIR		= $(OBJ_DIR) $(OBJ_DIR)/$(PARSER_DIR) $(OBJ_DIR)/${GLAD_DIR} $(OBJ_DIR)/${RENDER_DIR}
 
 ifeq ($(findstring bonus, $(MAKECMDGOALS)), bonus)
 ASCII_NAME	= "bonus"

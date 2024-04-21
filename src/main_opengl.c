@@ -1,92 +1,5 @@
 #include "../include/scop.h"
 
-
-
-
-/**
- * @brief Set key callback for the window
- * @param window 
- * @param key keycode receive from glfw
- * @param scancode unused
- * @param action action receive from glfw	
- * @param mode unused
-*/
-void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode) 
-{
-	(void)scancode, (void)mode;
-	t_obj_model *model = glfwGetWindowUserPointer(window);
-	static u8 fill_mode = 1;
-
-    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
-        glfwSetWindowShouldClose(window, GL_TRUE);
-		return ;
-	}
-	/* Zoom */
-	if (key == GLFW_KEY_W && action >= GLFW_PRESS) {
-		move_camera_forward(&model->cam, 1.0f);
-	}
-	/* Unzoom */ 
-	else if (key == GLFW_KEY_S && action >= GLFW_PRESS) {
-		move_camera_backward(&model->cam, 1.0f);
-	}
-	/* Rotate horizontal camera +1 */
-	else if (key == GLFW_KEY_A && action >= GLFW_PRESS) {
-		rotate_camera(&model->cam, CAM_MOVE_ANGLE, VEC3_ROTATEX);
-	} 
-	/* Rotate horizontale camera -1 */
-	else if (key == GLFW_KEY_D && action >= GLFW_PRESS) {
-		rotate_camera(&model->cam, -CAM_MOVE_ANGLE, VEC3_ROTATEX);
-	}
-	/* Up camera */ 
-	else if (key == GLFW_KEY_Q && action >= GLFW_PRESS) {
-		move_camera_up(&model->cam, 1.0f);
-	}
-	/* Down camera */
-	else if (key == GLFW_KEY_E && action >= GLFW_PRESS) {
-		move_camera_up(&model->cam, -1.0f);
-	}
-	/* Reset cam */
-	else if (key == GLFW_KEY_ENTER && action >= GLFW_PRESS) {
-		reset_camera(model);
-	} 
-	/* Display cam data */
-	else if (key == GLFW_KEY_SPACE && action >= GLFW_PRESS) {
-		display_camera_value(&model->cam);
-	} 
-	/* Change polygon mode */
-	else if (key == GLFW_KEY_P && action >= GLFW_PRESS) {
-		fill_mode = !fill_mode;
-		/* This working cause GL_FILL is GL_LINE + 1*/
-		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE + fill_mode);
-	} 
-	/* Rotate object left*/
-	else if (key == GLFW_KEY_LEFT && action >= GLFW_PRESS) {
-		rotate_object_around_center(model, VEC3_ROTATEX, ROTATE_ANGLE, model->shader_id);
-	} 
-	/* Rotate object right*/
-	else if (key == GLFW_KEY_RIGHT && action >= GLFW_PRESS) {
-		rotate_object_around_center(model, VEC3_ROTATEX, -ROTATE_ANGLE, model->shader_id);
-	} 
-	/* Rotate object up*/
-	else if (key == GLFW_KEY_UP && action >= GLFW_PRESS) {
-		rotate_object_around_center(model, VEC3_ROTATEY, ROTATE_ANGLE, model->shader_id);
-	} 
-	/* Rotate object down*/
-	else if (key == GLFW_KEY_DOWN && action >= GLFW_PRESS) {
-		rotate_object_around_center(model, VEC3_ROTATEY, -ROTATE_ANGLE, model->shader_id);
-	} 
-	/* Rotate object Z up */
-	else if (key == GLFW_KEY_PAGE_UP && action >= GLFW_PRESS) {
-		rotate_object_around_center(model, VEC3_ROTATEZ, ROTATE_ANGLE, model->shader_id);
-	} 
-	/* Rotate object Z down */
-	else if (key == GLFW_KEY_PAGE_DOWN && action >= GLFW_PRESS) {
-		rotate_object_around_center(model, VEC3_ROTATEZ, -ROTATE_ANGLE, model->shader_id);
-	} else if (key == GLFW_KEY_R && action >= GLFW_PRESS) {
-		reverse_flag(&model->status, STATUS_ROTATE_X);
-	}
-}
-
 /**
  * @brief Initialize the openGL context
  * @param model model structure
@@ -204,7 +117,8 @@ int main(int argc, char **argv)
 
 	/* Init camera structure */
 	model->cam = create_camera(45.0f, (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, 0.1f, 100.0f);
-	model->status = STATUS_ROTATE_X;
+	
+
 
     win = init_openGL_context(model);
     if (!win) {
@@ -213,10 +127,13 @@ int main(int argc, char **argv)
         return (1);
     }
 
+	/* Init model value */
+	model->status = STATUS_ROTATE_X;
+	model->win_ptr = win;
 	model->shader_id = load_shader(model);
 	init_gl_triangle_array(model);
+	
 	ft_printf_fd(1, "tri_size: %u\n", model->tri_size);
-
 	/* set this with event handle */
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
