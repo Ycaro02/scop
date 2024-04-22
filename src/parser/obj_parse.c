@@ -55,22 +55,10 @@ static u8 add_vertex_node(t_list **list, char **line)
  * @param to_check string to check
  * @return 0 if not valid, else the value of the token
 */
-static u16 is_valid_token(char *to_check)
+u16 is_valid_token(char **valid_tokens, char *to_check)
 {
-	char *tokens[] = {
-		TOKEN_COMMENT,
-		TOKEN_OBJ,
-		TOKEN_SMOOTH,
-		TOKEN_VERTEX,
-		TOKEN_VT,
-		TOKEN_VN,
-		TOKEN_MTLLIB,
-		TOKEN_USEMT,
-		TOKEN_FACE,
-		NULL
-	};
-	for (u32 i = 0; tokens[i]; ++i) {
-		if (ft_strcmp(to_check, tokens[i]) == 0) {
+	for (u32 i = 0; valid_tokens[i]; ++i) {
+		if (ft_strcmp(to_check, valid_tokens[i]) == 0) {
 			// ft_printf_fd(1, ORANGE"Token %s is valid, val %d"RESET, to_check, (1 << i));
 			return (1 << i);
 		}
@@ -175,6 +163,7 @@ vec3_f32 *vec3_f32_new(float x, float y, float z)
 */
 t_obj_model *parse_obj_file(char *path)
 {
+	char *valid_tokens[] = OBJ_TOKEN_ARRAY;
 	t_obj_file obj;
 	char **file = NULL;
 	uint16_t token = 0;
@@ -191,7 +180,7 @@ t_obj_model *parse_obj_file(char *path)
 		// ft_printf_fd(1, YELLOW"\nLine %d:"RESET" "BLUE"|%s|"RESET, i, file[i]);
 		char **trim = ft_split_trim(file[i], ' ');
 		if (trim != NULL)  {
-			if ((token = is_valid_token(trim[0])) == 0) {
+			if ((token = is_valid_token(valid_tokens, trim[0])) == 0) {
 				ft_printf_fd(2, RED"Error: Invalid token %s\n"RESET, trim[0]);
 				free_double_char(trim);
 				return (NULL);

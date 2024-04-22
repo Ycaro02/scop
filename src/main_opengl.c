@@ -1,11 +1,8 @@
 #include "../include/scop.h"
 
+/* TO REMOVE need to implement my own parser */
 #define STB_IMAGE_IMPLEMENTATION
 #include "../../lib/stb/stb_image.h"
-
-// #define STB_IMAGE_RESIZE_IMPLEMENTATION
-// #include "../../lib/stb/deprecated/stb_image_resize.h"
-
 
 GLuint init_openGL_texture(t_obj_model* model, u8 *data, u32 width, u32 height)
 {
@@ -32,21 +29,6 @@ GLuint init_openGL_texture(t_obj_model* model, u8 *data, u32 width, u32 height)
 	return (texture);
 }
 
-// u8 *resize_image(u8 *data, int oldWidth, int oldHeight, int newWidth, int newHeight) {
-//     u8 *newData = malloc(newWidth * newHeight * 4); // assuming 4 bytes per pixel
-//     if (!newData) {
-//         printf("Failed to allocate memory for resized image\n");
-//         return NULL;
-//     }
-
-//     if (!stbir_resize_uint8(data, oldWidth, oldHeight, 0, newData, newWidth, newHeight, 0, 4)) {
-//         printf("Failed to resize image\n");
-//         free(newData);
-//         return NULL;
-//     }
-
-//     return newData;
-// }
 
 /**
  * @brief Load a texture from a file
@@ -65,7 +47,7 @@ u8 *brut_load_texture(char *path, t_obj_model *model)
 	ft_printf_fd(1, "Texture loaded: %s\n", path);
 
 	// u8 *newd = resize_image(data, width, height, 128, 128); //
-	
+	ft_printf_fd(1, PINK"Width: %d, Height: %d, Channels: %d\n"RESET, width, height, nrChannels);
 	init_openGL_texture(model, data, width, height);
 	return (data);
 }

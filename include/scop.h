@@ -21,15 +21,18 @@
 #define SCREEN_WIDTH 700
 #define SCREEN_HEIGHT 700
 
-#define CAM_ZOOM 1.0f				/* Zoom/Unzoom value */
+#define CAM_ZOOM 0.2f				/* Zoom/Unzoom value */
 #define CAM_MOVE_HORIZONTAL 1.0f	/* Move camera horizontal value */
-#define CAM_UP_DOWN 0.1f			/* Move camera up/down value */
+#define CAM_UP_DOWN 0.05f			/* Move camera up/down value */
 
 #define ROTATE_ANGLE 4.0f			/* Rotate obj angle when arrow pressed */
 
 #define VEC3_ROTATEX (vec3_f32){1.0f, 0.0f, 0.0f}
 #define VEC3_ROTATEY (vec3_f32){0.0f, 1.0f, 0.0f}
 #define VEC3_ROTATEZ (vec3_f32){0.0f, 0.0f, 1.0f}
+
+/* Triangle data size */
+#define TRIANGLE_DSIZE(model) (u32)(sizeof(vec3_u32) * model->tri_size)
 
 /* Enum for obj token accepted */
 enum e_obj_token {
@@ -46,7 +49,6 @@ enum e_obj_token {
 };
 
 /* Token accepted in OBJ file */
-
 #define TOKEN_UNKNOWN	"unknown"	/* Type: string Nb Value: 1 Description: Unknown token. */
 #define TOKEN_COMMENT	"#"			/* Type: string Nb Value: 1 Description: A comment line. */
 #define TOKEN_OBJ 		"o"			/* Type: string Nb Value: 1 Description: The name of the object */
@@ -66,18 +68,8 @@ enum e_obj_token {
 */
 #define TOKEN_FACE	"f"
 
-/* Triangle data size */
-#define TRIANGLE_DSIZE(model) (u32)(sizeof(vec3_u32) * model->tri_size)
-
-
-/* Camera structure */
-typedef struct t_camera {
-    vec3_f32		position;			/* position vector */
-    vec3_f32		target;				/* target vector */
-    vec3_f32		up;					/* up vector */
-    mat4_f32		view;				/* view matrix */
-    mat4_f32		projection;			/* projection matrix */
-} t_camera;
+/* Token array for obj file  */
+#define OBJ_TOKEN_ARRAY {TOKEN_COMMENT, TOKEN_OBJ, TOKEN_SMOOTH, TOKEN_VERTEX, TOKEN_VT, TOKEN_VN, TOKEN_MTLLIB, TOKEN_USEMT, TOKEN_FACE}
 
 /* Node used only for parse */
 typedef struct s_face_node {
@@ -96,6 +88,54 @@ typedef struct s_obj_file {
 	t_list			*vn;			/* The coordinates of the normal vector associated with a vertex, list of vec3_f32 */
 	u8				smooth;			/* The smoothing group state. 'on' to activate, 'off' to deactivate. 1 for true, otherwise 0*/
 } t_obj_file;
+
+/* Material parse */
+
+enum e_material_token {
+	ENUM_MTL_UNKNOWN=0,
+	ENUM_MTL_COMMENT=(1 << 0),
+	ENUM_MTL_NEWMTL=(1 << 1),
+	ENUM_MTL_KA=(1 << 2),
+	ENUM_MTL_KD=(1 << 3),
+	ENUM_MTL_KS=(1 << 4),
+	ENUM_MTL_NS=(1 << 5),
+	ENUM_MTL_NI=(1 << 6),
+	ENUM_MTL_D=(1 << 7),
+	ENUM_MTL_ILLUM=(1 << 8)
+};
+
+#define TOKEN_MTL_NEWMTL	"newmtl"	/* Type: string Nb Value: 1 Description: The name of the material */
+#define TOKEN_MTL_KA		"Ka"		/* Type: float Nb Value: 3 Description: Ambient color */
+#define TOKEN_MTL_KD		"Kd"		/* Type: float Nb Value: 3 Description: Diffuse color */
+#define TOKEN_MTL_KS		"Ks"		/* Type: float Nb Value: 3 Description: Specular color */
+#define TOKEN_MTL_NS		"Ns"		/* Type: float Nb Value: 1 Description: Specular exponent */
+#define TOKEN_MTL_NI		"Ni"		/* Type: float Nb Value: 1 Description: Optical density */
+#define TOKEN_MTL_D			"d"			/* Type: float Nb Value: 1 Description: Dissolve factor */
+#define TOKEN_MTL_ILLUM		"illum"		/* Type: int Nb Value: 1 Description: Illumination model */
+
+#define MATERIAL_TOKEN_ARRAY {TOKEN_COMMENT, TOKEN_MTL_NEWMTL, TOKEN_MTL_KA, TOKEN_MTL_KD, TOKEN_MTL_KS, TOKEN_MTL_NS, TOKEN_MTL_NI, TOKEN_MTL_D, TOKEN_MTL_ILLUM}
+
+typedef struct s_material_file {
+	char			*mtllib;		/* The name of the material file associated with the object */
+	char			*usemtl;		/* The name of the material to be used for the subsequent faces of the object */
+	vec3_f32		ka;				/* Ambient color */
+	vec3_f32		kd;				/* Diffuse color */
+	vec3_f32		ks;				/* Specular color */
+	float			ns;				/* Specular exponent */
+	float			ni;				/* Optical density */
+	float			d;				/* Dissolve factor */
+	s32				illum;			/* Illumination model */
+} t_material_file;
+
+
+/* Camera structure */
+typedef struct t_camera {
+    vec3_f32		position;			/* position vector */
+    vec3_f32		target;				/* target vector */
+    vec3_f32		up;					/* up vector */
+    mat4_f32		view;				/* view matrix */
+    mat4_f32		projection;			/* projection matrix */
+} t_camera;
 
 /* Model structure */
 typedef struct s_obj_model {
@@ -148,6 +188,8 @@ enum model_status {
 /* parser/obj_parse.c */
 t_obj_model		*parse_obj_file(char *path);
 void			free_obj_file(t_obj_file *obj);
+/* parser/utils */
+u16				is_valid_token(char **valid_tokens, char *to_check);
 
 /* parser/build_obj_model.c */
 void			display_vertex_lst(t_list *lst);

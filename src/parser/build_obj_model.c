@@ -170,29 +170,8 @@ u8 hard_build_color(t_obj_model *model)
 	return (TRUE);
 }
 
-/* GOOOD FOR TEEEA*/
-// u8 build_texCoords(t_obj_model *model) 
-// {
-//     model->texture_coord = malloc(model->v_size * sizeof(vec2_f32));
-
-//     if (!model->texture_coord) {
-//         ft_printf_fd(2, RED"Error: Malloc failed\n"RESET);
-//         return (FALSE);
-//     }
-
-//     for (u32 i = 0; i < model->v_size; i++) {
-//         /* Assign a texture coordinate to each vertex based on its position */
-//         vec3_f32 vertex;
-//         ft_memcpy(vertex, model->vertex[i], sizeof(vec3_f32));
-//         vec2_f32 texCoord = { vertex[0], vertex[1] }; // Project onto the xy plane
-//         ft_vec_copy(model->texture_coord[i], &texCoord, sizeof(vec2_f32));
-//     }
-
-//     return (TRUE);
-// }
-
-
-u8 build_texCoords(t_obj_model *model) 
+/* Brut texture build when no texture data provided in obj file */
+u8 hard_build_texture_info(t_obj_model *model) 
 {
     model->texture_coord = malloc(model->v_size * sizeof(vec2_f32));
 
@@ -205,45 +184,13 @@ u8 build_texCoords(t_obj_model *model)
         /* Assign a texture coordinate to each vertex based on its position */
         vec3_f32 vertex;
         ft_memcpy(vertex, model->vertex[i], sizeof(vec3_f32));
-
-        // Convert the vertex position to spherical coordinates
-        float r = sqrt(vertex[0]*vertex[0] + vertex[1]*vertex[1] + vertex[2]*vertex[2]);
-        float theta = atan2(vertex[1], vertex[0]); // azimuthal angle
-        float phi = acos(vertex[2] / r); // polar angle
-
-        // Use the spherical coordinates as texture coordinates
-        vec2_f32 texCoord = { theta / (2.0f * M_PI), phi / M_PI };
+        vec2_f32 texCoord = { vertex[0], vertex[1] }; // Project onto the xy plane
         ft_vec_copy(model->texture_coord[i], &texCoord, sizeof(vec2_f32));
     }
 
     return (TRUE);
 }
 
-// u8 build_texCoords(t_obj_model *model) 
-// {
-//     model->texture_coord = malloc(model->v_size * sizeof(vec2_f32));
-
-//     if (!model->texture_coord) {
-//         ft_printf_fd(2, RED"Error: Malloc failed\n"RESET);
-//         return (FALSE);
-//     }
-
-// vec2_f32 texCoords[6][4] = {
-//     { {0.0f, 0.0f}, {1.0f, 0.0f}, {1.0f, 1.0f}, {0.0f, 1.0f} }, // Face 1
-//     { {0.0f, 0.0f}, {1.0f, 0.0f}, {1.0f, 1.0f}, {0.0f, 1.0f} }, // Face 2
-//     { {0.0f, 0.0f}, {1.0f, 0.0f}, {1.0f, 1.0f}, {0.0f, 1.0f} }, // Face 3
-//     { {0.0f, 0.0f}, {1.0f, 0.0f}, {1.0f, 1.0f}, {0.0f, 1.0f} }, // Face 4
-//     { {0.0f, 0.0f}, {1.0f, 0.0f}, {1.0f, 1.0f}, {0.0f, 1.0f} }, // Face 5
-//     { {0.0f, 0.0f}, {1.0f, 0.0f}, {1.0f, 1.0f}, {0.0f, 1.0f} }  // Face 6
-// };
-
-// for (u32 i = 0; i < model->v_size; i++) {
-//     u32 face = i / 4; // Each face of the cube has 4 vertices
-//     u32 vertex = i % 4;
-//     ft_vec_copy(model->texture_coord[i], &texCoords[face][vertex], sizeof(vec2_f32));
-// }
-//     return (TRUE);
-// }
 /**
  * @brief Create VBO
  * @param size size of the buffer
@@ -279,7 +226,7 @@ void init_gl_triangle_array(t_obj_model *model)
 	hard_build_color(model);
 	GLuint color_vbo = create_VBO(model->v_size * sizeof(vec3_f32), model->colors);
 
-	build_texCoords(model);
+	hard_build_texture_info(model);
 	GLuint texCoords_vbo = create_VBO(model->v_size * sizeof(vec2_f32), model->texture_coord);
 
     /* create and fill ebo Element Buffer Objects */
