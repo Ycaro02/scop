@@ -196,7 +196,7 @@ enum model_status {
 // vec3_f32	*vn;			/* normal array */
 // u8			smooth;		/* The smoothing group state. 'on' to activate, 'off' to deactivate. 1 for true, otherwise 0*/
 
-
+void set_shader_var_int(GLuint shader_id, char *name, int value);
 /* parser/material_parse.c */
 t_material_file *parse_mtl_file(char *path);
 void display_material_data(t_material_file *file);

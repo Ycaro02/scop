@@ -5,7 +5,12 @@ void act_escape(t_obj_model *model) {
     glfwSetWindowShouldClose(model->win_ptr, GL_TRUE);
 }
 
-
+/* Change texture color mod : N */
+void act_switch_texture(t_obj_model *model) {
+	static int texture_mod = 0;
+	texture_mod = !texture_mod;
+	set_shader_var_int(model->shader_id, "activeTexture", texture_mod);
+}
 
 /* Zoom : W */
 void act_zoom(t_obj_model *model) {
@@ -129,6 +134,7 @@ void handle_input(t_obj_model *model)
 		{GLFW_KEY_R, act_stop_start_y_rotation, SINGLE_PRESS},
 		{GLFW_KEY_T, act_stop_start_x_rotation, SINGLE_PRESS},
 		{GLFW_KEY_Y, act_stop_start_z_rotation, SINGLE_PRESS},
+		{GLFW_KEY_N, act_switch_texture, SINGLE_PRESS},
 	};
 	u32 			max = (sizeof(key_actions) / sizeof(t_key_action));
 	s32				state = GLFW_RELEASE;

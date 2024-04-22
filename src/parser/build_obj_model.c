@@ -172,52 +172,34 @@ u8 hard_build_color(t_obj_model *model)
 
 void calculate_texture_coord(vec3_f32 vertex, vec2_f32 texCoord) {
     // Convert the Cartesian coordinates to polar coordinates
-    float theta = atan2(vertex[2], vertex[0]);
-    float z = vertex[1];
+    // float theta = atan2(vertex[2], vertex[0]);
+    // float z = vertex[1];
 
-    // Normalize theta to be between 0 and 1
-    theta = (theta + FT_PI) / (2 * FT_PI);
+    // // Normalize theta to be between 0 and 1
+    // theta = (theta + FT_PI) / (2 * FT_PI);
 
-    // You may need to adjust this depending on the range of z values in your model
-    z = (z + 1) / 2;
+    //  Normalize z value
+    // z = (z + 1) / 2;
 
     // Use theta and z as texture coordinates
-    texCoord[0] = theta;
-    texCoord[1] = z;
+    // texCoord[0] = theta;
+    // texCoord[1] = z;
+	texCoord[0] = vertex[0];
+	texCoord[1] = vertex[1];
 }
 /* Brut texture build when no texture data provided in obj file */
 u8 build_material_texture(t_obj_model *model) 
 {
-    model->texture_coord = malloc(3 * (model->tri_size * sizeof(vec2_f32)));
+    model->texture_coord = malloc(model->v_size * sizeof(vec2_f32));
 
     if (!model->texture_coord) {
         ft_printf_fd(2, RED"Error: Malloc failed\n"RESET);
         return (FALSE);
     }
 
-	for (u32 i = 0; i < model->tri_size; i++) {
+	for (u32 i = 0; i < model->v_size; i++) {
 		// Get the indices of the vertices of the i-th triangle
-		u32 v1_index = model->tri_face[i][0];
-		u32 v2_index = model->tri_face[i][1];
-		u32 v3_index = model->tri_face[i][2];
-
-		// Calculate the texture coordinates for each vertex
-		vec2_f32 tc1;
-		calculate_texture_coord(model->vertex[v1_index], tc1);
-
-		vec2_f32 tc2;
-		calculate_texture_coord(model->vertex[v2_index], tc2);
-
-		vec2_f32 tc3;
-		calculate_texture_coord(model->vertex[v3_index], tc3);
-
-		// Assign the texture coordinates to the vertices of the i-th triangle
-		ft_vec_copy(model->texture_coord[i * 3 + 0], &tc1, sizeof(vec2_f32));
-		ft_vec_copy(model->texture_coord[i * 3 + 1], &tc2, sizeof(vec2_f32));
-		ft_vec_copy(model->texture_coord[i * 3 + 2], &tc3, sizeof(vec2_f32));
-		ft_printf_fd(1, "%u: %f, %f\n", i, model->texture_coord[i * 3 + 0][0], model->texture_coord[i * 3 + 0][1]);
-		ft_printf_fd(1, "%u: %f, %f\n", i, model->texture_coord[i * 3 + 1][0], model->texture_coord[i * 3 + 1][1]);
-		ft_printf_fd(1, "%u: %f, %f\n", i, model->texture_coord[i * 3 + 2][0], model->texture_coord[i * 3 + 2][1]);
+		calculate_texture_coord(model->vertex[i], model->texture_coord[i]);
 	}
 
     return (TRUE);
@@ -255,15 +237,12 @@ void init_gl_triangle_array(t_obj_model *model)
 	model->vbo = create_VBO((sizeof(vec3_f32) * model->v_size), model->vertex);
 
 	/* Hard build color for each vertex */
-	if (model->material) {
-		ft_printf_fd(1, CYAN"Building texture material info\n"RESET);
-		build_material_texture(model);
-	} else 
+	build_material_texture(model);
 
 	hard_build_color(model);
 	GLuint color_vbo = create_VBO(model->v_size * sizeof(vec3_f32), model->colors);
 
-	GLuint texCoords_vbo = create_VBO(3 * (model->tri_size * sizeof(vec2_f32)), model->texture_coord);
+	GLuint texCoords_vbo = create_VBO(model->tri_size * sizeof(vec2_f32), model->texture_coord);
 
     /* create and fill ebo Element Buffer Objects */
     glGenBuffers(1, &model->ebo);
@@ -294,7 +273,5 @@ void init_gl_triangle_array(t_obj_model *model)
 
     /* Unlink vao */
     glBindVertexArray(0);
-
-
 
 }

@@ -172,6 +172,12 @@ static void glfw_destroy(GLFWwindow *win, t_obj_model *model)
 	free_obj_model(model);
 }
 
+void set_shader_var_int(GLuint shader_id, char *name, int value)
+{
+	GLint loc = glGetUniformLocation(shader_id, name);
+	glUniform1i(loc, value);
+}
+
 int main(int argc, char **argv)
 {
     GLFWwindow	*win;
@@ -211,6 +217,8 @@ int main(int argc, char **argv)
 
 	// brut_load_texture(TEXTURE_MANDATORY_PATH, model);
 	brut_load_texture(TEXTURE_BRICK_PATH, model);
+
+	set_shader_var_int(model->shader_id, "activeTexture", 0);
 
     main_loop(model, win);
 	glfw_destroy(win, model);
