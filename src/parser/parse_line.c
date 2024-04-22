@@ -45,9 +45,6 @@ vec3_f32 *line_to_vertex_node(char **line)
 	float y = ft_atof(line[1]);
 	float z = ft_atof(line[2]);
 	CREATE_VEC3(x, y, z, (*vertex));
-	// vertex->x = ft_atof(line[0]);
-	// vertex->y = ft_atof(line[1]);
-	// vertex->z = ft_atof(line[2]);
 	return (vertex);
 }
 
@@ -56,6 +53,8 @@ vec3_f32 *line_to_vertex_node(char **line)
  * @brief Line to vec3_u32
  * @param line line to parse
  * @param other_val ptr on u32, set to the number of other value
+ * @param vec ptr on vec3_u32, set to the value of the vec3
+ * @param error ptr on u8, set to 1 if error TO REWORK can now retur value
  * @return vec3_u32
 */
 void line_to_vec3_u32(char **line, u32 *other_val, vec3_u32 *vec, u8 *error)
@@ -83,10 +82,6 @@ void line_to_vec3_u32(char **line, u32 *other_val, vec3_u32 *vec, u8 *error)
 	u32 z = array_to_uint32(line[2]);
 
 	CREATE_VEC3(x, y, z, (*vec));
-	// vec[0] = array_to_uint32(line[0]);
-	// vec[1] = array_to_uint32(line[1]);
-	// vec[2] = array_to_uint32(line[2]);
-	// return (vec);
 }
 
 

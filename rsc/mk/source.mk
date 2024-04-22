@@ -15,6 +15,8 @@ SRCS			=	parser/obj_parse.c\
 					parser/parse_line.c\
 					parser/build_obj_model.c\
 					parser/face_handling.c\
+					parser/parse_utils.c\
+					parser/material_parse.c\
 					render/camera.c\
 					render/shader_utils.c\
 					win_event/key_callback.c\

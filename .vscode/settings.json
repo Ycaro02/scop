@@ -30,7 +30,9 @@
 		"ft_math_define.h": "c",
 		"handle_vec3.h": "c",
 		"float.h": "c",
-		"stb_image.h": "c"
+		"stb_image.h": "c",
+		"typeinfo": "c",
+		"cmath": "c"
 	},
 	"42header.email": "nfour@student.42angouleme.fr",
 	"42header.username": "nfour"

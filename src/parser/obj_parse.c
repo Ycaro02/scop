@@ -50,39 +50,6 @@ static u8 add_vertex_node(t_list **list, char **line)
 }
 
 
-/**
- * @brief Check if a string is a valid token
- * @param to_check string to check
- * @return 0 if not valid, else the value of the token
-*/
-u16 is_valid_token(char **valid_tokens, char *to_check)
-{
-	for (u32 i = 0; valid_tokens[i]; ++i) {
-		if (ft_strcmp(to_check, valid_tokens[i]) == 0) {
-			// ft_printf_fd(1, ORANGE"Token %s is valid, val %d"RESET, to_check, (1 << i));
-			return (1 << i);
-		}
-	}
-	return (0);
-}
-
-/**
- * @brief Get string after token
- * @param to_fill_ptr string to fill
- * @param line line to parse
- * @return TRUE if success, else FALSE
-*/
-static s8 get_str_after_token(char **to_fill_ptr, char **line)
-{
-	if (line[0] == NULL || *line[0] == '\0' || line[1] != NULL) {
-		ft_printf_fd(2, RED"Error: Invalid object name\n"RESET);
-		display_double_char(line);
-		return (FALSE);
-	}
-	*to_fill_ptr = ft_strdup(line[0]);
-	return (TRUE);
-}
-
 
 /**
  * @brief Handle line by token
@@ -91,7 +58,7 @@ static s8 get_str_after_token(char **to_fill_ptr, char **line)
  * @param token token value
  * @return TRUE if success, else FALSE
 */
-static u8 handle_line_by_token(t_obj_file *file, char **line, u16 token)
+static u8 obj_line_by_token(t_obj_file *file, char **line, u16 token)
 {
 	char *tmp = NULL;
 
@@ -145,7 +112,6 @@ static u8 handle_line_by_token(t_obj_file *file, char **line, u16 token)
 }
 
 
-
 vec3_f32 *vec3_f32_new(float x, float y, float z)
 {
 	vec3_f32 *vec = (vec3_f32 *)malloc(sizeof(vec3_f32));
@@ -185,13 +151,39 @@ t_obj_model *parse_obj_file(char *path)
 				free_double_char(trim);
 				return (NULL);
 			}
-			handle_line_by_token(&obj, &trim[1], token);
+			obj_line_by_token(&obj, &trim[1], token);
 			free_double_char(trim);
 		}
 	}
 	free_double_char(file);
 
+	t_sstring sstr = fill_sstring(MODEL_PATH);
+
+	concat_sstring(&sstr, obj.mtllib);
+
+	ft_printf_fd(1, CYAN"\nMaterial file: %s\n"RESET, sstr.data);
+
+
+	t_material_file *mtl = NULL;
+
+	if (obj.mtllib) {
+		mtl = parse_mtl_file(sstr.data);
+		if (mtl) {
+			ft_printf_fd(1, GREEN"\nMaterial file parsed\n"RESET);
+			display_material_data(mtl);
+			// free_material_file(mtl);
+		}
+	}
+
 	t_obj_model *model = init_obj_model(&obj);
+
+	if (!model){
+		ft_printf_fd(2, RED"Error: Failed to init obj model\n"RESET);
+		return (NULL);
+	}
+	model->material = mtl;
+
+
 
 	return (model);
 }

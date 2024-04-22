@@ -17,11 +17,24 @@
 /* Fragment shader source path */
 #define FRAGMENT_SHADER_PATH "rsc/shaders/fragment_shader.glsl"
 
+
+#define TEXTURE_MANDATORY_PATH "rsc/texture/kitten.bmp"
+
+
+// #define TEXTURE_MANDATORY_PATH "texture.bmp"
+
+
+// #define TEXTURE_MANDATORY_PATH "kitten_color.bmp"
+
+#define TEXTURE_BRICK_PATH "brick.bmp"
+
+#define MODEL_PATH "rsc/model/"
+
 /* Window size */
 #define SCREEN_WIDTH 700
 #define SCREEN_HEIGHT 700
 
-#define CAM_ZOOM 0.2f				/* Zoom/Unzoom value */
+#define CAM_ZOOM 0.3f				/* Zoom/Unzoom value */
 #define CAM_MOVE_HORIZONTAL 1.0f	/* Move camera horizontal value */
 #define CAM_UP_DOWN 0.05f			/* Move camera up/down value */
 
@@ -37,15 +50,15 @@
 /* Enum for obj token accepted */
 enum e_obj_token {
 	ENUM_UNKNOWN=0,
-	ENUM_COMMENT=(1 << 0),
-	ENUM_OBJ=(1 << 1),
-	ENUM_SMOOTH=(1 << 2),
-	ENUM_VERTEX=(1 << 3),
-	ENUM_VT=(1 << 4),
-	ENUM_VN=(1 << 5),
-	ENUM_MTLLIB=(1 << 6),
-	ENUM_USEMTL=(1 << 7),
-	ENUM_F=(1 << 8)
+	ENUM_COMMENT=(1u << 0),
+	ENUM_OBJ=(1u << 1),
+	ENUM_SMOOTH=(1u << 2),
+	ENUM_VERTEX=(1u << 3),
+	ENUM_VT=(1u << 4),
+	ENUM_VN=(1u << 5),
+	ENUM_MTLLIB=(1u << 6),
+	ENUM_USEMTL=(1u << 7),
+	ENUM_F=(1u << 8)
 };
 
 /* Token accepted in OBJ file */
@@ -93,15 +106,15 @@ typedef struct s_obj_file {
 
 enum e_material_token {
 	ENUM_MTL_UNKNOWN=0,
-	ENUM_MTL_COMMENT=(1 << 0),
-	ENUM_MTL_NEWMTL=(1 << 1),
-	ENUM_MTL_KA=(1 << 2),
-	ENUM_MTL_KD=(1 << 3),
-	ENUM_MTL_KS=(1 << 4),
-	ENUM_MTL_NS=(1 << 5),
-	ENUM_MTL_NI=(1 << 6),
-	ENUM_MTL_D=(1 << 7),
-	ENUM_MTL_ILLUM=(1 << 8)
+	ENUM_MTL_COMMENT=(1u << 0),
+	ENUM_MTL_NEWMTL=(1u << 1),
+	ENUM_MTL_KA=(1u << 2),
+	ENUM_MTL_KD=(1u << 3),
+	ENUM_MTL_KS=(1u << 4),
+	ENUM_MTL_NS=(1u << 5),
+	ENUM_MTL_NI=(1u << 6),
+	ENUM_MTL_D=(1u << 7),
+	ENUM_MTL_ILLUM=(1u << 8)
 };
 
 #define TOKEN_MTL_NEWMTL	"newmtl"	/* Type: string Nb Value: 1 Description: The name of the material */
@@ -116,15 +129,14 @@ enum e_material_token {
 #define MATERIAL_TOKEN_ARRAY {TOKEN_COMMENT, TOKEN_MTL_NEWMTL, TOKEN_MTL_KA, TOKEN_MTL_KD, TOKEN_MTL_KS, TOKEN_MTL_NS, TOKEN_MTL_NI, TOKEN_MTL_D, TOKEN_MTL_ILLUM}
 
 typedef struct s_material_file {
-	char			*mtllib;		/* The name of the material file associated with the object */
-	char			*usemtl;		/* The name of the material to be used for the subsequent faces of the object */
+	char			*newmtl;		/* The name of the material */
 	vec3_f32		ka;				/* Ambient color */
 	vec3_f32		kd;				/* Diffuse color */
 	vec3_f32		ks;				/* Specular color */
 	float			ns;				/* Specular exponent */
 	float			ni;				/* Optical density */
 	float			d;				/* Dissolve factor */
-	s32				illum;			/* Illumination model */
+	u32				illum;			/* Illumination model */
 } t_material_file;
 
 
@@ -153,6 +165,7 @@ typedef struct s_obj_model {
 	u32				status;			/* model rotation state */
 	GLFWwindow		*win_ptr;		/* window pointer */
 	vec2_f32		*texture_coord;	/* texture coordinates associated with a vertex */
+	t_material_file	*material;		/* material file structure */
 }	t_obj_model;
 
 
@@ -184,12 +197,15 @@ enum model_status {
 // u8			smooth;		/* The smoothing group state. 'on' to activate, 'off' to deactivate. 1 for true, otherwise 0*/
 
 
-
+/* parser/material_parse.c */
+t_material_file *parse_mtl_file(char *path);
+void display_material_data(t_material_file *file);
 /* parser/obj_parse.c */
 t_obj_model		*parse_obj_file(char *path);
 void			free_obj_file(t_obj_file *obj);
 /* parser/utils */
 u16				is_valid_token(char **valid_tokens, char *to_check);
+s8				get_str_after_token(char **to_fill_ptr, char **line);
 
 /* parser/build_obj_model.c */
 void			display_vertex_lst(t_list *lst);
