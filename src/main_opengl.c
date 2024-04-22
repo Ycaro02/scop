@@ -13,8 +13,8 @@ GLuint init_openGL_texture(t_obj_model* model, u8 *data, u32 width, u32 height)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	/* Set texture filtering parameters */
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);	// Set texture filtering to GL_LINEAR
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);	// Set texture filtering to GL_NEAREST
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	/* Load the texture */
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
 	glGenerateMipmap(GL_TEXTURE_2D);
@@ -68,7 +68,7 @@ GLFWwindow *init_openGL_context()
         return (NULL);
 
 	/* Enable 8x antialiasing */
-    glfwWindowHint(GLFW_SAMPLES, 8);
+    // glfwWindowHint(GLFW_SAMPLES, 8);
 
     win = glfwCreateWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "OpenGL Window", NULL, NULL);
     if (!win) {

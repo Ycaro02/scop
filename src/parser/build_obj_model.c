@@ -170,23 +170,23 @@ u8 hard_build_color(t_obj_model *model)
 	return (TRUE);
 }
 
-void calculate_texture_coord(vec3_f32 vertex, vec2_f32 texCoord) {
+void calculate_texture_coord(vec3_f32 vertex, vec2_f32 texCoord, u32 max_img) {
     // Convert the Cartesian coordinates to polar coordinates
-    // float theta = atan2(vertex[2], vertex[0]);
-    // float z = vertex[1];
+    float theta = atan2(vertex[2], vertex[0]);
+    float z = vertex[1];
 
-    // // Normalize theta to be between 0 and 1
-    // theta = (theta + FT_PI) / (2 * FT_PI);
-
+    // Normalize theta to be between 0 and 1
+    theta = (theta + FT_PI) / (2 * FT_PI);
     //  Normalize z value
-    // z = (z + 1) / 2;
-
+    z = (z + 1) / 2;
+    // Clamp values between 0 and 1
+    theta = fmaxf(0, fminf(theta, 1));
+    z = fmaxf(0, fminf(z, 1));
     // Use theta and z as texture coordinates
-    // texCoord[0] = theta;
-    // texCoord[1] = z;
-	texCoord[0] = vertex[0];
-	texCoord[1] = vertex[1];
+    texCoord[0] = theta * max_img;
+    texCoord[1] = z * max_img;
 }
+
 /* Brut texture build when no texture data provided in obj file */
 u8 build_material_texture(t_obj_model *model) 
 {
@@ -199,9 +199,11 @@ u8 build_material_texture(t_obj_model *model)
 
 	for (u32 i = 0; i < model->v_size; i++) {
 		// Get the indices of the vertices of the i-th triangle
-		calculate_texture_coord(model->vertex[i], model->texture_coord[i]);
+		calculate_texture_coord(model->vertex[i], model->texture_coord[i], 1);
 	}
-
+	for (u32 i = 0; i < model->v_size; i++) {
+		ft_printf_fd(1, GREEN"texture %u x %f, y %f\n"RESET, i, model->texture_coord[i][0], model->texture_coord[i][1]);
+	}
     return (TRUE);
 }
 
