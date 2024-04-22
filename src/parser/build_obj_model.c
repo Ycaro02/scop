@@ -31,6 +31,116 @@ void free_obj_model(t_obj_model *model)
 	free(model);
 }
 
+t_list *get_all_triangle_vertex(t_obj_model *model, t_list **idx_lst_ptr) {
+	t_list *vertex_lst = NULL;
+	t_list *idx_lst = *idx_lst_ptr;
+	u32 idx_for_lst = 1;
+	vec3_f32 *hard_origin = ft_calloc(sizeof(vec3_f32), 1);
+	if (!hard_origin) {
+		ft_printf_fd(2, RED"Error: Malloc failed\n"RESET);
+		return (NULL);
+	}
+	ft_lstadd_back(&vertex_lst, ft_lstnew(hard_origin)); 
+	
+	for (u32 i = 0; i < model->tri_size; i++) {
+		for (u32 j = 0; j < 3; j++) {
+			u32 vertex_index = model->tri_face[i][j];		
+			vec3_f32 *vertex = ft_calloc(sizeof(vec3_f32), 1);
+			if (!vertex){
+				ft_printf_fd(2, RED"Error: Malloc failed\n"RESET);
+				return (NULL);
+			}
+			ft_vec_copy(*vertex, model->vertex[vertex_index], sizeof(vec3_f32));
+			ft_lstadd_back(&vertex_lst, ft_lstnew(vertex));
+			u32 *idx = ft_calloc(sizeof(u32), 1);
+			if (!idx) {
+				ft_printf_fd(2, RED"Error: Malloc failed\n"RESET);
+				return (NULL);
+			}
+			*idx = idx_for_lst;
+			ft_lstadd_back(&idx_lst, ft_lstnew(idx));
+			idx_for_lst++;
+		}
+	}
+	u32 nb = 0;
+	for (t_list *current = vertex_lst; current; current = current->next) {
+		if (nb == 0) {
+			current = current->next;
+			nb++;
+		}
+		vec3_f32 *vec = (vec3_f32 *)current->content;
+		ft_printf_fd(1, PURPLE"Vertex %u, %f %f %f", nb, (*vec)[0], (*vec)[1], (*vec)[2]);
+		if (nb != 0 && nb % 3 == 0) {
+			ft_printf_fd(1, "\n");
+		} else {
+			ft_printf_fd(1, " -> ");
+		}
+		nb++;
+	}
+	nb = 0;
+	for (t_list *current = idx_lst; current; current = current->next) {
+		u32 *val = current->content;
+		// if (nb == 0) {
+		// 	current = current->next;
+		// 	nb++;
+		// }
+		ft_printf_fd(1, ORANGE"nb %u, |%u|"RESET,nb, *val);
+		if (nb != 0 && nb % 3 == 0) {
+			ft_printf_fd(1, "\n");
+		} else {
+			ft_printf_fd(1, " ->");
+		}
+		nb++;
+	}
+	free(model->vertex);
+	return (vertex_lst);
+}
+
+t_list *get_all_face_vertex(t_obj_file *file, t_obj_model *model) {
+	t_list *vertex_lst = NULL;
+	
+	vec3_f32 *hard_origin = ft_calloc(sizeof(vec3_f32), 1);
+	if (!hard_origin) {
+		ft_printf_fd(2, RED"Error: Malloc failed\n"RESET);
+		return (NULL);
+	}
+	ft_lstadd_back(&vertex_lst, ft_lstnew(hard_origin)); 
+
+	t_list *current = file->face;
+
+	u32 lst_face_size = ft_lstsize(file->face);
+	for (u32 i = 0; i < lst_face_size; i++) {
+		t_face_node *face_node = current->content; 
+		for (u32 j = 0; j < 3; j++) {
+			vec3_f32 *vertex = ft_calloc(sizeof(vec3_f32), 1);
+			if (!vertex){
+				ft_printf_fd(2, RED"Error: Malloc failed\n"RESET);
+				return (NULL);
+			}
+			ft_vec_copy(*vertex, model->vertex[face_node->vec[j]], sizeof(vec3_f32));
+			ft_lstadd_back(&vertex_lst, ft_lstnew(vertex));
+		}
+		if (face_node->other) { /* hardcode for quadra need to loop here */
+			vec3_f32 *vertex = ft_calloc(sizeof(vec3_f32), 1);
+			if (!vertex){
+				ft_printf_fd(2, RED"Error: Malloc failed\n"RESET);
+				return (NULL);
+			}
+			ft_vec_copy(*vertex, model->vertex[face_node->other[0]], sizeof(vec3_f32));
+			ft_lstadd_back(&vertex_lst, ft_lstnew(vertex));
+		}
+		current = current->next;
+	}
+
+	ft_printf_fd(1, "Vertex list size %u\n", ft_lstsize(vertex_lst));
+	for (t_list *curr = vertex_lst; curr; curr = curr->next) {
+		vec3_f32 *vec = (vec3_f32 *)curr->content;
+		VECTOR_FLOAT_DISPLAY(3, (*vec))
+	}
+
+	return (vertex_lst);
+}
+
 /**
  * @brief Init obj model
  * @param obj_file obj file data structure
@@ -56,17 +166,22 @@ t_obj_model *init_obj_model(t_obj_file *obj_file)
 		return (NULL);
 	}
 
-	// model->tri_face = triangle_list_to_array(triangle_lst, ft_lstsize(triangle_lst));
 	model->tri_face = list_to_array(triangle_lst, ft_lstsize(triangle_lst), sizeof(vec3_u32));
 	model->tri_size = ft_lstsize(triangle_lst);
 
+
+	// t_list	*idx_lst = NULL;
+	// t_list	*vertex_lst = get_all_triangle_vertex(model, &idx_lst);
+	// u32		vertex_size = ft_lstsize(vertex_lst);
+	// model->vertex = list_to_array(vertex_lst, vertex_size, sizeof(vec3_f32));
+	// model->v_size = ft_lstsize(vertex_lst);
+
+	// free(model->tri_face);
+	// model->tri_face = list_to_array(idx_lst, ft_lstsize(idx_lst), sizeof(u32));
+	// model->tri_size = ft_lstsize(triangle_lst);
+
+
 	ft_lstclear(&triangle_lst, free);
-
-	// for (t_list *current = triangle_lst; current; current = current->next) {
-	// 	vec3_u32 *vec = (vec3_u32 *)current->content;
-	// 	VECTOR_UINT_DISPLAY(3, (*vec))
-	// }
-
 	free_obj_file(obj_file);
 	return (model);
 }

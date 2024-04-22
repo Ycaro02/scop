@@ -40,8 +40,8 @@ t_list *quadra_to_triangle(t_list *face_node_lst)
 				}
                 ft_lstadd_back(&triangle_list, ft_lstnew(sub_triangle));
             }
-            free(node->other);
-            node->other = NULL;
+            // free(node->other);
+            // node->other = NULL;
         }
     }
 
