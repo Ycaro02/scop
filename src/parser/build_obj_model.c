@@ -189,22 +189,32 @@ u8 hard_build_color(t_obj_model *model)
 	return (TRUE);
 }
 
-void calculate_texture_coord(t_obj_face *face, vec2_f32 *texCoords, u32 repeat_fact) {
+/* r is repeat factor */
+void calculate_texture_coord(t_obj_face *face, vec2_f32 *texCoords, u32 r) {
     if (face->size == 3) {
         // Triangle face
-        texCoords[0][0] = repeat_fact * 0; texCoords[0][1] = repeat_fact * 0;  // Top left
-        texCoords[1][0] = repeat_fact * 1; texCoords[1][1] = repeat_fact * 0;  // Top right
-        texCoords[2][0] = repeat_fact * 0; texCoords[2][1] = repeat_fact * 1;  // Bottom
+        texCoords[0][0] = r * 0; texCoords[0][1] = r * 0;  // Top left
+        texCoords[1][0] = r * 1; texCoords[1][1] = r * 0;  // Top right
+        texCoords[2][0] = r * 0; texCoords[2][1] = r * 1;  // Bottom
 		return ;
     }
-	// Quadrilateral face, split into two triangles
-	texCoords[0][0] = repeat_fact * 0; texCoords[0][1] = repeat_fact * 0;  // Top left of first triangle
-	texCoords[1][0] = repeat_fact * 1; texCoords[1][1] = repeat_fact * 0;  // Top right of first triangle
-	texCoords[2][0] = repeat_fact * 0; texCoords[2][1] = repeat_fact * 1;  // Bottom of first triangle
 
-	texCoords[3][0] = repeat_fact * 0; texCoords[3][1] = repeat_fact * 0;  // Top left of second triangle (same as top left of first triangle)
-	texCoords[4][0] = repeat_fact * 1; texCoords[4][1] = repeat_fact * 0;  // Top right of second triangle (same as top right of first triangle)
-	texCoords[5][0] = repeat_fact * 1; texCoords[5][1] = repeat_fact * 1;  // Bottom of second triangle
+	/* Diagonale only */
+	texCoords[0][0] = r * 0; texCoords[0][1] = r * 0;  // Top left of first triangle
+	texCoords[1][0] = r * 1; texCoords[1][1] = r * 0;  // Top right of first triangle
+	texCoords[2][0] = r * 1; texCoords[2][1] = r * 1;  // Bottom right of first triangle
+	
+	texCoords[3][0] = r * 0; texCoords[3][1] = r * 0;  // Top left of second triangle (same as top left of first triangle)
+	texCoords[4][0] = r * 1; texCoords[4][1] = r * 1;  // Bottom right of second triangle (same as bottom right of first triangle)
+	texCoords[5][0] = r * 0; texCoords[5][1] = r * 1;  // Bottom left of second triangle
+
+	// Quadrilateral face, split into two triangles
+	// texCoords[0][0] = r * 0; texCoords[0][1] = r * 0;  // Top left of first triangle
+	// texCoords[1][0] = r * 1; texCoords[1][1] = r * 0;  // Top right of first triangle
+	// texCoords[2][0] = r * 0; texCoords[2][1] = r * 1;  // Bottom of first triangle
+	// texCoords[3][0] = r * 0; texCoords[3][1] = r * 0;  // Top left of second triangle (same as top left of first triangle)
+	// texCoords[4][0] = r * 1; texCoords[4][1] = r * 0;  // Top right of second triangle (same as top right of first triangle)
+	// texCoords[5][0] = r * 1; texCoords[5][1] = r * 1;  // Bottom of second triangle
 }
 
 // void calculate_texture_coord(t_obj_face *face, vec2_f32 *texCoords, vec3_f32 min, vec3_f32 max) {

@@ -10,8 +10,8 @@ GLuint init_openGL_texture(t_obj_model* model, u8 *data, u32 width, u32 height, 
 	glGenTextures(1, &texture);
 	glBindTexture(GL_TEXTURE_2D, texture);
 	/* Set the texture wrapping parameters */
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
 	/* Set texture filtering parameters */
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);	// Set texture filtering to GL_LINEAR
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -225,8 +225,8 @@ int main(int argc, char **argv)
 
 	int type = 0;
 
-	// brut_load_texture(TEXTURE_MANDATORY_PATH, model, &type);
-	brut_load_texture(TEXTURE_BRICK_PATH, model, &type);
+	brut_load_texture(TEXTURE_MANDATORY_PATH, model, &type);
+	// brut_load_texture(TEXTURE_BRICK_PATH, model, &type);
 
 	set_shader_var_int(model->shader_id, "activeTexture", 0);
 
