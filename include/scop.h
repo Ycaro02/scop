@@ -19,11 +19,7 @@
 
 
 #define TEXTURE_MANDATORY_PATH "rsc/texture/kitten.bmp"
-
-
 // #define TEXTURE_MANDATORY_PATH "texture.bmp"
-
-
 // #define TEXTURE_MANDATORY_PATH "kitten_color.bmp"
 
 #define TEXTURE_BRICK_PATH "brick.bmp"
@@ -126,6 +122,9 @@ enum e_material_token {
 #define TOKEN_MTL_D			"d"			/* Type: float Nb Value: 1 Description: Dissolve factor */
 #define TOKEN_MTL_ILLUM		"illum"		/* Type: int Nb Value: 1 Description: Illumination model */
 
+
+//Vertex 1, 0.232406 -0.745504 1.477731 -> Vertex 2, 0.232406 -0.745504 2.843098 -> Vertex 3, -0.227475 -0.745504 2.843098
+
 #define MATERIAL_TOKEN_ARRAY {TOKEN_COMMENT, TOKEN_MTL_NEWMTL, TOKEN_MTL_KA, TOKEN_MTL_KD, TOKEN_MTL_KS, TOKEN_MTL_NS, TOKEN_MTL_NI, TOKEN_MTL_D, TOKEN_MTL_ILLUM}
 
 typedef struct s_material_file {
@@ -148,6 +147,13 @@ typedef struct t_camera {
     mat4_f32		view;				/* view matrix */
     mat4_f32		projection;			/* projection matrix */
 } t_camera;
+
+typedef struct s_obj_face {
+	t_list *vertex;		/* list of vec3_u32, list of vertex for this face, all triangle vertex for each face */
+	t_list *idx;		/* list of u32, list of index for each vertex */
+	u32		size;		/* number of vertex in this face */
+	u32		id;			/* face id */
+} t_obj_face;
 
 /* Model structure */
 typedef struct s_obj_model {

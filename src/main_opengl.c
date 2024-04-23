@@ -4,7 +4,7 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "../../lib/stb/stb_image.h"
 
-GLuint init_openGL_texture(t_obj_model* model, u8 *data, u32 width, u32 height)
+GLuint init_openGL_texture(t_obj_model* model, u8 *data, u32 width, u32 height, u16 texture_type)
 {
 	GLuint texture;
 	glGenTextures(1, &texture);
@@ -13,10 +13,13 @@ GLuint init_openGL_texture(t_obj_model* model, u8 *data, u32 width, u32 height)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	/* Set texture filtering parameters */
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);	// Set texture filtering to GL_NEAREST
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);	// Set texture filtering to GL_LINEAR
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	
+	GLfloat anisotropy_level = 8.0f;  // adjust this value to your preference
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY, anisotropy_level);
 	/* Load the texture */
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+	glTexImage2D(GL_TEXTURE_2D, 0, texture_type, width, height, 0, texture_type, GL_UNSIGNED_BYTE, data);
 	glGenerateMipmap(GL_TEXTURE_2D);
 
 
@@ -35,10 +38,10 @@ GLuint init_openGL_texture(t_obj_model* model, u8 *data, u32 width, u32 height)
  * @param path path to the texture file
  * @return u8* return the texture data
 */
-u8 *brut_load_texture(char *path, t_obj_model *model)
+u8 *brut_load_texture(char *path, t_obj_model *model, int *type)
 {
-	int width, height, nrChannels;
-	u8 *data = stbi_load(path, &width, &height, &nrChannels, 0);
+	int width, height;
+	u8 *data = stbi_load(path, &width, &height, type, 0);
 
 	if (!data) {
 		ft_printf_fd(2, RED"Error: Failed to load texture\n"RESET);
@@ -47,8 +50,13 @@ u8 *brut_load_texture(char *path, t_obj_model *model)
 	ft_printf_fd(1, "Texture loaded: %s\n", path);
 
 	// u8 *newd = resize_image(data, width, height, 128, 128); //
-	ft_printf_fd(1, PINK"Width: %d, Height: %d, Channels: %d\n"RESET, width, height, nrChannels);
-	init_openGL_texture(model, data, width, height);
+	ft_printf_fd(1, PINK"Width: %d, Height: %d, Channels: %d\n"RESET, width, height, *type);
+	if (*type == 3) {
+		*type = GL_RGB;
+	} else if (*type == 4) {
+		*type = GL_RGBA;
+	}
+	init_openGL_texture(model, data, width, height, *type);
 	return (data);
 }
 
@@ -68,7 +76,7 @@ GLFWwindow *init_openGL_context()
         return (NULL);
 
 	/* Enable 8x antialiasing */
-    // glfwWindowHint(GLFW_SAMPLES, 8);
+    glfwWindowHint(GLFW_SAMPLES, 8);
 
     win = glfwCreateWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "OpenGL Window", NULL, NULL);
     if (!win) {
@@ -215,8 +223,10 @@ int main(int argc, char **argv)
 	init_gl_triangle_array(model);
 	ft_printf_fd(1, CYAN"Triangle number: %u\n"RESET, model->tri_size);
 
-	// brut_load_texture(TEXTURE_MANDATORY_PATH, model);
-	brut_load_texture(TEXTURE_BRICK_PATH, model);
+	int type = 0;
+
+	// brut_load_texture(TEXTURE_MANDATORY_PATH, model, &type);
+	brut_load_texture(TEXTURE_BRICK_PATH, model, &type);
 
 	set_shader_var_int(model->shader_id, "activeTexture", 0);
 

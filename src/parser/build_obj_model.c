@@ -31,37 +31,8 @@ void free_obj_model(t_obj_model *model)
 	free(model);
 }
 
-t_list *get_all_triangle_vertex(t_obj_model *model, t_list **idx_lst_ptr) {
-	t_list *vertex_lst = NULL;
-	t_list *idx_lst = *idx_lst_ptr;
-	u32 idx_for_lst = 1;
-	vec3_f32 *hard_origin = ft_calloc(sizeof(vec3_f32), 1);
-	if (!hard_origin) {
-		ft_printf_fd(2, RED"Error: Malloc failed\n"RESET);
-		return (NULL);
-	}
-	ft_lstadd_back(&vertex_lst, ft_lstnew(hard_origin)); 
-	
-	for (u32 i = 0; i < model->tri_size; i++) {
-		for (u32 j = 0; j < 3; j++) {
-			u32 vertex_index = model->tri_face[i][j];		
-			vec3_f32 *vertex = ft_calloc(sizeof(vec3_f32), 1);
-			if (!vertex){
-				ft_printf_fd(2, RED"Error: Malloc failed\n"RESET);
-				return (NULL);
-			}
-			ft_vec_copy(*vertex, model->vertex[vertex_index], sizeof(vec3_f32));
-			ft_lstadd_back(&vertex_lst, ft_lstnew(vertex));
-			u32 *idx = ft_calloc(sizeof(u32), 1);
-			if (!idx) {
-				ft_printf_fd(2, RED"Error: Malloc failed\n"RESET);
-				return (NULL);
-			}
-			*idx = idx_for_lst;
-			ft_lstadd_back(&idx_lst, ft_lstnew(idx));
-			idx_for_lst++;
-		}
-	}
+void display_triangle_data(t_list *vertex_lst, t_list *idx_lst)
+{
 	u32 nb = 0;
 	for (t_list *current = vertex_lst; current; current = current->next) {
 		if (nb == 0) {
@@ -80,10 +51,6 @@ t_list *get_all_triangle_vertex(t_obj_model *model, t_list **idx_lst_ptr) {
 	nb = 0;
 	for (t_list *current = idx_lst; current; current = current->next) {
 		u32 *val = current->content;
-		// if (nb == 0) {
-		// 	current = current->next;
-		// 	nb++;
-		// }
 		ft_printf_fd(1, ORANGE"nb %u, |%u|"RESET,nb, *val);
 		if (nb != 0 && nb % 3 == 0) {
 			ft_printf_fd(1, "\n");
@@ -92,53 +59,127 @@ t_list *get_all_triangle_vertex(t_obj_model *model, t_list **idx_lst_ptr) {
 		}
 		nb++;
 	}
-	free(model->vertex);
-	return (vertex_lst);
 }
 
-t_list *get_all_face_vertex(t_obj_file *file, t_obj_model *model) {
+t_list *get_all_triangle_vertex(t_obj_model *model, t_list **idx_lst_ptr) {
 	t_list *vertex_lst = NULL;
-	
+	t_list **idx_lst = idx_lst_ptr;
+	u32 idx_for_lst = 1;
 	vec3_f32 *hard_origin = ft_calloc(sizeof(vec3_f32), 1);
 	if (!hard_origin) {
 		ft_printf_fd(2, RED"Error: Malloc failed\n"RESET);
 		return (NULL);
 	}
 	ft_lstadd_back(&vertex_lst, ft_lstnew(hard_origin)); 
-
-	t_list *current = file->face;
-
-	u32 lst_face_size = ft_lstsize(file->face);
-	for (u32 i = 0; i < lst_face_size; i++) {
-		t_face_node *face_node = current->content; 
+	
+	for (u32 i = 0; i < model->tri_size; i++) {
 		for (u32 j = 0; j < 3; j++) {
+			u32 vertex_index = model->tri_face[i][j];		
 			vec3_f32 *vertex = ft_calloc(sizeof(vec3_f32), 1);
 			if (!vertex){
 				ft_printf_fd(2, RED"Error: Malloc failed\n"RESET);
 				return (NULL);
 			}
-			ft_vec_copy(*vertex, model->vertex[face_node->vec[j]], sizeof(vec3_f32));
+//			ft_printf_fd(1, "Vertex index %u\n", vertex_index);
+			ft_vec_copy(*vertex, model->vertex[vertex_index], sizeof(vec3_f32));
 			ft_lstadd_back(&vertex_lst, ft_lstnew(vertex));
-		}
-		if (face_node->other) { /* hardcode for quadra need to loop here */
-			vec3_f32 *vertex = ft_calloc(sizeof(vec3_f32), 1);
-			if (!vertex){
+			u32 *idx = ft_calloc(sizeof(u32), 1);
+			if (!idx) {
 				ft_printf_fd(2, RED"Error: Malloc failed\n"RESET);
 				return (NULL);
 			}
-			ft_vec_copy(*vertex, model->vertex[face_node->other[0]], sizeof(vec3_f32));
-			ft_lstadd_back(&vertex_lst, ft_lstnew(vertex));
+			*idx = idx_for_lst;
+			ft_lstadd_back(idx_lst, ft_lstnew(idx));
+			idx_for_lst++;
 		}
-		current = current->next;
 	}
-
-	ft_printf_fd(1, "Vertex list size %u\n", ft_lstsize(vertex_lst));
-	for (t_list *curr = vertex_lst; curr; curr = curr->next) {
-		vec3_f32 *vec = (vec3_f32 *)curr->content;
-		VECTOR_FLOAT_DISPLAY(3, (*vec))
-	}
-
+	display_triangle_data(vertex_lst, *idx_lst);
+	free(model->vertex);
 	return (vertex_lst);
+}
+
+t_list *get_all_face_vertex(t_obj_file *file, t_obj_model *model) {
+	t_list *face_lst = NULL;
+	u32 face_id = 1, vertex_idx = 1;
+
+
+	/* We need to loop on face lst to identify different face, and loop on tri_face to select right, vertex and idx
+		- loop on face list logic
+			- NODE = face list content, get the 3 first vertex/index in tri_face, cause face is minimum triangle (3 vertex)
+			- if NODE->other is not null, get the next 3 vertex/index in tri_face, get the next triangle
+	*/
+
+	for (t_list *current = file->face; current; current = current->next) {
+		t_face_node *curr_node = current->content;
+		t_obj_face *face = ft_calloc(sizeof(t_obj_face), 1);
+		u32 face_size = 0;
+		if (!face) {
+			ft_printf_fd(2, RED"Error: Malloc failed\n"RESET);
+			return (NULL);
+		}
+		face->id = face_id;
+		for (u32 i = 0; i < 3; i++) {
+			u32 vertex_index = curr_node->vec[i];
+			vec3_f32 *vertex = ft_calloc(sizeof(vec3_f32), 1);
+			if (!vertex) {
+				ft_printf_fd(2, RED"Error: Malloc failed\n"RESET);
+				return (NULL);
+			}
+			ft_vec_copy(*vertex, model->vertex[vertex_index], sizeof(vec3_f32));
+			ft_lstadd_back(&face->vertex, ft_lstnew(vertex));
+
+			u32 *idx = ft_calloc(sizeof(u32), 1);
+			if (!idx) {
+				ft_printf_fd(2, RED"Error: Malloc failed\n"RESET);
+				return (NULL);
+			}
+			*idx = vertex_idx;
+			ft_lstadd_back(&face->idx, ft_lstnew(idx));
+			vertex_idx++;
+			face_size++;
+
+			if (curr_node->other) {
+				vec3_f32 *vertex = ft_calloc(sizeof(vec3_f32), 1);
+				if (!vertex) {
+					ft_printf_fd(2, RED"Error: Malloc failed\n"RESET);
+					return (NULL);
+				}
+				ft_vec_copy(*vertex, model->vertex[*(curr_node->other)], sizeof(vec3_f32));
+				ft_lstadd_back(&face->vertex, ft_lstnew(vertex));
+
+				u32 *idx = ft_calloc(sizeof(u32), 1);
+				if (!idx) {
+					ft_printf_fd(2, RED"Error: Malloc failed\n"RESET);
+					return (NULL);
+				}
+				*idx = vertex_idx;
+				ft_lstadd_back(&face->idx, ft_lstnew(idx));
+				vertex_idx++;
+				face_size++;
+			}
+		}
+		face_id++;
+		face->size = face_size;
+		ft_lstadd_back(&face_lst, ft_lstnew(face));
+	}
+
+
+	/* Display obj_face_lst */
+	for (t_list *current = face_lst; current; current = current->next) {
+		t_obj_face *face = current->content;
+		ft_printf_fd(1, "Face %u\n", face->id);
+		for (t_list *curr_vertex = face->vertex; curr_vertex; curr_vertex = curr_vertex->next) {
+			vec3_f32 *vec = curr_vertex->content;
+			VECTOR_FLOAT_DISPLAY(3, (*vec))
+		}
+		for (t_list *curr_idx = face->idx; curr_idx; curr_idx = curr_idx->next) {
+			u32 *idx = curr_idx->content;
+			ft_printf_fd(1, "idx %u\n", *idx);
+		}
+		ft_printf_fd(1, "ID: %u, Size %u\n", face->id, face->size);
+	}
+
+	return (face_lst);
 }
 
 /**
@@ -170,15 +211,18 @@ t_obj_model *init_obj_model(t_obj_file *obj_file)
 	model->tri_size = ft_lstsize(triangle_lst);
 
 
-	// t_list	*idx_lst = NULL;
-	// t_list	*vertex_lst = get_all_triangle_vertex(model, &idx_lst);
-	// u32		vertex_size = ft_lstsize(vertex_lst);
-	// model->vertex = list_to_array(vertex_lst, vertex_size, sizeof(vec3_f32));
-	// model->v_size = ft_lstsize(vertex_lst);
+	t_list	*idx_lst = NULL;
+	t_list	*vertex_lst = get_all_triangle_vertex(model, &idx_lst);
+	u32		vertex_size = ft_lstsize(vertex_lst);
+	model->vertex = list_to_array(vertex_lst, vertex_size, sizeof(vec3_f32));
+	model->v_size = ft_lstsize(vertex_lst);
 
-	// free(model->tri_face);
-	// model->tri_face = list_to_array(idx_lst, ft_lstsize(idx_lst), sizeof(u32));
-	// model->tri_size = ft_lstsize(triangle_lst);
+	free(model->tri_face);
+	model->tri_face = list_to_array(idx_lst, ft_lstsize(idx_lst), sizeof(u32));
+	model->tri_size = ft_lstsize(triangle_lst);
+
+	t_list *test = get_all_face_vertex(obj_file, model);
+	(void)test;
 
 
 	ft_lstclear(&triangle_lst, free);
@@ -285,22 +329,46 @@ u8 hard_build_color(t_obj_model *model)
 	return (TRUE);
 }
 
-void calculate_texture_coord(vec3_f32 vertex, vec2_f32 texCoord, u32 max_img) {
-    // Convert the Cartesian coordinates to polar coordinates
-    float theta = atan2(vertex[2], vertex[0]);
-    float z = vertex[1];
+// void calculate_texture_coord(vec3_f32 vertex, vec2_f32 texCoord, u32 max_img) {
+//     // Convert the Cartesian coordinates to polar coordinates
+//     float theta = atan2(vertex[2], vertex[0]);  // theta calculated from x and z
+//     float z = vertex[1];  // z corresponds to y
 
-    // Normalize theta to be between 0 and 1
-    theta = (theta + FT_PI) / (2 * FT_PI);
-    //  Normalize z value
-    z = (z + 1) / 2;
+//     // Normalize theta to be between 0 and 1, and wrap around at 1
+//     theta = fmod((theta + FT_PI) / (2 * FT_PI), 1);
+
+//     // Normalize z to be between 0 and 1, considering the range is -1 to 2.8
+//     z = (z + 1) / 3.8;  // adjusted for range -1 to 2.8
+
+//     // Clamp values between 0 and 1
+//     theta = fmaxf(0, fminf(theta, 1));
+//     z = fmaxf(0, fminf(z, 1));
+
+//     // Use theta and z as texture coordinates, and scale by max_img
+//     texCoord[0] = theta * max_img;
+//     texCoord[1] = (1 - z) * max_img;  // flip the image vertically
+// }
+
+void calculate_texture_coord(vec3_f32 vertex, vec2_f32 texCoord, u32 repeat_fact) {
+    // Convert the Cartesian coordinates to spherical coordinates
+    float r = sqrt(vertex[0]*vertex[0] + vertex[1]*vertex[1] + vertex[2]*vertex[2]);
+    float theta = acos(vertex[1] / r);  // theta calculated from y and r
+    float phi = atan2(vertex[2], vertex[0]);  // phi calculated from x and z
+
+    // Normalize theta and phi to be between 0 and 1
+    theta = theta / FT_PI;
+    phi = (phi + FT_PI) / (2 * FT_PI);
+
     // Clamp values between 0 and 1
     theta = fmaxf(0, fminf(theta, 1));
-    z = fmaxf(0, fminf(z, 1));
-    // Use theta and z as texture coordinates
-    texCoord[0] = theta * max_img;
-    texCoord[1] = z * max_img;
+    phi = fmaxf(0, fminf(phi, 1));
+
+    // Use theta and phi as texture coordinates, and scale by repeat_fact
+    // Multiply by a factor to repeat the texture
+    texCoord[0] = phi * repeat_fact;
+    texCoord[1] = theta * repeat_fact;
 }
+
 
 /* Brut texture build when no texture data provided in obj file */
 u8 build_material_texture(t_obj_model *model) 
@@ -314,11 +382,13 @@ u8 build_material_texture(t_obj_model *model)
 
 	for (u32 i = 0; i < model->v_size; i++) {
 		// Get the indices of the vertices of the i-th triangle
-		calculate_texture_coord(model->vertex[i], model->texture_coord[i], 1);
+		calculate_texture_coord(model->vertex[i], model->texture_coord[i], 10);
 	}
-	for (u32 i = 0; i < model->v_size; i++) {
+	
+	/*for (u32 i = 0; i < model->v_size; i++) {
 		ft_printf_fd(1, GREEN"texture %u x %f, y %f\n"RESET, i, model->texture_coord[i][0], model->texture_coord[i][1]);
-	}
+	}*/
+
     return (TRUE);
 }
 
@@ -359,7 +429,7 @@ void init_gl_triangle_array(t_obj_model *model)
 	hard_build_color(model);
 	GLuint color_vbo = create_VBO(model->v_size * sizeof(vec3_f32), model->colors);
 
-	GLuint texCoords_vbo = create_VBO(model->tri_size * sizeof(vec2_f32), model->texture_coord);
+	GLuint texCoords_vbo = create_VBO(model->v_size * sizeof(vec2_f32), model->texture_coord);
 
     /* create and fill ebo Element Buffer Objects */
     glGenBuffers(1, &model->ebo);
