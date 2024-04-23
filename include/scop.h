@@ -234,7 +234,13 @@ vec3_f32		*line_to_vertex_node(char **line);
 
 /* main to move */
 void			check_struct_size(char *str_test, u32 struct_size, u32 wanted_size);
+
+/* parser/build_triangle_lst.c */
 t_list			*quadra_to_triangle(t_list *face_node_lst);
+t_list 			*get_all_triangle_vertex(t_obj_model *model, t_list **idx_lst_ptr);
+
+/* parser/face_handling.c */
+t_list			*get_all_face_vertex(t_obj_file *file, t_obj_model *model);
 
 /* render/camera */
 t_camera		create_camera(float fov, float aspect_ratio, float near, float far);
