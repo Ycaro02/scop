@@ -149,7 +149,7 @@ typedef struct t_camera {
 } t_camera;
 
 typedef struct s_obj_face {
-	t_list *vertex;		/* list of vec3_u32, list of vertex for this face, all triangle vertex for each face */
+	t_list *vertex;		/* list of vec3_f32, list of vertex for this face, all triangle vertex for each face */
 	t_list *idx;		/* list of u32, list of index for each vertex */
 	u32		size;		/* number of vertex in this face */
 	u32		id;			/* face id */
@@ -172,6 +172,7 @@ typedef struct s_obj_model {
 	GLFWwindow		*win_ptr;		/* window pointer */
 	vec2_f32		*texture_coord;	/* texture coordinates associated with a vertex */
 	t_material_file	*material;		/* material file structure */
+	t_list			*obj_face;		/* list of obj face structure */
 }	t_obj_model;
 
 

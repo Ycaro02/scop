@@ -61,6 +61,7 @@ void display_triangle_data(t_list *vertex_lst, t_list *idx_lst)
 	}
 }
 
+/*This free model->vertex */
 t_list *get_all_triangle_vertex(t_obj_model *model, t_list **idx_lst_ptr) {
 	t_list *vertex_lst = NULL;
 	t_list **idx_lst = idx_lst_ptr;
@@ -98,10 +99,65 @@ t_list *get_all_triangle_vertex(t_obj_model *model, t_list **idx_lst_ptr) {
 	return (vertex_lst);
 }
 
-t_list *get_all_face_vertex(t_obj_file *file, t_obj_model *model) {
-	t_list *face_lst = NULL;
-	u32 face_id = 1, vertex_idx = 1;
+void display_obj_face_lst(t_list *face_lst) {
+	/* Display obj_face_lst */
+	for (t_list *current = face_lst; current; current = current->next) {
+		t_obj_face	*face = current->content;
+		t_list		*curr_idx = face->idx;
+		ft_printf_fd(1, CYAN"\nFace %u\n"RESET, face->id);
+		for (t_list *curr_vertex = face->vertex; curr_vertex; curr_vertex = curr_vertex->next) {
+			vec3_f32 *vec = curr_vertex->content;
+			void *idx = curr_idx->content;
+			ft_printf_fd(1, PINK"Vertex [%u] %f %f %f\n"RESET, *((u32 *)idx), (*vec)[0], (*vec)[1], (*vec)[2]);
+			curr_idx = curr_idx->next;
+		}
+		ft_printf_fd(1, CYAN"ID: %u, Size %u\n"RESET, face->id, face->size);
+	}
+}
 
+/**
+ * @brief Extract face data
+ * @param model obj model
+ * @param face obj face
+ * @param tri_idx triangle index
+ * @return TRUE if success, FALSE otherwise (malloc failed)
+*/
+u8 extract_face_data(t_obj_model *model, t_obj_face *face, u32 tri_idx)
+{
+	vec3_u32	*tri_face = model->tri_face;
+
+	for (u32 i = 0; i < 3; i++) {
+		vec3_f32 *vertex = ft_calloc(sizeof(vec3_f32), 1);
+		if (!vertex) {
+			ft_printf_fd(2, RED"Error: Malloc failed\n"RESET);
+			return (FALSE);
+		}
+		ft_vec_copy(*vertex, model->vertex[tri_face[tri_idx][i]], sizeof(vec3_f32));
+		ft_lstadd_back(&face->vertex, ft_lstnew(vertex));
+		u32 *idx = ft_calloc(sizeof(u32), 1);
+		if (!idx) {
+			ft_printf_fd(2, RED"Error: Malloc failed\n"RESET);
+			return (FALSE);
+		}
+		*idx = tri_face[tri_idx][i];
+		ft_lstadd_back(&face->idx, ft_lstnew(idx));
+	} /* End for loop 3 */
+	return (TRUE);
+}
+
+/**
+ * @brief Increment tri_idx and face_size
+ * @param tri_idx triangle index to increment by 1
+ * @param face_size face size to increment by 3 (3 vertex per triangle)
+*/
+FT_INLINE void increment_tri_idx(u32 *tri_idx, u32 *face_size) {
+	*tri_idx += 1;
+	*face_size += 3;
+}
+
+t_list *get_all_face_vertex(t_obj_file *file, t_obj_model *model) {
+	t_list 		*face_lst = NULL;
+	u32			face_id = 1, tri_idx = 0;
 
 	/* We need to loop on face lst to identify different face, and loop on tri_face to select right, vertex and idx
 		- loop on face list logic
@@ -110,74 +166,28 @@ t_list *get_all_face_vertex(t_obj_file *file, t_obj_model *model) {
 	*/
 
 	for (t_list *current = file->face; current; current = current->next) {
-		t_face_node *curr_node = current->content;
-		t_obj_face *face = ft_calloc(sizeof(t_obj_face), 1);
-		u32 face_size = 0;
+		t_face_node	*curr_node = current->content;
+		t_obj_face	*face = ft_calloc(sizeof(t_obj_face), 1);
+		u32			face_size = 0;
+		
 		if (!face) {
 			ft_printf_fd(2, RED"Error: Malloc failed\n"RESET);
 			return (NULL);
 		}
 		face->id = face_id;
-		for (u32 i = 0; i < 3; i++) {
-			u32 vertex_index = curr_node->vec[i];
-			vec3_f32 *vertex = ft_calloc(sizeof(vec3_f32), 1);
-			if (!vertex) {
-				ft_printf_fd(2, RED"Error: Malloc failed\n"RESET);
-				return (NULL);
-			}
-			ft_vec_copy(*vertex, model->vertex[vertex_index], sizeof(vec3_f32));
-			ft_lstadd_back(&face->vertex, ft_lstnew(vertex));
-
-			u32 *idx = ft_calloc(sizeof(u32), 1);
-			if (!idx) {
-				ft_printf_fd(2, RED"Error: Malloc failed\n"RESET);
-				return (NULL);
-			}
-			*idx = vertex_idx;
-			ft_lstadd_back(&face->idx, ft_lstnew(idx));
-			vertex_idx++;
-			face_size++;
-
-			if (curr_node->other) {
-				vec3_f32 *vertex = ft_calloc(sizeof(vec3_f32), 1);
-				if (!vertex) {
-					ft_printf_fd(2, RED"Error: Malloc failed\n"RESET);
-					return (NULL);
-				}
-				ft_vec_copy(*vertex, model->vertex[*(curr_node->other)], sizeof(vec3_f32));
-				ft_lstadd_back(&face->vertex, ft_lstnew(vertex));
-
-				u32 *idx = ft_calloc(sizeof(u32), 1);
-				if (!idx) {
-					ft_printf_fd(2, RED"Error: Malloc failed\n"RESET);
-					return (NULL);
-				}
-				*idx = vertex_idx;
-				ft_lstadd_back(&face->idx, ft_lstnew(idx));
-				vertex_idx++;
-				face_size++;
-			}
+		extract_face_data(model, face, tri_idx);
+		increment_tri_idx(&tri_idx, &face_size);
+		if (curr_node->other) {
+			extract_face_data(model, face, tri_idx);
+			increment_tri_idx(&tri_idx, &face_size);
 		}
-		face_id++;
 		face->size = face_size;
 		ft_lstadd_back(&face_lst, ft_lstnew(face));
+		face_id++;
 	}
 
-
-	/* Display obj_face_lst */
-	for (t_list *current = face_lst; current; current = current->next) {
-		t_obj_face *face = current->content;
-		ft_printf_fd(1, "Face %u\n", face->id);
-		for (t_list *curr_vertex = face->vertex; curr_vertex; curr_vertex = curr_vertex->next) {
-			vec3_f32 *vec = curr_vertex->content;
-			VECTOR_FLOAT_DISPLAY(3, (*vec))
-		}
-		for (t_list *curr_idx = face->idx; curr_idx; curr_idx = curr_idx->next) {
-			u32 *idx = curr_idx->content;
-			ft_printf_fd(1, "idx %u\n", *idx);
-		}
-		ft_printf_fd(1, "ID: %u, Size %u\n", face->id, face->size);
-	}
+	/* Display data here */
+	display_obj_face_lst(face_lst);
 
 	return (face_lst);
 }
@@ -196,10 +206,11 @@ t_obj_model *init_obj_model(t_obj_file *obj_file)
 		free_obj_file(obj_file);
 		return (NULL);
 	}
-
+	/* First vertex array, contain only vertex file data */
 	model->vertex = list_to_array(obj_file->vertex, ft_lstsize(obj_file->vertex), sizeof(vec3_f32));
 	model->v_size = ft_lstsize(obj_file->vertex);
 
+	/* Cut face to get triangle list of vec3_u32 represent all triangle vertex index */
 	t_list *triangle_lst = quadra_to_triangle(obj_file->face);
 	if (!triangle_lst) {
 		ft_printf_fd(2, RED"Error: Failed to convert quadra to triangle\n"RESET);
@@ -207,24 +218,34 @@ t_obj_model *init_obj_model(t_obj_file *obj_file)
 		return (NULL);
 	}
 
+	/* Convert this triangle list into array */
 	model->tri_face = list_to_array(triangle_lst, ft_lstsize(triangle_lst), sizeof(vec3_u32));
 	model->tri_size = ft_lstsize(triangle_lst);
 
-
+	/* Build new vertex/index list with all triangle */
 	t_list	*idx_lst = NULL;
 	t_list	*vertex_lst = get_all_triangle_vertex(model, &idx_lst);
 	u32		vertex_size = ft_lstsize(vertex_lst);
+
+	/* Convert vertex_lst to new vertex array */
+	// free(model->vertex);
 	model->vertex = list_to_array(vertex_lst, vertex_size, sizeof(vec3_f32));
 	model->v_size = ft_lstsize(vertex_lst);
 
+
+	/* Convert idx_lst to new tri_face array */
 	free(model->tri_face);
 	model->tri_face = list_to_array(idx_lst, ft_lstsize(idx_lst), sizeof(u32));
 	model->tri_size = ft_lstsize(triangle_lst);
 
-	t_list *test = get_all_face_vertex(obj_file, model);
-	(void)test;
+	/* Need to build face data structure contain all new vertex/index  */
+	model->obj_face = get_all_face_vertex(obj_file, model);
+	// (void)test;
+	// free(model->vertex);
+	// model->vertex = list_to_array(test->, vertex_size, sizeof(vec3_f32));
 
 
+	ft_lstclear(&vertex_lst, free);
 	ft_lstclear(&triangle_lst, free);
 	free_obj_file(obj_file);
 	return (model);
@@ -329,46 +350,23 @@ u8 hard_build_color(t_obj_model *model)
 	return (TRUE);
 }
 
-// void calculate_texture_coord(vec3_f32 vertex, vec2_f32 texCoord, u32 max_img) {
-//     // Convert the Cartesian coordinates to polar coordinates
-//     float theta = atan2(vertex[2], vertex[0]);  // theta calculated from x and z
-//     float z = vertex[1];  // z corresponds to y
+void calculate_texture_coord(t_obj_face *face, vec2_f32 *texCoords, u32 repeat_fact) {
+    if (face->size == 3) {
+        // Triangle face
+        texCoords[0][0] = repeat_fact * 0; texCoords[0][1] = repeat_fact * 0;  // Top left
+        texCoords[1][0] = repeat_fact * 1; texCoords[1][1] = repeat_fact * 0;  // Top right
+        texCoords[2][0] = repeat_fact * 0; texCoords[2][1] = repeat_fact * 1;  // Bottom
+		return ;
+    }
+	// Quadrilateral face, split into two triangles
+	texCoords[0][0] = repeat_fact * 0; texCoords[0][1] = repeat_fact * 0;  // Top left of first triangle
+	texCoords[1][0] = repeat_fact * 1; texCoords[1][1] = repeat_fact * 0;  // Top right of first triangle
+	texCoords[2][0] = repeat_fact * 0; texCoords[2][1] = repeat_fact * 1;  // Bottom of first triangle
 
-//     // Normalize theta to be between 0 and 1, and wrap around at 1
-//     theta = fmod((theta + FT_PI) / (2 * FT_PI), 1);
-
-//     // Normalize z to be between 0 and 1, considering the range is -1 to 2.8
-//     z = (z + 1) / 3.8;  // adjusted for range -1 to 2.8
-
-//     // Clamp values between 0 and 1
-//     theta = fmaxf(0, fminf(theta, 1));
-//     z = fmaxf(0, fminf(z, 1));
-
-//     // Use theta and z as texture coordinates, and scale by max_img
-//     texCoord[0] = theta * max_img;
-//     texCoord[1] = (1 - z) * max_img;  // flip the image vertically
-// }
-
-void calculate_texture_coord(vec3_f32 vertex, vec2_f32 texCoord, u32 repeat_fact) {
-    // Convert the Cartesian coordinates to spherical coordinates
-    float r = sqrt(vertex[0]*vertex[0] + vertex[1]*vertex[1] + vertex[2]*vertex[2]);
-    float theta = acos(vertex[1] / r);  // theta calculated from y and r
-    float phi = atan2(vertex[2], vertex[0]);  // phi calculated from x and z
-
-    // Normalize theta and phi to be between 0 and 1
-    theta = theta / FT_PI;
-    phi = (phi + FT_PI) / (2 * FT_PI);
-
-    // Clamp values between 0 and 1
-    theta = fmaxf(0, fminf(theta, 1));
-    phi = fmaxf(0, fminf(phi, 1));
-
-    // Use theta and phi as texture coordinates, and scale by repeat_fact
-    // Multiply by a factor to repeat the texture
-    texCoord[0] = phi * repeat_fact;
-    texCoord[1] = theta * repeat_fact;
+	texCoords[3][0] = repeat_fact * 0; texCoords[3][1] = repeat_fact * 0;  // Top left of second triangle (same as top left of first triangle)
+	texCoords[4][0] = repeat_fact * 1; texCoords[4][1] = repeat_fact * 0;  // Top right of second triangle (same as top right of first triangle)
+	texCoords[5][0] = repeat_fact * 1; texCoords[5][1] = repeat_fact * 1;  // Bottom of second triangle
 }
-
 
 /* Brut texture build when no texture data provided in obj file */
 u8 build_material_texture(t_obj_model *model) 
@@ -380,17 +378,20 @@ u8 build_material_texture(t_obj_model *model)
         return (FALSE);
     }
 
-	for (u32 i = 0; i < model->v_size; i++) {
-		// Get the indices of the vertices of the i-th triangle
-		calculate_texture_coord(model->vertex[i], model->texture_coord[i], 10);
-	}
+	u32 i = 0;
+    for (t_list *face_lst = model->obj_face; face_lst; face_lst = face_lst->next) {
+		t_obj_face *face_node = face_lst->content;
+        // Calculez les coordonnées de texture pour chaque sommet de la face
+        calculate_texture_coord(face_node, &model->texture_coord[i], 4);
+		i += face_node->size;
+    }
 	
-	/*for (u32 i = 0; i < model->v_size; i++) {
+	for (u32 i = 0; i < model->v_size; i++) {
 		ft_printf_fd(1, GREEN"texture %u x %f, y %f\n"RESET, i, model->texture_coord[i][0], model->texture_coord[i][1]);
-	}*/
-
+	}
     return (TRUE);
 }
+
 
 /**
  * @brief Create VBO
