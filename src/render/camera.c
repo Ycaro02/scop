@@ -181,7 +181,8 @@ void rotate_object(t_obj_model *model, vec3_f32 rotate_vec, float angle, GLuint 
  * @param m object model
  * @param center center vector
 */
-void get_obj_center(t_obj_model* m, vec3_f32 center) {
+void get_obj_center(t_obj_model* m, vec3_f32 center) 
+{
     vec3_f32 total = {0.0f};
 
     for (u32 i = 0; i < m->v_size; i++) {

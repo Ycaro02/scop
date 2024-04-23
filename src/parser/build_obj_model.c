@@ -368,6 +368,31 @@ void calculate_texture_coord(t_obj_face *face, vec2_f32 *texCoords, u32 repeat_f
 	texCoords[5][0] = repeat_fact * 1; texCoords[5][1] = repeat_fact * 1;  // Bottom of second triangle
 }
 
+// void calculate_texture_coord(t_obj_face *face, vec2_f32 *texCoords, vec3_f32 min, vec3_f32 max) {
+//     for (u32 i = 0; i < face->size; i++) {
+//         vec3_f32 *vertex = get_lst_index_content(face->vertex, i);
+//         texCoords[i][0] = ((vertex[0][0] - min[0]) / (max[0] - min[0])) / 0.5f;
+//         texCoords[i][1] = ((vertex[0][2] - min[2]) / (max[2] - min[2])) / 0.5f;  // Use z-coordinate for v
+//     }
+// }
+// #include <float.h>
+// void get_obj_min_max(t_obj_model *model, vec3_f32 min, vec3_f32 max)
+// {
+// 	min[0] = min[1] = min[2] = FLT_MAX;
+// 	max[0] = max[1] = max[2] = -FLT_MAX;
+
+// 	for (u32 i = 0; i < model->v_size; i++) {
+// 		vec3_f32 vertex; 
+// 		ft_vec_copy(vertex, model->vertex[i], sizeof(vec3_f32));
+// 		if (vertex[0] < min[0]) min[0] = vertex[0];
+// 		if (vertex[0] > max[0]) max[0] = vertex[0];
+// 		if (vertex[1] < min[1]) min[1] = vertex[1];
+// 		if (vertex[1] > max[1]) max[1] = vertex[1];
+// 		if (vertex[2] < min[2]) min[2] = vertex[2];
+// 		if (vertex[2] > max[2]) max[2] = vertex[2];
+// 	}
+// }
+
 /* Brut texture build when no texture data provided in obj file */
 u8 build_material_texture(t_obj_model *model) 
 {
@@ -378,11 +403,15 @@ u8 build_material_texture(t_obj_model *model)
         return (FALSE);
     }
 
+
+	// vec3_f32 min, max;
+	// get_obj_min_max(model, min, max);
+
 	u32 i = 0;
     for (t_list *face_lst = model->obj_face; face_lst; face_lst = face_lst->next) {
 		t_obj_face *face_node = face_lst->content;
         // Calculez les coordonnées de texture pour chaque sommet de la face
-        calculate_texture_coord(face_node, &model->texture_coord[i], 4);
+        calculate_texture_coord(face_node, &model->texture_coord[i], 1);
 		i += face_node->size;
     }
 	
