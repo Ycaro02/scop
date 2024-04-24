@@ -203,19 +203,21 @@ enum model_status {
 // u8			smooth;		/* The smoothing group state. 'on' to activate, 'off' to deactivate. 1 for true, otherwise 0*/
 
 void get_obj_center(t_obj_model* m, vec3_f32 center);
-
 void set_shader_var_int(GLuint shader_id, char *name, int value);
+
 /* parser/material_parse.c */
 t_material_file *parse_mtl_file(char *path);
 void display_material_data(t_material_file *file);
+
 /* parser/obj_parse.c */
 t_obj_model		*parse_obj_file(char *path);
 void			free_obj_file(t_obj_file *obj);
+
 /* parser/utils */
 u16				is_valid_token(char **valid_tokens, char *to_check);
 s8				get_str_after_token(char **to_fill_ptr, char **line);
 
-/* parser/build_obj_model.c */
+/* builder/build_obj_model.c */
 void			display_vertex_lst(t_list *lst);
 void			free_obj_model(t_obj_model *model);
 t_obj_model		*init_obj_model(t_obj_file *obj_file);
@@ -261,5 +263,11 @@ GLuint			load_shader(t_obj_model *model);
 
 /* win_event/key_callback.c */
 void			handle_input(t_obj_model *model);
+
+/* builder/texture.c */
+u8				build_material_texture(t_obj_model *model);
+
+/* builder.colors.c */
+u8				hard_build_color(t_obj_model *model);
 
 #endif /* SCOP_HEADER_H */

@@ -5,7 +5,8 @@ SRC_DIR 		=	src
 SUB_SRC_DIR		=	parser\
 					render\
 					glad\
-					win_event
+					win_event\
+					builder
 
 ALL_SRC_DIR		=	$(OBJ_DIR) $(addprefix $(OBJ_DIR)/, $(SUB_SRC_DIR))
 
@@ -13,14 +14,16 @@ MAIN_MANDATORY 	=	main_opengl.c
 
 SRCS			=	parser/obj_parse.c\
 					parser/parse_line.c\
-					parser/build_obj_model.c\
-					parser/face_handling.c\
 					parser/parse_utils.c\
 					parser/material_parse.c\
-					parser/build_triangle_lst.c\
-					render/camera.c\
-					render/shader_utils.c\
+					builder/face_handling.c\
+					builder/build_triangle_lst.c\
+					builder/build_obj_model.c\
+					builder/texture.c\
+					builder/colors.c\
 					win_event/key_callback.c\
+					render/shader_utils.c\
+					render/camera.c\
 					glad/gl.c\
 
 
