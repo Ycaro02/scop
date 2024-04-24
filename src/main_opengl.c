@@ -1,8 +1,9 @@
 #include "../include/scop.h"
+#include "parser/parse_bmp.h"
 
 /* TO REMOVE need to implement my own parser */
-#define STB_IMAGE_IMPLEMENTATION
-#include "../../lib/stb/stb_image.h"
+// #define STB_IMAGE_IMPLEMENTATION
+// #include "../../lib/stb/stb_image.h"
 
 GLuint init_openGL_texture(t_obj_model* model, u8 *data, u32 width, u32 height, u16 texture_type)
 {
@@ -41,16 +42,16 @@ GLuint init_openGL_texture(t_obj_model* model, u8 *data, u32 width, u32 height, 
 u8 *brut_load_texture(char *path, t_obj_model *model, int *type)
 {
 	int width, height;
-	u8 *data = stbi_load(path, &width, &height, type, 0);
+	// u8 *data = stbi_load(path, &width, &height, type, 0);
+	u8 *data = parse_bmp_file(path, &width, &height, type);
+
 
 	if (!data) {
 		ft_printf_fd(2, RED"Error: Failed to load texture\n"RESET);
 		return (NULL);
 	}
-	ft_printf_fd(1, "Texture loaded: %s\n", path);
-
-	// u8 *newd = resize_image(data, width, height, 128, 128); //
-	ft_printf_fd(1, PINK"Width: %d, Height: %d, Channels: %d\n"RESET, width, height, *type);
+	// ft_printf_fd(1, "Texture loaded: %s\n", path);
+	// ft_printf_fd(1, PINK"Width: %d, Height: %d, Channels: %d\n"RESET, width, height, *type);
 	if (*type == 3) {
 		*type = GL_RGB;
 	} else if (*type == 4) {

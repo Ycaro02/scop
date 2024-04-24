@@ -1,7 +1,5 @@
 #version 330 core
 
-const float PI = 3.1415926535897932384626433832795;
-
 out vec4 FragColor;
 in vec3 myColor;
 in vec2 textureCoords;
