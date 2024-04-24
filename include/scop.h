@@ -148,10 +148,10 @@ typedef struct t_camera {
 } t_camera;
 
 typedef struct s_obj_face {
-	t_list *vertex;		/* list of vec3_f32, list of vertex for this face, all triangle vertex for each face */
-	t_list *idx;		/* list of u32, list of index for each vertex */
-	u32		size;		/* number of vertex in this face */
-	u32		id;			/* face id */
+	t_list		*vertex;			/* list of vec3_f32, list of vertex for this face, all triangle vertex for each face */
+	t_list		*idx;				/* list of u32, list of index for each vertex */
+	u32			size;				/* number of vertex in this face */
+	u32			id;					/* face id */
 } t_obj_face;
 
 /* Model structure */

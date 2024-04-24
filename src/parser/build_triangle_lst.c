@@ -121,7 +121,7 @@ t_list *get_all_triangle_vertex(t_obj_model *model, t_list **idx_lst_ptr)
 			idx_for_lst++;
 		}
 	}
-	display_triangle_data(vertex_lst, *idx_lst);
+	// display_triangle_data(vertex_lst, *idx_lst);
 	free(model->vertex);
 	return (vertex_lst);
 }

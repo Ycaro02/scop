@@ -192,10 +192,10 @@ int main(int argc, char **argv)
 	t_obj_model	*model;
     
 
-	if (argc != 2) { /* need to check file */
-		ft_printf_fd(2, "Usage: %s <obj_file>\n", argv[0]);
+	if (argc < 2 || argc > 3) { /* need to check file */
+		ft_printf_fd(2, "Usage: %s <obj_file> [texture_path]\n", argv[0]);
 		return (1);
-	}
+	} 
 
 	model = parse_obj_file(argv[1]);
 	if (!model) {
@@ -225,7 +225,7 @@ int main(int argc, char **argv)
 
 	int type = 0;
 
-	brut_load_texture(TEXTURE_MANDATORY_PATH, model, &type);
+	brut_load_texture(argv[2], model, &type);
 	// brut_load_texture(TEXTURE_BRICK_PATH, model, &type);
 
 	set_shader_var_int(model->shader_id, "activeTexture", 0);

@@ -4,7 +4,7 @@
  * @brief Display face list
  * @param face_lst face list to display
 */
-static void display_obj_face_lst(t_list *face_lst) {
+void display_obj_face_lst(t_list *face_lst) {
 	for (t_list *current = face_lst; current; current = current->next) {
 		t_obj_face	*face = current->content;
 		t_list		*curr_idx = face->idx;
@@ -91,7 +91,7 @@ t_list *get_all_face_vertex(t_obj_file *file, t_obj_model *model)
 	}
 
 	/* Display data here */
-	display_obj_face_lst(face_lst);
+	// display_obj_face_lst(face_lst);
 
 	return (face_lst);
 }
