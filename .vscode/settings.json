@@ -32,7 +32,17 @@
 		"float.h": "c",
 		"stb_image.h": "c",
 		"typeinfo": "c",
-		"cmath": "c"
+		"cmath": "c",
+		"common.h": "c",
+		"ivec3.h": "c",
+		"ivec4.h": "c",
+		"mat3x2.h": "c",
+		"ivec2.h": "c",
+		"mat4x3.h": "c",
+		"affine.h": "c",
+		"curve.h": "c",
+		"mat3.h": "c",
+		"vec3-ext.h": "c"
 	},
 	"42header.email": "nfour@student.42angouleme.fr",
 	"42header.username": "nfour"

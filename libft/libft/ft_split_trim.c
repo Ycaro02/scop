@@ -28,27 +28,23 @@ static int	ft_in_set(char c, char set)
 
 static char	**ft_make_split(char **dest, char const *str, char c, int j)
 {
-	size_t	len;
-	int		i;
+	size_t	len = 0;
+	int		i = 0;
 
-	i = 0;
-	len = 0;
-	while (str[i])
-	{
-		if (ft_in_set(str[i], c) == 1)
+	while (str[i]) {
+		if (ft_in_set(str[i], c) == 1) {
 			i++;
-		else
-		{
+		}
+		else {
 			len++;
 			i++;
-			if (str[i] == c || (str[i] == '\0' && j < ft_count_word(str, c)))
-			{
+			if (str[i] == c || (str[i] == '\0' && j < ft_count_word(str, c))) {
 				dest[j] = ft_calloc(sizeof(char), len + 1);
 				ft_strlcpy(dest[j], &str[i - len], len + 1);
 				len = 0;
-                char *trim_path = ft_strtrim(dest[j], "\b\t\n\v\f\r ");
-                free(dest[j]);
-                dest[j] = trim_path;
+				char *trim_path = ft_strtrim(dest[j], "\b\t\n\v\f\r ");
+				free(dest[j]);
+				dest[j] = trim_path;
 				j++;
 			}
 		}
@@ -63,14 +59,15 @@ char	**ft_split_trim(char const *str, char c)
 	int		j;
 	int		nb_word;
 
-	if (str == NULL)
+	if (str == NULL) {
 		return (NULL);
+	}
 	nb_word = ft_count_word(str, c);
 	j = 0;
 	dest = malloc(sizeof(char *) * (nb_word + 1));
-	if (dest == NULL)
+	if (dest == NULL){
 		return (NULL);
+	}
 	dest = ft_make_split(dest, str, c, j);
-    
 	return (dest);
 }

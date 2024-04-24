@@ -17,11 +17,8 @@
 /* Fragment shader source path */
 #define FRAGMENT_SHADER_PATH "rsc/shaders/fragment_shader.glsl"
 
-
-#define TEXTURE_MANDATORY_PATH "rsc/texture/kitten.bmp"
-// #define TEXTURE_MANDATORY_PATH "rsc/texture/kitten_color.bmp"
-
-#define TEXTURE_BRICK_PATH "rsc/texture/brick.bmp"
+// #define TEXTURE_MANDATORY_PATH "rsc/texture/kitten.bmp"
+// #define TEXTURE_BRICK_PATH "rsc/texture/brick.bmp"
 
 #define MODEL_PATH "rsc/model/"
 
@@ -121,9 +118,6 @@ enum e_material_token {
 #define TOKEN_MTL_D			"d"			/* Type: float Nb Value: 1 Description: Dissolve factor */
 #define TOKEN_MTL_ILLUM		"illum"		/* Type: int Nb Value: 1 Description: Illumination model */
 
-
-//Vertex 1, 0.232406 -0.745504 1.477731 -> Vertex 2, 0.232406 -0.745504 2.843098 -> Vertex 3, -0.227475 -0.745504 2.843098
-
 #define MATERIAL_TOKEN_ARRAY {TOKEN_COMMENT, TOKEN_MTL_NEWMTL, TOKEN_MTL_KA, TOKEN_MTL_KD, TOKEN_MTL_KS, TOKEN_MTL_NS, TOKEN_MTL_NI, TOKEN_MTL_D, TOKEN_MTL_ILLUM}
 
 typedef struct s_material_file {
@@ -207,7 +201,7 @@ void set_shader_var_int(GLuint shader_id, char *name, int value);
 
 /* parser/material_parse.c */
 t_material_file *parse_mtl_file(char *path);
-void display_material_data(t_material_file *file);
+void 			display_material_data(t_material_file *file);
 
 /* parser/obj_parse.c */
 t_obj_model		*parse_obj_file(char *path);
