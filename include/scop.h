@@ -266,6 +266,9 @@ void			rotate_object(t_obj_model *model, vec3_f32 rotate_vec, float angle, GLuin
 void			move_camera_up(t_camera* camera, float distance) ;
 void			rotate_object_around_center(t_obj_model* m, vec3_f32 rotate_vec, float angle, GLuint shader_id);
 
+/* window/openGL_glw_init.c */
+GLFWwindow		*init_openGL_context();
+
 /* render/shader_utils */
 void			set_shader_var_mat4(GLuint shader_id, char *var_name, mat4_f32 data);
 void			set_shader_var_vec4(GLuint shader_id, char *var_name, vec4_f32 vec);

@@ -12,6 +12,12 @@ void set_shader_var_mat4(GLuint shader_id, char *var_name, mat4_f32 data)
 	glUniformMatrix4fv(var_loc, 1, GL_FALSE, (GLfloat *)data);
 }
 
+void set_shader_var_float(GLuint shader_id, char *name, float value)
+{
+	GLint loc = glGetUniformLocation(shader_id, name);
+	glUniform1f(loc, value);
+}
+
 char *load_shader_file(char *path)
 {
 	char **file = sstring_load_file(path);

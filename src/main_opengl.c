@@ -35,11 +35,11 @@ GLuint init_openGL_texture(t_obj_model* model, u8 *data, u32 width, u32 height, 
  * @param path path to the texture file
  * @return u8* return the texture data
 */
-u8 *brut_load_texture(char *path, t_obj_model *model, int *type)
+u8 *brut_load_texture(char *path, t_obj_model *model)
 {
-	int width, height;
+	int width, height, type;
 	// u8 *data = stbi_load(path, &width, &height, type, 0);
-	u8 *data = parse_bmp_file(path, &width, &height, type);
+	u8 *data = parse_bmp_file(path, &width, &height, &type);
 
 
 	if (!data) {
@@ -48,69 +48,14 @@ u8 *brut_load_texture(char *path, t_obj_model *model, int *type)
 	}
 	// ft_printf_fd(1, "Texture loaded: %s\n", path);
 	// ft_printf_fd(1, PINK"Width: %d, Height: %d, Channels: %d\n"RESET, width, height, *type);
-	if (*type == 3) {
-		*type = GL_RGB;
-	} else if (*type == 4) {
-		*type = GL_RGBA;
+	if (type == 3) {
+		type = GL_RGB;
+	} else if (type == 4) {
+		type = GL_RGBA;
 	}
-	init_openGL_texture(model, data, width, height, *type);
+	init_openGL_texture(model, data, width, height, type);
 	return (data);
 }
-
-
-
-/**
- * @brief Initialize the openGL context
- * @return GLFWwindow* return the window struct pointer
-*/
-GLFWwindow *init_openGL_context() 
-{
-    GLFWwindow *win;
-	int version = 0;
-	
-
-    if (!glfwInit())
-        return (NULL);
-
-	/* Enable 8x antialiasing */
-    glfwWindowHint(GLFW_SAMPLES, 8);
-
-    win = glfwCreateWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "OpenGL Window", NULL, NULL);
-    if (!win) {
-        return (NULL);
-    }
-
-	/* Init openGL context on current thread */
-    glfwMakeContextCurrent(win);
-
-	/* 
-	 * Load all openGL function pointer with glad
-	 * gladLoaderLoadGLLoader returns the version of glad
-	*/
-
- 	if (!(version = gladLoaderLoadGL())) {
-        ft_printf_fd(2, "Error: Failed to initialize Glad\n");
-        glfwDestroyWindow(win);
-        glfwTerminate();
-        return (NULL);
-    }
-
-	ft_printf_fd(1, ORANGE"Glad Version %d.%d\n"RESET, GLAD_VERSION_MAJOR(version), GLAD_VERSION_MINOR(version));
-
-	/* Enable multisampling for antialiasing */
-    glEnable(GL_MULTISAMPLE);
-	/* Enable depth testing */
-	glEnable(GL_DEPTH_TEST);
-
-	/* Enable blending */
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-	glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-	glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
-    return (win);
-}
-
 
 void handle_auto_rotate(t_obj_model *model)
 {
@@ -177,11 +122,6 @@ static void glfw_destroy(GLFWwindow *win, t_obj_model *model)
 	free_obj_model(model);
 }
 
-void set_shader_var_float(GLuint shader_id, char *name, float value)
-{
-	GLint loc = glGetUniformLocation(shader_id, name);
-	glUniform1f(loc, value);
-}
 
 int main(int argc, char **argv)
 {
@@ -221,13 +161,8 @@ int main(int argc, char **argv)
 	init_gl_triangle_array(model);
 	ft_printf_fd(1, CYAN"Triangle number: %u\n"RESET, model->tri_size);
 
-	int type = 0;
-
-	brut_load_texture(argv[2], model, &type);
-	// brut_load_texture(TEXTURE_BRICK_PATH, model, &type);
-
+	brut_load_texture(argv[2], model);
 	set_shader_var_float(model->shader_id, "textureIntensity", model->tex_intensity);
-
     main_loop(model, win);
 	glfw_destroy(win, model);
 	return (0);

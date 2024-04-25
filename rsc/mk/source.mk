@@ -5,6 +5,7 @@ SRC_DIR 		=	src
 SUB_SRC_DIR		=	parser\
 					render\
 					glad\
+					window\
 					win_event\
 					builder
 
@@ -17,6 +18,7 @@ SRCS			=	parser/obj_parse.c\
 					parser/parse_utils.c\
 					parser/material_parse.c\
 					parser/parse_bmp.c\
+					window/openGL_glw_init.c\
 					builder/face_handling.c\
 					builder/build_triangle_lst.c\
 					builder/build_obj_model.c\
