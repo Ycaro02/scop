@@ -42,7 +42,8 @@
 		"affine.h": "c",
 		"curve.h": "c",
 		"mat3.h": "c",
-		"vec3-ext.h": "c"
+		"vec3-ext.h": "c",
+		"parse_bmp.h": "c"
 	},
 	"42header.email": "nfour@student.42angouleme.fr",
 	"42header.username": "nfour"

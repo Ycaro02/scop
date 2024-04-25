@@ -6,7 +6,7 @@
 /*   By: nfour <nfour@student.42angouleme.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 15:43:41 by nfour             #+#    #+#             */
-/*   Updated: 2024/04/25 11:32:59 by nfour            ###   ########.fr       */
+/*   Updated: 2024/04/25 14:50:49 by nfour            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@
 
 #define BUFFER_SIZE 1
 #define OUT_OF_UINT32 (uint64_t)(UINT32_MAX + 1)
+#define PACKED_STRUCT __attribute__((packed))
 
 /* Libft */
 char    *get_next_line(int fd); /* Get next line */
@@ -166,11 +167,21 @@ char	*ft_ultoa(unsigned long n);
 void check_struct_size(char *str_test, u32 struct_size, u32 wanted_size);
 
 /* Math */
+
+/**
+ * @brief Return the absolute value between uint32 a and b 
+*/
 uint32_t abs_diff(uint32_t a, uint32_t b);
+
+/**
+ * @brief Return the maximum value between uint32 a and b
+*/
 uint32_t max_uint32(uint32_t a, uint32_t b);
+
+/**
+ * @brief Return the minimum value between uint32 a and b
+*/
 uint32_t min_uint32(uint32_t a, uint32_t b);
-
-
 
 
 /* Use ft_memcpy in mat4 */

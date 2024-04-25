@@ -4,44 +4,32 @@
 #define Y_UNUSED 2U
 #define Z_UNUSED 4U
 
-u32 check_for_unused_field(vec3_f32 *vec, u32 size) {
-	f32 x = 0.0f; 
-	f32 y = 0.0f; 
-	f32 z = 0.0f;
+#define X_FIELD 0
+#define Y_FIELD 1
+#define Z_FIELD 2
 
-	u32 unused = 0;
+FT_INLINE u8 vec_unused_axe(vec3_f32 vec1, vec3_f32 vec2, vec3_f32 vec3, u32 field)
+{
+	return (float_equal(vec1[field], vec2[field]) && float_equal(vec1[field], vec3[field]));
+}
 
-	for (u32 i = 0; i < size; i++) {
-		x = vec[i][0];
-		y = vec[i][1];
-		z = vec[i][2];
-		for (u32 j = 0; j < size; j++) {
-			if (i != j) {
-				if (float_equal(x, vec[j][0]) == TRUE) {
-					set_flag(&unused, X_UNUSED);
-				} else {
-					unset_flag(&unused, X_UNUSED);
-				}
-				if (float_equal(y, vec[j][1]) == TRUE) {
-					set_flag(&unused, Y_UNUSED);
-				} else {
-					unset_flag(&unused, Y_UNUSED);
-				}
-				if (float_equal(z, vec[j][2]) == TRUE) {
-					set_flag(&unused, Z_UNUSED);
-				} else {
-					unset_flag(&unused, Z_UNUSED);
-				}
-				if (unused == 7) {
-					unused = 0; /* same point detected */
-				}
-				ft_printf_fd(1, ORANGE"Vec i [%u] x %f, y %f, z %f -> "RESET, i, vec[i][0], vec[i][1], vec[i][2]);
-				ft_printf_fd(1, PINK"Vec j [%u] x %f, y %f, z %f --> "RESET, j, vec[j][0], vec[j][1], vec[j][2]);
-				ft_printf_fd(1, CYAN"unused %u\n"RESET, unused);
-			}
-		}
+u32 check_unused_field(vec3_f32 *vec)
+{
+	// if (float_equal(vec[0][0], vec[1][0]) && float_equal(vec[0][0], vec[2][0])) {
+	// 	return (X_UNUSED);
+	// } else if (float_equal(vec[0][1], vec[1][1]) && float_equal(vec[0][1], vec[2][1])) {
+	// 	return (Y_UNUSED);
+	// } else if (float_equal(vec[0][2], vec[1][2]) && float_equal(vec[0][2], vec[2][2])) {
+	// 	return (Z_UNUSED);
+	// }
+	if (vec_unused_axe(vec[0], vec[1], vec[2], 0)) {
+		return (X_UNUSED);
+	} else if (vec_unused_axe(vec[0], vec[1], vec[2], 1)) {
+		return (Y_UNUSED);
+	} else if (vec_unused_axe(vec[0], vec[1], vec[2], 2)) {
+		return (Z_UNUSED);
 	}
-	return (unused);
+	return (0);
 }
 
 void calculate_texture_coord(t_obj_face *face, vec2_f32 *texCoords, u32 r) {
@@ -56,16 +44,29 @@ void calculate_texture_coord(t_obj_face *face, vec2_f32 *texCoords, u32 r) {
 		vertex_lst = vertex_lst->next;
 	}
 
-	u32 unused = check_for_unused_field(vertex, face->size);
+	u32 unused = check_unused_field(vertex);
 	ft_printf_fd(1, YELLOW"Final unused %u\n"RESET, unused);
 
-	texCoords[0][0] = vertex[0][2] * r ; texCoords[0][1] = vertex[0][1] * r ;  // Top left
-	texCoords[1][0] = vertex[1][2] * r ; texCoords[1][1] = vertex[1][1] * r ;  // Top right
-	texCoords[2][0] = vertex[2][2] * r ; texCoords[2][1] = vertex[2][1] * r ;  // Bottom
+	// u32 first_val = 2; /* z */
+	u32 first_val = 0;
+	if (unused == X_UNUSED) {
+		first_val = 2;
+	} else if (unused == Z_UNUSED) {
+		first_val = 0;
+	}
+
+	u32 second_val = 1; /* y */
+	if (unused == Y_UNUSED) {
+		second_val = 2;
+	}
+
+	texCoords[0][0] = vertex[0][first_val] * r ; texCoords[0][1] = vertex[0][second_val] * r ;  // Top left
+	texCoords[1][0] = vertex[1][first_val] * r ; texCoords[1][1] = vertex[1][second_val] * r ;  // Top right
+	texCoords[2][0] = vertex[2][first_val] * r ; texCoords[2][1] = vertex[2][second_val] * r ;  // Bottom
 	if (face->size != 3) {
-		texCoords[3][0] = vertex[3][2] * r ; texCoords[3][1] = vertex[3][1] * r ;  // Top left
-		texCoords[4][0] = vertex[4][2] * r ; texCoords[4][1] = vertex[4][1] * r ;  // Bottom
-		texCoords[5][0] = vertex[5][2] * r ; texCoords[5][1] = vertex[5][1] * r ;  // Bottom
+		texCoords[3][0] = vertex[3][first_val] * r ; texCoords[3][1] = vertex[3][second_val] * r ;  // Top left
+		texCoords[4][0] = vertex[4][first_val] * r ; texCoords[4][1] = vertex[4][second_val] * r ;  // Bottom
+		texCoords[5][0] = vertex[5][first_val] * r ; texCoords[5][1] = vertex[5][second_val] * r ;  // Bottom
 	}
 }
 
