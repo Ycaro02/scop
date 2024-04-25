@@ -176,13 +176,18 @@ typedef struct s_obj_model {
 	vec2_f32		*texture_coord;	/* texture coordinates associated with a vertex */
 	t_material_file	*material;		/* material file structure */
 	t_list			*obj_face;		/* list of obj face structure */
+	s8				texture_mod;	/* texture mod, 1 for true, otherwise 0 */
+	f32				tex_intensity;	/* texture intensity */
 }	t_obj_model;
-
 
 
 /* Key repeat, key_action->repeat field */
 #define SINGLE_PRESS	0				/* key action will be done only once */
 #define REPEAT			1				/* key action will be done until key release */
+
+
+/* Texture color scale factor */
+#define TEXTURE_COLOR_SCALE_FACTOR 0.0075f
 
 
 /* Key action structure */
@@ -208,7 +213,7 @@ enum model_status {
 // u8			smooth;		/* The smoothing group state. 'on' to activate, 'off' to deactivate. 1 for true, otherwise 0*/
 
 void			get_obj_center(t_obj_model* m, vec3_f32 center);
-void			set_shader_var_int(GLuint shader_id, char *name, int value);
+void set_shader_var_float(GLuint shader_id, char *name, float value);
 
 /* parser/material_parse.c */
 t_material_file *parse_mtl_file(char *path);

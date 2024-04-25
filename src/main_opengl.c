@@ -181,10 +181,10 @@ static void glfw_destroy(GLFWwindow *win, t_obj_model *model)
 	free_obj_model(model);
 }
 
-void set_shader_var_int(GLuint shader_id, char *name, int value)
+void set_shader_var_float(GLuint shader_id, char *name, float value)
 {
 	GLint loc = glGetUniformLocation(shader_id, name);
-	glUniform1i(loc, value);
+	glUniform1f(loc, value);
 }
 
 int main(int argc, char **argv)
@@ -221,6 +221,7 @@ int main(int argc, char **argv)
 	model->status = STATUS_ROTATE_Y;
 	model->win_ptr = win;
 	model->shader_id = load_shader(model);
+	model->tex_intensity = 0.0f;
 	init_gl_triangle_array(model);
 	ft_printf_fd(1, CYAN"Triangle number: %u\n"RESET, model->tri_size);
 
@@ -229,7 +230,7 @@ int main(int argc, char **argv)
 	brut_load_texture(argv[2], model, &type);
 	// brut_load_texture(TEXTURE_BRICK_PATH, model, &type);
 
-	set_shader_var_int(model->shader_id, "activeTexture", 0);
+	set_shader_var_float(model->shader_id, "textureIntensity", model->tex_intensity);
 
     main_loop(model, win);
 	glfw_destroy(win, model);

@@ -5,11 +5,25 @@ void act_escape(t_obj_model *model) {
     glfwSetWindowShouldClose(model->win_ptr, GL_TRUE);
 }
 
+void act_process_transition(t_obj_model *model) {
+	if (float_greater(model->tex_intensity, 0.0f) && float_less(model->tex_intensity, 1.0f)) {
+		model->tex_intensity += (TEXTURE_COLOR_SCALE_FACTOR * model->texture_mod);
+		ft_printf_fd(1, "Texture intensity: %f\n", model->tex_intensity);
+		set_shader_var_float(model->shader_id, "textureIntensity", model->tex_intensity);
+	}
+}
+
+
 /* Change texture color mod : N */
 void act_switch_texture(t_obj_model *model) {
-	static int texture_mod = 0;
-	texture_mod = !texture_mod;
-	set_shader_var_int(model->shader_id, "activeTexture", texture_mod);
+	// model->texture_mod = !(model->texture_mod);
+	if (model->texture_mod == 1) {
+		model->texture_mod = -1;
+	} else {
+		model->texture_mod = 1;
+	}
+	model->tex_intensity += (0.01f * model->texture_mod);
+
 }
 
 /* Zoom : W */
@@ -152,4 +166,6 @@ void handle_input(t_obj_model *model)
 		}
         previous_state[key_actions[i].key] = state;
 	}
+
+	act_process_transition(model);
 }

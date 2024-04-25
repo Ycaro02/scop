@@ -6,7 +6,7 @@
 /*   By: nfour <nfour@student.42angouleme.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 12:15:06 by nfour             #+#    #+#             */
-/*   Updated: 2024/04/18 12:15:24 by nfour            ###   ########.fr       */
+/*   Updated: 2024/04/25 18:37:45 by nfour            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,22 @@
 /* Check float eqauel without epsilon */
 FT_INLINE int8_t float_equal(float a, float b) {
 	return (fabs(a - b) < FT_EPSILON);
+}
+
+FT_INLINE s8 float_greater(float a, float b) {
+	return (a - b > FT_EPSILON);
+}
+
+FT_INLINE s8 float_less(float a, float b) {
+	return (a - b < -FT_EPSILON);
+}
+
+FT_INLINE s8 float_greater_equal(float a, float b) {
+	return (a - b > -FT_EPSILON);
+}
+
+FT_INLINE s8 float_less_equal(float a, float b) {
+	return (a - b < FT_EPSILON);
 }
 
 /* Convert degres to radian  */
