@@ -131,7 +131,6 @@ typedef struct s_material_file {
 	u32				illum;			/* Illumination model */
 } t_material_file;
 
-
 /* Camera structure */
 typedef struct t_camera {
     vec3_f32		position;			/* position vector */
@@ -169,9 +168,10 @@ typedef struct s_obj_model {
 }	t_obj_model;
 
 
+
 /* Key repeat, key_action->repeat field */
-#define SINGLE_PRESS	0			/* key action will be done only once */
-#define REPEAT			1			/* key action will be done until key release */
+#define SINGLE_PRESS	0				/* key action will be done only once */
+#define REPEAT			1				/* key action will be done until key release */
 
 
 /* Key action structure */
@@ -196,8 +196,8 @@ enum model_status {
 // vec3_f32	*vn;			/* normal array */
 // u8			smooth;		/* The smoothing group state. 'on' to activate, 'off' to deactivate. 1 for true, otherwise 0*/
 
-void get_obj_center(t_obj_model* m, vec3_f32 center);
-void set_shader_var_int(GLuint shader_id, char *name, int value);
+void			get_obj_center(t_obj_model* m, vec3_f32 center);
+void			set_shader_var_int(GLuint shader_id, char *name, int value);
 
 /* parser/material_parse.c */
 t_material_file *parse_mtl_file(char *path);

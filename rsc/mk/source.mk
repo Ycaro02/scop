@@ -16,6 +16,7 @@ SRCS			=	parser/obj_parse.c\
 					parser/parse_line.c\
 					parser/parse_utils.c\
 					parser/material_parse.c\
+					parser/parse_bmp.c\
 					builder/face_handling.c\
 					builder/build_triangle_lst.c\
 					builder/build_obj_model.c\
