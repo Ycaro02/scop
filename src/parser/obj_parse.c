@@ -139,7 +139,7 @@ t_obj_model *parse_obj_file(char *path)
 		return (0);
 	}
 
-	/* Ugly hard first line */
+	/* Add origin vertex index 0 */
 	ft_lstadd_front(&obj.vertex, ft_lstnew(vec3_f32_new(0.0f, 0.0f, 0.0f)));
 
 	for (u32 i = 0; file[i]; ++i) {

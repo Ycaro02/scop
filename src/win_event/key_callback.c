@@ -8,7 +8,7 @@ void act_escape(t_obj_model *model) {
 void act_process_transition(t_obj_model *model) {
 	if (float_greater(model->tex_intensity, 0.0f) && float_less(model->tex_intensity, 1.0f)) {
 		model->tex_intensity += (TEXTURE_COLOR_SCALE_FACTOR * model->texture_mod);
-		ft_printf_fd(1, "Texture intensity: %f\n", model->tex_intensity);
+		// ft_printf_fd(1, "Texture intensity: %f\n", model->tex_intensity);
 		set_shader_var_float(model->shader_id, "textureIntensity", model->tex_intensity);
 	}
 }

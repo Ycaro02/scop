@@ -1,10 +1,6 @@
 #include "../include/scop.h"
 #include "parser/parse_bmp.h"
 
-/* TO REMOVE need to implement my own parser */
-// #define STB_IMAGE_IMPLEMENTATION
-// #include "../../lib/stb/stb_image.h"
-
 GLuint init_openGL_texture(t_obj_model* model, u8 *data, u32 width, u32 height, u16 texture_type)
 {
 	GLuint texture;
