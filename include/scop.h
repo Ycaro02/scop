@@ -262,7 +262,6 @@ void			move_camera_forward(t_camera* camera, float distance);
 void			move_camera_backward(t_camera* camera, float distance);
 void 			rotate_camera(t_camera* camera, float angle, vec3_f32 axis);
 void 			reset_camera(t_obj_model *model);
-void			rotate_object(t_obj_model *model, vec3_f32 rotate_vec, float angle, GLuint shader_id);
 void			move_camera_up(t_camera* camera, float distance) ;
 void			rotate_object_around_center(t_obj_model* m, vec3_f32 rotate_vec, float angle, GLuint shader_id);
 

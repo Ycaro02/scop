@@ -32,11 +32,6 @@ t_camera create_camera(float fov, float aspect_ratio, float near, float far)
 {
     t_camera camera;
 
-    /* Initialize position, target and up vector */
-	// CREATE_VEC3(0.0f, 0.0f, 3.0f, camera.position);
-	// CREATE_VEC3(0.0f, 0.0f, -1.0f, camera.target);
-	// CREATE_VEC3(0.0f, 1.0f, 0.0f, camera.up);
-
     /* init camera position */
     CREATE_VEC3(23.756206f, 0.00000f, 2.155274f, camera.position);
     /* init camera target */
@@ -154,27 +149,7 @@ void reset_camera(t_obj_model *model)
 	update_view_mat4(camera->position, camera->target, camera->up, camera->view);
 }
 
-
-/**
- * @brief Rotate object
- * @param camera camera context
- * @param rotate_vec vector used to rotate
- * @param angle angle used to rotate
- * @param shader_id shader id for update model matrix
-*/
-void rotate_object(t_obj_model *model, vec3_f32 rotate_vec, float angle, GLuint shader_id) 
-{
-    mat4_f32 rotation;
-
-    /* Create rotation matrix */
-    mat4_rotate(rotation, deg_to_rad(angle), rotate_vec);
-
-    /* Multiply model matrix by rotation matrix */
-    mat4_mult(rotation, model->rotation, model->rotation);
-
-	/* Update shader model matrix */
-	set_shader_var_mat4(shader_id, "model", model->rotation);
-}
+/* GO to obj rotate file --> */
 
 /**
  * @brief Get object center
