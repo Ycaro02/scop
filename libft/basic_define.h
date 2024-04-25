@@ -6,7 +6,7 @@
 /*   By: nfour <nfour@student.42angouleme.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 17:03:53 by nfour             #+#    #+#             */
-/*   Updated: 2024/04/18 12:19:04 by nfour            ###   ########.fr       */
+/*   Updated: 2024/04/25 17:42:33 by nfour            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,10 +35,10 @@
 #define		PINK    			"\x1b[38;5;200m"
 #define		ORANGE  			"\x1b[38;5;208m"
 #define		RESET   			"\x1b[0m"
-#define		FILL_GREEN		"\033[7;32m"
-#define		FILL_YELLOW		"\033[7;33m"
+#define		FILL_GREEN			"\033[7;32m"
+#define		FILL_YELLOW			"\033[7;33m"
 #define		FILL_RED			"\033[7;31m"
-#define		FILL_YELBLACK	"\033[40;33m"
+#define		FILL_YELBLACK		"\033[40;33m"
 
 /* Inline function */
 #define		FT_INLINE   static inline __attribute((always_inline))

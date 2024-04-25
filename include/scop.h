@@ -39,6 +39,17 @@
 /* Triangle data size */
 #define TRIANGLE_DSIZE(model) (u32)(sizeof(vec3_u32) * model->tri_size)
 
+/* Texture handle define */
+
+#define X_UNUSED 1U
+#define Y_UNUSED 2U
+#define Z_UNUSED 4U
+
+#define X_FIELD 0U
+#define Y_FIELD 1U
+#define Z_FIELD 2U
+
+
 /* Enum for obj token accepted */
 enum e_obj_token {
 	ENUM_UNKNOWN=0,
