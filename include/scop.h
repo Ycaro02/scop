@@ -178,6 +178,9 @@ typedef struct s_obj_model {
 	t_list			*obj_face;		/* list of obj face structure */
 	s8				texture_mod;	/* texture mod, 1 for true, otherwise 0 */
 	f32				tex_intensity;	/* texture intensity */
+	vec3_f32		center;			/* model center */
+	vec3_f32		min;			/* model min */
+	vec3_f32		max;			/* model max */
 }	t_obj_model;
 
 

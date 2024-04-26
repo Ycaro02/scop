@@ -42,7 +42,21 @@ u8 get_most_unsignifiant_field(vec3_f32 *vec)
 	return (field);
 }
 
-void calculate_texture_coord(t_obj_face *face, vec2_f32 *text_v, u32 r) {
+#define TOP_CUT 0.5f
+
+s8 is_top_bot_face(vec3_f32 *vertex, vec3_f32 min, vec3_f32 max)
+{
+    float threshold = 0.150000;  // Adjust this value as needed
+    for (u32 i = 0; i < 3; i++) {  // Assuming the face is a triangle
+        if (fabs(vertex[i][1] - max[1]) < threshold || fabs(vertex[i][1] - (max[1] - TOP_CUT)) < threshold  ) {
+            return (TRUE);
+        } else if (fabs(vertex[i][1] - min[1]) < threshold) {
+            return (TRUE);
+        }
+    }
+    return (FALSE);
+}
+void calculate_texture_coord(t_obj_model *model, t_obj_face *face, vec2_f32 *text_v, u32 r) {
 	t_list *vertex_lst = face->vertex;
     vec3_f32 vertex[6];
 
@@ -68,7 +82,7 @@ void calculate_texture_coord(t_obj_face *face, vec2_f32 *text_v, u32 r) {
 		second_val = Z_FIELD;
 	}
 
-	if (unused_axis == 0 && face->size > 3) {
+	if ((unused_axis == 0 && face->size > 3) || is_top_bot_face(vertex, model->min, model->max)) {
 		second_val = get_most_unsignifiant_field(vertex); /* Need to choice for y or z */
 	}
 
@@ -95,7 +109,7 @@ u8 build_material_texture(t_obj_model *model)
 	u32 i = 1;
     for (t_list *face_lst = model->obj_face; face_lst; face_lst = face_lst->next) {
 		t_obj_face *face_node = face_lst->content;
-        calculate_texture_coord(face_node, &model->texture_coord[i], 1);
+        calculate_texture_coord(model, face_node, &model->texture_coord[i], 1);
 		i += face_node->size;
     }
 	

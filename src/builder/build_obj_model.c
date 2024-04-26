@@ -38,8 +38,6 @@ void print_vertex_data(t_obj_model *model) {
     free(bufferData);
 }
 
-
-
 /**
  * @brief Free obj model
  * @param model obj model to free
@@ -68,6 +66,36 @@ void free_obj_model(t_obj_model *model)
 		free(model->material);
 	}
 	free(model);
+}
+
+void get_min_vertex(t_obj_model *model, vec3_f32 min)
+{
+	for (u32 i = 0; i < model->v_size; i++) {
+		if (model->vertex[i][0] < min[0]) {
+			min[0] = model->vertex[i][0];
+		}
+		if (model->vertex[i][1] < min[1]) {
+			min[1] = model->vertex[i][1];
+		}
+		if (model->vertex[i][2] < min[2]) {
+			min[2] = model->vertex[i][2];
+		}
+	}
+}
+
+void get_max_vertex(t_obj_model *model, vec3_f32 max)
+{
+	for (u32 i = 0; i < model->v_size; i++) {
+		if (model->vertex[i][0] > max[0]) {
+			max[0] = model->vertex[i][0];
+		}
+		if (model->vertex[i][1] > max[1]) {
+			max[1] = model->vertex[i][1];
+		}
+		if (model->vertex[i][2] > max[2]) {
+			max[2] = model->vertex[i][2];
+		}
+	}
 }
 
 /**
@@ -118,6 +146,15 @@ t_obj_model *init_obj_model(t_obj_file *obj_file)
 
 	/* Need to build face data structure contain all new vertex/index  */
 	model->obj_face = get_all_face_vertex(obj_file, model);
+
+	/* Compute center/min/max for obj vertex */
+	get_min_vertex(model, model->min);
+	get_max_vertex(model, model->max);
+	get_obj_center(model, model->center);
+
+	ft_printf_fd(1, CYAN"Center: x %f, y %f, z %f\n"RESET, model->center[0], model->center[1], model->center[2]);
+	ft_printf_fd(1, ORANGE"Min: x %f, y %f, z %f\n"RESET, model->min[0], model->min[1], model->min[2]);
+	ft_printf_fd(1, RED"Max: x %f, y %f, z %f\n"RESET, model->max[0], model->max[1], model->max[2]);
 
 
 	ft_lstclear(&idx_lst, free);
