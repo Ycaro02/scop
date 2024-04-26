@@ -133,6 +133,7 @@ u8 *parse_bmp_file(char* path, int *width, int *height, int *type)
 	/* Alloc the data unsigned char array */
     u8 *image = malloc(info.width * info.height * data_size);
     if (!image) {
+		munmap(file, file_size);
         return (NULL);
     }
 
@@ -151,5 +152,6 @@ u8 *parse_bmp_file(char* path, int *width, int *height, int *type)
             read_ptr += data_size;
         }
     }
+	munmap(file, file_size);
     return (image);
 }

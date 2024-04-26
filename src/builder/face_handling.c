@@ -58,6 +58,16 @@ FT_INLINE void increment_tri_idx(u32 *tri_idx, u32 *face_size) {
 	*face_size += 3;
 }
 
+void free_obj_face_lst(t_list **face_lst)
+{
+	for (t_list *current = *face_lst; current; current = current->next) {
+		t_obj_face *face = current->content;
+		ft_lstclear(&face->vertex, free);
+		ft_lstclear(&face->idx, free);
+	}
+	ft_lstclear(face_lst, free);
+}
+
 t_list *get_all_face_vertex(t_obj_file *file, t_obj_model *model)
 {
 	t_list 		*face_lst = NULL;

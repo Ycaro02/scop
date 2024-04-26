@@ -77,13 +77,16 @@ static u8  material_line_by_token(t_material_file *file, char **line, u16 token)
 
 t_material_file *parse_mtl_file(char *path)
 {
-	char *valid_tokens[] = MATERIAL_TOKEN_ARRAY;
-	t_material_file *file = ft_calloc(sizeof(t_material_file), 1);
-	char **file_content = NULL;
-	uint16_t token = 0;
+	char			*valid_tokens[] = MATERIAL_TOKEN_ARRAY; /* Array of valid token for obj file */
+	char			**file_content = NULL; /* Array of string from file */
+	t_material_file	*file = NULL;	/* Material file structure */
+	uint16_t		token = 0;		/* Token value */
 
 	if ((file_content = sstring_load_file(path)) == NULL) {
-		return (0);
+		return (NULL);
+	} else if ((file = ft_calloc(sizeof(t_material_file), 1)) == NULL) {
+		ft_printf_fd(2, RED"Error: Malloc failed\n"RESET);
+		return (NULL);
 	}
 
 	for (u32 i = 0; file_content[i]; ++i) {
@@ -98,6 +101,7 @@ t_material_file *parse_mtl_file(char *path)
 			free_double_char(trim);
 		}
 	}
+	free_double_char(file_content);
 	return (file);
 }
 

@@ -55,6 +55,18 @@ void free_obj_model(t_obj_model *model)
 	if (model->colors) {
 		free(model->colors);
 	}
+	if (model->texture_coord) {
+		free(model->texture_coord);
+	}
+	if (model->obj_face) {
+		free_obj_face_lst(&model->obj_face);
+	}
+	if (model->material) {
+		if (model->material->newmtl) {
+			free(model->material->newmtl);
+		}
+		free(model->material);
+	}
 	free(model);
 }
 
@@ -111,6 +123,7 @@ t_obj_model *init_obj_model(t_obj_file *obj_file)
 	// model->vertex = list_to_array(test->, vertex_size, sizeof(vec3_f32));
 
 
+	ft_lstclear(&idx_lst, free);
 	ft_lstclear(&vertex_lst, free);
 	ft_lstclear(&triangle_lst, free);
 	free_obj_file(obj_file);

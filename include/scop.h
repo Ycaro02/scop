@@ -212,6 +212,7 @@ enum model_status {
 // vec3_f32	*vn;			/* normal array */
 // u8			smooth;		/* The smoothing group state. 'on' to activate, 'off' to deactivate. 1 for true, otherwise 0*/
 
+
 void			get_obj_center(t_obj_model* m, vec3_f32 center);
 void set_shader_var_float(GLuint shader_id, char *name, float value);
 
@@ -253,6 +254,7 @@ t_list 			*get_all_triangle_vertex(t_obj_model *model, t_list **idx_lst_ptr);
 
 /* parser/face_handling.c */
 t_list			*get_all_face_vertex(t_obj_file *file, t_obj_model *model);
+void			free_obj_face_lst(t_list **face_lst);
 
 /* render/camera */
 t_camera		create_camera(float fov, float aspect_ratio, float near, float far);

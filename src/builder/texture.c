@@ -55,7 +55,7 @@ void calculate_texture_coord(t_obj_face *face, vec2_f32 *text_v, u32 r) {
 	}
 
 	u8 unused_axis = check_unused_field(vertex);
-	ft_printf_fd(1, YELLOW"Final unused_axis %u\n"RESET, unused_axis);
+	// ft_printf_fd(1, YELLOW"Final unused_axis %u\n"RESET, unused_axis);
 
 	// u32 first_val = 2; /* z */
 	u8 first_val = X_FIELD;
@@ -68,7 +68,7 @@ void calculate_texture_coord(t_obj_face *face, vec2_f32 *text_v, u32 r) {
 		second_val = Z_FIELD;
 	}
 
-	if (unused_axis == 0) {
+	if (unused_axis == 0 && face->size > 3) {
 		second_val = get_most_unsignifiant_field(vertex); /* Need to choice for y or z */
 	}
 

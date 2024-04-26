@@ -35,7 +35,7 @@ GLuint init_openGL_texture(t_obj_model* model, u8 *data, u32 width, u32 height, 
  * @param path path to the texture file
  * @return u8* return the texture data
 */
-u8 *brut_load_texture(char *path, t_obj_model *model)
+s8 brut_load_texture(char *path, t_obj_model *model)
 {
 	int width, height, type;
 	// u8 *data = stbi_load(path, &width, &height, type, 0);
@@ -44,7 +44,7 @@ u8 *brut_load_texture(char *path, t_obj_model *model)
 
 	if (!data) {
 		ft_printf_fd(2, RED"Error: Failed to load texture\n"RESET);
-		return (NULL);
+		return (FALSE);
 	}
 	// ft_printf_fd(1, "Texture loaded: %s\n", path);
 	// ft_printf_fd(1, PINK"Width: %d, Height: %d, Channels: %d\n"RESET, width, height, *type);
@@ -52,9 +52,14 @@ u8 *brut_load_texture(char *path, t_obj_model *model)
 		type = GL_RGB;
 	} else if (type == 4) {
 		type = GL_RGBA;
+	} else {
+		ft_printf_fd(2, RED"Error: Unknow texture type only RGB or RGBA supported\n"RESET);
+		free(data);
+		return (FALSE);
 	}
 	init_openGL_texture(model, data, width, height, type);
-	return (data);
+	free(data);
+	return (TRUE);
 }
 
 void handle_auto_rotate(t_obj_model *model)
