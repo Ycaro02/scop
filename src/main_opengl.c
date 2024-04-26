@@ -166,7 +166,11 @@ int main(int argc, char **argv)
 	init_gl_triangle_array(model);
 	ft_printf_fd(1, CYAN"Triangle number: %u\n"RESET, model->tri_size);
 
-	brut_load_texture(argv[2], model);
+	if (argc == 3) {
+		brut_load_texture(argv[2], model);
+	} else {
+		brut_load_texture(TEXTURE_BRICK_PATH, model);
+	}
 	set_shader_var_float(model->shader_id, "textureIntensity", model->tex_intensity);
     main_loop(model, win);
 	glfw_destroy(win, model);

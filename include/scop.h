@@ -17,8 +17,8 @@
 /* Fragment shader source path */
 #define FRAGMENT_SHADER_PATH "rsc/shaders/fragment_shader.glsl"
 
-// #define TEXTURE_MANDATORY_PATH "rsc/texture/kitten.bmp"
-// #define TEXTURE_BRICK_PATH "rsc/texture/brick.bmp"
+#define TEXTURE_MANDATORY_PATH "rsc/texture/kitten.bmp"
+#define TEXTURE_BRICK_PATH "rsc/texture/brick.bmp"
 
 #define MODEL_PATH "rsc/model/"
 

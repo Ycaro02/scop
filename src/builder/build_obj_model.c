@@ -118,9 +118,6 @@ t_obj_model *init_obj_model(t_obj_file *obj_file)
 
 	/* Need to build face data structure contain all new vertex/index  */
 	model->obj_face = get_all_face_vertex(obj_file, model);
-	// (void)test;
-	// free(model->vertex);
-	// model->vertex = list_to_array(test->, vertex_size, sizeof(vec3_f32));
 
 
 	ft_lstclear(&idx_lst, free);
