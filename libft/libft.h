@@ -6,7 +6,7 @@
 /*   By: nfour <nfour@student.42angouleme.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 15:43:41 by nfour             #+#    #+#             */
-/*   Updated: 2024/04/25 14:50:49 by nfour            ###   ########.fr       */
+/*   Updated: 2024/04/25 18:46:22 by nfour            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,6 +136,10 @@ uint64_t array_to_uint32(const char *nptr);
 */
 int		ft_atoi(const char *str);
 
+/*-+-+-+-+-+-+-+-+-+-+-+-+-+*/
+/*-+-+ Number to string +-+*/
+/*-+-+-+-+-+-+-+-+-+-+-+-+-+*/
+
 /**
  * @brief Convert int to an array
  * @param n number to convert\
@@ -186,9 +190,5 @@ uint32_t min_uint32(uint32_t a, uint32_t b);
 
 /* Use ft_memcpy in mat4 */
 #include "math/ft_math.h"
-
-// #include "math/vector_template.h"
-// #include "math/mat4.h"
-
 
 #endif

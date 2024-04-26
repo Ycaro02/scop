@@ -2,7 +2,7 @@
 
 
 FT_INLINE u8 vec_unused_axe(vec3_f32 vec1, vec3_f32 vec2, vec3_f32 vec3, u32 field) {
-	return (float_equal(vec1[field], vec2[field]) && float_equal(vec1[field], vec3[field]));
+	return (float_equal(vec1[field], vec2[field]) && float_equal(vec1[field], vec3[field]) && float_equal(vec2[field], vec3[field]));
 }
 
 u32 check_unused_field(vec3_f32 *vec)
@@ -15,6 +15,29 @@ u32 check_unused_field(vec3_f32 *vec)
 		return (Z_UNUSED);
 	}
 	return (0);
+}
+
+f32 count_abs_field(vec3_f32 *vec, u32 field)
+{
+	f32 count = 0;
+	if (!float_equal(vec[0][field], vec[1][field])) {
+		count += fabs(vec[0][field] - vec[1][field]);
+	} if (!float_equal(vec[0][field], vec[2][field])) {
+		count += fabs(vec[0][field] - vec[2][field]);
+	}
+	return (count);
+}
+
+u32 get_most_unsignifiant_field(vec3_f32 *vec)
+{
+	u32 field = Y_FIELD;
+	f32 y_count = count_abs_field(vec, Y_FIELD);
+	f32 z_count = count_abs_field(vec, Z_FIELD);
+
+	if (y_count < z_count) {
+		field = Z_FIELD;
+	} 
+	return (field);
 }
 
 void calculate_texture_coord(t_obj_face *face, vec2_f32 *texCoords, u32 r) {
@@ -43,6 +66,11 @@ void calculate_texture_coord(t_obj_face *face, vec2_f32 *texCoords, u32 r) {
 	u32 second_val = 1; /* y */
 	if (unused_axis == Y_UNUSED) {
 		second_val = 2;
+	}
+
+	if (unused_axis == 0) {
+		first_val = 0; /* Always keep x */
+		second_val = get_most_unsignifiant_field(vertex); /* Need to choice for y or z */
 	}
 
 	texCoords[0][0] = vertex[0][first_val] * r ; texCoords[0][1] = vertex[0][second_val] * r ;  // Top left

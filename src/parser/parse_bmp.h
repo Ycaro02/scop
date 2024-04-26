@@ -6,7 +6,6 @@
 #include <sys/mman.h>   /* mmap header */
 #include <sys/stat.h>   /* fstat */
 
-
 /* Mandatory to pack this, 14 bytes always rounded too 16 by compiler */
 typedef struct PACKED_STRUCT s_bmp_hdr {
     u16 type;           			/* file type. this should be 'BM'. */
