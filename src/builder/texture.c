@@ -5,7 +5,7 @@ FT_INLINE u8 vec_unused_axe(vec3_f32 vec1, vec3_f32 vec2, vec3_f32 vec3, u32 fie
 	return (float_equal(vec1[field], vec2[field]) && float_equal(vec1[field], vec3[field]) && float_equal(vec2[field], vec3[field]));
 }
 
-u32 check_unused_field(vec3_f32 *vec)
+u8 check_unused_field(vec3_f32 *vec)
 {
 	if (vec_unused_axe(vec[0], vec[1], vec[2], X_FIELD)) {
 		return (X_UNUSED);
@@ -30,7 +30,7 @@ f32 count_abs_field(vec3_f32 *vec, u32 field)
 	return (count);
 }
 
-u32 get_most_unsignifiant_field(vec3_f32 *vec)
+u8 get_most_unsignifiant_field(vec3_f32 *vec)
 {
 	u32 field = Y_FIELD;
 	f32 y_count = count_abs_field(vec, Y_FIELD);
@@ -54,16 +54,16 @@ void calculate_texture_coord(t_obj_face *face, vec2_f32 *text_v, u32 r) {
 		vertex_lst = vertex_lst->next;
 	}
 
-	u32 unused_axis = check_unused_field(vertex);
+	u8 unused_axis = check_unused_field(vertex);
 	ft_printf_fd(1, YELLOW"Final unused_axis %u\n"RESET, unused_axis);
 
 	// u32 first_val = 2; /* z */
-	u32 first_val = X_FIELD;
+	u8 first_val = X_FIELD;
 	if (unused_axis == X_UNUSED) {
 		first_val = Z_FIELD;
 	} 
 
-	u32 second_val = Y_FIELD; /* y */
+	u8 second_val = Y_FIELD; /* y */
 	if (unused_axis == Y_UNUSED) {
 		second_val = Z_FIELD;
 	}
