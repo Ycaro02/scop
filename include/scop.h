@@ -23,8 +23,8 @@
 #define MODEL_PATH "rsc/model/"
 
 /* Window size */
-#define SCREEN_WIDTH 700
-#define SCREEN_HEIGHT 700
+#define SCREEN_WIDTH 1080
+#define SCREEN_HEIGHT 1080
 
 #define CAM_ZOOM 0.3f				/* Zoom/Unzoom value */
 #define CAM_MOVE_HORIZONTAL 1.0f	/* Move camera horizontal value */

@@ -24,6 +24,8 @@ f32 count_abs_field(vec3_f32 *vec, u32 field)
 		count += fabs(vec[0][field] - vec[1][field]);
 	} if (!float_equal(vec[0][field], vec[2][field])) {
 		count += fabs(vec[0][field] - vec[2][field]);
+	} if (!float_equal(vec[1][field], vec[2][field])) {
+		count += fabs(vec[1][field] - vec[2][field]);
 	}
 	return (count);
 }
@@ -40,7 +42,7 @@ u32 get_most_unsignifiant_field(vec3_f32 *vec)
 	return (field);
 }
 
-void calculate_texture_coord(t_obj_face *face, vec2_f32 *texCoords, u32 r) {
+void calculate_texture_coord(t_obj_face *face, vec2_f32 *text_v, u32 r) {
 	t_list *vertex_lst = face->vertex;
     vec3_f32 vertex[6];
 
@@ -56,30 +58,27 @@ void calculate_texture_coord(t_obj_face *face, vec2_f32 *texCoords, u32 r) {
 	ft_printf_fd(1, YELLOW"Final unused_axis %u\n"RESET, unused_axis);
 
 	// u32 first_val = 2; /* z */
-	u32 first_val = 0;
+	u32 first_val = X_FIELD;
 	if (unused_axis == X_UNUSED) {
-		first_val = 2;
-	} else if (unused_axis == Z_UNUSED) {
-		first_val = 0;
-	}
+		first_val = Z_FIELD;
+	} 
 
-	u32 second_val = 1; /* y */
+	u32 second_val = Y_FIELD; /* y */
 	if (unused_axis == Y_UNUSED) {
-		second_val = 2;
+		second_val = Z_FIELD;
 	}
 
 	if (unused_axis == 0) {
-		first_val = 0; /* Always keep x */
 		second_val = get_most_unsignifiant_field(vertex); /* Need to choice for y or z */
 	}
 
-	texCoords[0][0] = vertex[0][first_val] * r ; texCoords[0][1] = vertex[0][second_val] * r ;  // Top left
-	texCoords[1][0] = vertex[1][first_val] * r ; texCoords[1][1] = vertex[1][second_val] * r ;  // Top right
-	texCoords[2][0] = vertex[2][first_val] * r ; texCoords[2][1] = vertex[2][second_val] * r ;  // Bottom
+	text_v[0][0] = vertex[0][first_val] * r ; text_v[0][1] = vertex[0][second_val] * r ;  // Top left
+	text_v[1][0] = vertex[1][first_val] * r ; text_v[1][1] = vertex[1][second_val] * r ;  // Top right
+	text_v[2][0] = vertex[2][first_val] * r ; text_v[2][1] = vertex[2][second_val] * r ;  // Bottom
 	if (face->size != 3) {
-		texCoords[3][0] = vertex[3][first_val] * r ; texCoords[3][1] = vertex[3][second_val] * r ;  // Top left
-		texCoords[4][0] = vertex[4][first_val] * r ; texCoords[4][1] = vertex[4][second_val] * r ;  // Bottom
-		texCoords[5][0] = vertex[5][first_val] * r ; texCoords[5][1] = vertex[5][second_val] * r ;  // Bottom
+		text_v[3][0] = vertex[3][first_val] * r ; text_v[3][1] = vertex[3][second_val] * r ;  // Top left
+		text_v[4][0] = vertex[4][first_val] * r ; text_v[4][1] = vertex[4][second_val] * r ;  // Bottom
+		text_v[5][0] = vertex[5][first_val] * r ; text_v[5][1] = vertex[5][second_val] * r ;  // Bottom
 	}
 }
 

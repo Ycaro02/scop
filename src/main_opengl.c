@@ -144,7 +144,7 @@ int main(int argc, char **argv)
 	mat4_identity(model->rotation);
 
 	/* Init camera structure */
-	model->cam = create_camera(45.0f, (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, 0.1f, 100.0f);
+	model->cam = create_camera(70.0f, (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, 0.1f, 100.0f);
 
     win = init_openGL_context();
     if (!win) {
