@@ -22,7 +22,7 @@ void act_switch_texture(t_obj_model *model) {
 	} else {
 		model->texture_mod = 1;
 	}
-	model->tex_intensity += (0.01f * model->texture_mod);
+	model->tex_intensity += (TEXTURE_COLOR_SCALE_FACTOR * model->texture_mod);
 
 }
 
@@ -158,7 +158,7 @@ void handle_input(t_obj_model *model)
 
 		if (!key_actions[i].repeat) { /* if not repeat key */ 
 			if (state == GLFW_PRESS \
-				&& previous_state[key_actions[i].key] != (u8)GLFW_PRESS) { /* and key pressed and previous state not key_pressed */
+				&& previous_state[key_actions[i].key] != (u8)GLFW_PRESS) { /* key pressed and previous state not key_pressed */
 				key_actions[i].action(model);
 			}
 		} else if (state == GLFW_PRESS) { /* If repeat and key pressed */

@@ -165,22 +165,22 @@ typedef struct s_obj_model {
 	u32				v_size;			/* vertex size */
 	vec3_u32		*tri_face;		/* face array, give to openGL context, each vector is a triangle, each point represent index of vertex to link */
 	u32				tri_size;		/* face size */
+	t_list			*obj_face;		/* list of obj face structure */
+	t_material_file	*material;		/* material file structure */
 	vec3_f32		*colors;		/* color array, give to openGL context, one for each triangle vertex */
+	vec2_f32		*texture_coord;	/* texture coordinates associated with a vertex */
+	GLFWwindow		*win_ptr;		/* window pointer */
+	mat4_f32		rotation;		/* model rotation matrix */
+	vec3_f32		center;			/* model center */
+	vec3_f32		min;			/* model min */
+	vec3_f32		max;			/* model max */
 	GLuint			vao;			/* vertex array object */
 	GLuint			vbo;			/* vertex buffer object */
 	GLuint			ebo;			/* element buffer object */
 	GLuint			shader_id;		/* shader program id */
-	mat4_f32		rotation;		/* model rotation matrix */
 	u32				status;			/* model rotation state */
-	GLFWwindow		*win_ptr;		/* window pointer */
-	vec2_f32		*texture_coord;	/* texture coordinates associated with a vertex */
-	t_material_file	*material;		/* material file structure */
-	t_list			*obj_face;		/* list of obj face structure */
-	s8				texture_mod;	/* texture mod, 1 for true, otherwise 0 */
 	f32				tex_intensity;	/* texture intensity */
-	vec3_f32		center;			/* model center */
-	vec3_f32		min;			/* model min */
-	vec3_f32		max;			/* model max */
+	s8				texture_mod;	/* texture mod, 1 for true, -1 for false */
 }	t_obj_model;
 
 
