@@ -10,6 +10,7 @@
 #include "../libft/libft.h"
 #include "../libft/parse_flag/parse_flag.h"
 #include "../libft/stack_string/stack_string.h"
+#include "../src/parser/parse_bmp.h"
 
 /* Vertex shader source path */
 #define VERTEX_SHADER_PATH "rsc/shaders/vertex_shader.glsl"
@@ -272,11 +273,15 @@ void			rotate_object_around_center(t_obj_model* m, vec3_f32 rotate_vec, float an
 
 /* window/openGL_glw_init.c */
 GLFWwindow		*init_openGL_context();
+void			glfw_destroy(GLFWwindow *win, t_obj_model *model);
 
 /* render/shader_utils */
 void			set_shader_var_mat4(GLuint shader_id, char *var_name, mat4_f32 data);
 void			set_shader_var_vec4(GLuint shader_id, char *var_name, vec4_f32 vec);
 GLuint			load_shader(t_obj_model *model);
+
+/* render/main_loop.c */
+void			main_loop(t_obj_model *model, GLFWwindow *win);
 
 /* win_event/key_callback.c */
 void			handle_input(t_obj_model *model);
@@ -286,5 +291,9 @@ u8				build_material_texture(t_obj_model *model);
 
 /* builder.colors.c */
 u8				hard_build_color(t_obj_model *model);
+
+/* builder/load_texture.c */
+GLuint			init_openGL_texture(t_obj_model* model, u8 *data, u32 width, u32 height, u16 texture_type);
+s8				brut_load_texture(char *path, t_obj_model *model);
 
 #endif /* SCOP_HEADER_H */

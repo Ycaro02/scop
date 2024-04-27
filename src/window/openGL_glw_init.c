@@ -68,3 +68,20 @@ GLFWwindow *init_openGL_context()
     return (win);
 }
 
+/**
+ * @brief Destroy glfw and free the model
+ * @param win window struct
+ * @param model model struct
+*/
+void glfw_destroy(GLFWwindow *win, t_obj_model *model)
+{
+
+	ft_printf_fd(2, RED"Destroying glfw\n"RESET);
+	glBindVertexArray(0);
+	glDeleteVertexArrays(1, &model->vao);
+	glDeleteProgram(model->shader_id);
+	gladLoaderUnloadGL();
+	glfwDestroyWindow(win);
+	glfwTerminate();
+	free_obj_model(model);
+}

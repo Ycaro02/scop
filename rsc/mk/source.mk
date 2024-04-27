@@ -24,9 +24,11 @@ SRCS			=	parser/obj_parse.c\
 					builder/build_obj_model.c\
 					builder/texture.c\
 					builder/colors.c\
+					builder/load_texture.c\
 					win_event/key_callback.c\
 					render/shader_utils.c\
 					render/camera.c\
+					render/main_loop.c\
 					glad/gl.c\
 
 
