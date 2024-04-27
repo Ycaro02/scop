@@ -9,7 +9,7 @@
 #include "../libft/parse_flag/parse_flag.h"
 #include "../libft/stack_string/stack_string.h"
 #include "../src/parser/parse_bmp.h"
-
+#include "camera.h"
 /* Vertex shader source path */
 #define VERTEX_SHADER_PATH "rsc/shaders/vertex_shader.glsl"
 
@@ -24,16 +24,6 @@
 /* Window size */
 #define SCREEN_WIDTH 1080
 #define SCREEN_HEIGHT 1080
-
-#define CAM_ZOOM 0.3f				/* Zoom/Unzoom value */
-#define CAM_MOVE_HORIZONTAL 1.0f	/* Move camera horizontal value */
-#define CAM_UP_DOWN 0.05f			/* Move camera up/down value */
-
-#define ROTATE_ANGLE 4.0f			/* Rotate obj angle when arrow pressed */
-
-#define VEC3_ROTATEX (vec3_f32){1.0f, 0.0f, 0.0f}
-#define VEC3_ROTATEY (vec3_f32){0.0f, 1.0f, 0.0f}
-#define VEC3_ROTATEZ (vec3_f32){0.0f, 0.0f, 1.0f}
 
 /* Triangle data size */
 #define TRIANGLE_DSIZE(model) (u32)(sizeof(vec3_u32) * model->tri_size)
@@ -163,15 +153,6 @@ typedef struct s_material_file {
 	float			d;				/* Dissolve factor */
 	u32				illum;			/* Illumination model */
 } t_material_file;
-
-/* Camera structure */
-typedef struct t_camera {
-    vec3_f32		position;			/* position vector */
-    vec3_f32		target;				/* target vector */
-    vec3_f32		up;					/* up vector */
-    mat4_f32		view;				/* view matrix */
-    mat4_f32		projection;			/* projection matrix */
-} t_camera;
 
 typedef struct s_obj_face {
 	t_list		*vertex;			/* list of vec3_f32, list of vertex for this face, all triangle vertex for each face */
