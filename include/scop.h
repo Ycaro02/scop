@@ -39,14 +39,15 @@
 #define TRIANGLE_DSIZE(model) (u32)(sizeof(vec3_u32) * model->tri_size)
 
 /* Texture handle define */
-
 #define X_UNUSED 1U
 #define Y_UNUSED 2U
 #define Z_UNUSED 4U
 
+/* Explicit define for x y z and w FIELD*/
 #define X_FIELD 0U
 #define Y_FIELD 1U
 #define Z_FIELD 2U
+#define W_FIELD 3U
 
 
 /* Enum for obj token accepted */
@@ -64,15 +65,15 @@ enum e_obj_token {
 };
 
 /* Token accepted in OBJ file */
-#define TOKEN_UNKNOWN	"unknown"	/* Type: string Nb Value: 1 Description: Unknown token. */
-#define TOKEN_COMMENT	"#"			/* Type: string Nb Value: 1 Description: A comment line. */
-#define TOKEN_OBJ 		"o"			/* Type: string Nb Value: 1 Description: The name of the object */
-#define TOKEN_SMOOTH	"s"			/* Type: bool (true or false) Nb Value: 1 Description: The smoothing group state. on to activate, off to deactivate.*/
-#define TOKEN_VERTEX	"v"			/* Type: float Nb Value: 3 Description: The coordinates of a 3D vertex.*/
-#define TOKEN_VT		"vt"		/* Type: float Nb Value: 2 or 3 Description: The texture coordinates associated with a vertex.*/
-#define TOKEN_VN		"vn"		/* Type: float Nb Value: 3 Description: The coordinates of the normal vector associated with a vertex.*/
-#define TOKEN_MTLLIB	"mtllib"	/* Type: string Nb Value: 1 Description: The name of the material file associated with the object.*/
-#define TOKEN_USEMT		"usemtl"	/* Type: string Nb Value: 1 Description: The name of the material to be used for the subsequent faces of the object */
+#define TOKEN_UNKNOWN	"unknown"	/* Type: string | Nb Value: 1 Description: Unknown token. */
+#define TOKEN_COMMENT	"#"			/* Type: string | Nb Value: 1 Description: A comment line. */
+#define TOKEN_OBJ 		"o"			/* Type: string | Nb Value: 1 Description: The name of the object */
+#define TOKEN_SMOOTH	"s"			/* Type: bool   | Nb Value: 1 Description: The smoothing group state. on to activate, off to deactivate.*/
+#define TOKEN_VERTEX	"v"			/* Type: float  | Nb Value: 3 Description: The coordinates of a 3D vertex.*/
+#define TOKEN_VT		"vt"		/* Type: float  | Nb Value: 2 or 3 Description: The texture coordinates associated with a vertex.*/
+#define TOKEN_VN		"vn"		/* Type: float  | Nb Value: 3 Description: The coordinates of the normal vector associated with a vertex.*/
+#define TOKEN_MTLLIB	"mtllib"	/* Type: string | Nb Value: 1 Description: The name of the material file associated with the object.*/
+#define TOKEN_USEMT		"usemtl"	/* Type: string | Nb Value: 1 Description: The name of the material to be used for the subsequent faces of the object */
 
 /*
  *	Description: The indices of the vertices composing a face. 
@@ -84,7 +85,18 @@ enum e_obj_token {
 #define TOKEN_FACE	"f"
 
 /* Token array for obj file  */
-#define OBJ_TOKEN_ARRAY {TOKEN_COMMENT, TOKEN_OBJ, TOKEN_SMOOTH, TOKEN_VERTEX, TOKEN_VT, TOKEN_VN, TOKEN_MTLLIB, TOKEN_USEMT, TOKEN_FACE, NULL}
+#define OBJ_TOKEN_ARRAY {\
+	TOKEN_COMMENT,\
+	TOKEN_OBJ,\
+	TOKEN_SMOOTH,\
+	TOKEN_VERTEX,\
+	TOKEN_VT,\
+	TOKEN_VN,\
+	TOKEN_MTLLIB,\
+	TOKEN_USEMT,\
+	TOKEN_FACE,\
+	NULL\
+}
 
 /* Node used only for parse */
 typedef struct s_face_node {
@@ -128,7 +140,18 @@ enum e_material_token {
 #define TOKEN_MTL_D			"d"			/* Type: float Nb Value: 1 Description: Dissolve factor */
 #define TOKEN_MTL_ILLUM		"illum"		/* Type: int Nb Value: 1 Description: Illumination model */
 
-#define MATERIAL_TOKEN_ARRAY {TOKEN_COMMENT, TOKEN_MTL_NEWMTL, TOKEN_MTL_KA, TOKEN_MTL_KD, TOKEN_MTL_KS, TOKEN_MTL_NS, TOKEN_MTL_NI, TOKEN_MTL_D, TOKEN_MTL_ILLUM, NULL}
+#define MATERIAL_TOKEN_ARRAY {\
+		TOKEN_COMMENT,\
+		TOKEN_MTL_NEWMTL,\
+		TOKEN_MTL_KA,\
+		TOKEN_MTL_KD,\
+		TOKEN_MTL_KS,\
+		TOKEN_MTL_NS,\
+		TOKEN_MTL_NI,\
+		TOKEN_MTL_D,\
+		TOKEN_MTL_ILLUM,\
+		NULL\
+	}
 
 typedef struct s_material_file {
 	char			*newmtl;		/* The name of the material */

@@ -28,6 +28,7 @@ SRCS			=	parser/obj_parse.c\
 					win_event/key_callback.c\
 					render/shader_utils.c\
 					render/camera.c\
+					render/obj_rotate.c\
 					render/main_loop.c\
 					glad/gl.c\
 

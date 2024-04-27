@@ -44,7 +44,7 @@ char **sstring_load_file(char *path)
 		// ft_printf_fd(1, ORANGE"map|%s|"RESET,map);
 	}
 
-	ft_printf_fd(1, YELLOW"In sstring load File %s:"RESET"\n"PINK"|%s|"RESET,path,map);
+	// ft_printf_fd(1, YELLOW"In sstring load File %s:"RESET"\n"PINK"|%s|"RESET,path,map);
 	close(fd);
 	dest = ft_split_trim(map, '\n');
 	free(map);

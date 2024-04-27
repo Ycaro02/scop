@@ -153,7 +153,6 @@ t_obj_model *parse_obj_file(char *path)
 				free_obj_file(&obj);
 				return (NULL);
 			}
-			ft_printf_fd(1, YELLOW"\nLine %d:"RESET" "BLUE"|%s|"RESET, i, file[i]);
 			obj_line_by_token(&obj, &trim[1], token);
 			free_double_char(trim);
 		}
@@ -171,10 +170,8 @@ t_obj_model *parse_obj_file(char *path)
 
 	if (obj.mtllib) {
 		mtl = parse_mtl_file(sstr.data);
-		if (mtl) {
-			ft_printf_fd(1, GREEN"\nMaterial file parsed\n"RESET);
-			display_material_data(mtl);
-			// free_material_file(mtl);
+		if (!mtl) {
+			ft_printf_fd(1, GREEN"\nInvalid Material file %s\n"RESET, sstr.data);
 		}
 	}
 

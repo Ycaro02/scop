@@ -67,7 +67,8 @@ static u8  material_line_by_token(t_material_file *file, char **line, u16 token)
 	}  else if (token == ENUM_MTL_ILLUM) {
 		file->illum = array_to_uint32(line[0]); /* to check */
 	} else if (token == ENUM_MTL_COMMENT) {
-		ft_printf_fd(1, CYAN"MTL comment: %s\n"RESET, line[0]);
+		return (TRUE);
+		// ft_printf_fd(1, CYAN"MTL comment: %s\n"RESET, line[0]);
 	} else {
 		return (FALSE);
 	}
