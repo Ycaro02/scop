@@ -113,7 +113,7 @@ void rotate_camera(t_camera* camera, float angle, vec3_f32 axis) {
 */
 void move_camera_up(t_camera* camera, float distance) 
 {
-    vec3_f32 direction, right, up_movement, up = {0.0f, 1.0f, 0.0f};;
+    vec3_f32 direction, right, up_movement, up = {0.0f, 1.0f, 0.0f};
     
 	/* Compute direction vector */
 	vec3_sub(camera->target, camera->position, direction);

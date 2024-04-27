@@ -1,5 +1,17 @@
 #include "../include/scop.h"
 
+
+s8 can_open_file(char *path)
+{
+	int fd = open(path, O_RDONLY);
+	if (fd < 0) {
+		ft_printf_fd(2, RED"Error: Failed to open file %s\n"RESET, path);
+		return (FALSE);
+	}
+	close(fd);
+	return (TRUE);
+}
+
 int main(int argc, char **argv)
 {
     GLFWwindow	*win;
@@ -14,7 +26,6 @@ int main(int argc, char **argv)
 	model = parse_obj_file(argv[1]);
 	if (!model) {
 		ft_printf_fd(2, "Error parse 42.obj\n");
-		// free_obj_model(model);
 		return (1);
 	}
 
@@ -39,11 +50,14 @@ int main(int argc, char **argv)
 	init_gl_triangle_array(model);
 	ft_printf_fd(1, CYAN"Triangle number: %u\n"RESET, model->tri_size);
 
-	if (argc == 3) {
-		brut_load_texture(argv[2], model);
-	} else {
-		brut_load_texture(TEXTURE_BRICK_PATH, model);
-	}
+	char *texture_path = TEXTURE_BRICK_PATH;
+
+	if (argc == 3 && can_open_file(argv[2])) {
+		texture_path = argv[2];
+	} 
+
+	brut_load_texture(texture_path, model);
+
 	set_shader_var_float(model->shader_id, "textureIntensity", model->tex_intensity);
     main_loop(model, win);
 	glfw_destroy(win, model);
