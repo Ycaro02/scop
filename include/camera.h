@@ -1,10 +1,11 @@
 #ifndef HEADER_CAMERA_H
 #define HEADER_CAMERA_H
 
+#include "../libft/libft.h"
+
 #define CAM_ZOOM 0.3f				/* Zoom/Unzoom value */
 #define CAM_MOVE_HORIZONTAL 1.0f	/* Move camera horizontal value */
 #define CAM_UP_DOWN 0.05f			/* Move camera up/down value */
-
 #define ROTATE_ANGLE 4.0f			/* Rotate obj angle when arrow pressed */
 
 #define VEC3_ROTATEX (vec3_f32){1.0f, 0.0f, 0.0f}
