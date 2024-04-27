@@ -14,6 +14,7 @@ int main(int argc, char **argv)
 	model = parse_obj_file(argv[1]);
 	if (!model) {
 		ft_printf_fd(2, "Error parse 42.obj\n");
+		// free_obj_model(model);
 		return (1);
 	}
 

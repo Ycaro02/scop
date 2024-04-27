@@ -3,8 +3,6 @@
 
 #include <math.h>
 
-// #include <cglm/cglm.h> /* need to remove */
-
 #include "../glad_gen/include/glad/gl.h" /* include glad header before glfw3 */
 #include "../include/glfw3.h"
 #include "../libft/libft.h"
@@ -86,7 +84,7 @@ enum e_obj_token {
 #define TOKEN_FACE	"f"
 
 /* Token array for obj file  */
-#define OBJ_TOKEN_ARRAY {TOKEN_COMMENT, TOKEN_OBJ, TOKEN_SMOOTH, TOKEN_VERTEX, TOKEN_VT, TOKEN_VN, TOKEN_MTLLIB, TOKEN_USEMT, TOKEN_FACE}
+#define OBJ_TOKEN_ARRAY {TOKEN_COMMENT, TOKEN_OBJ, TOKEN_SMOOTH, TOKEN_VERTEX, TOKEN_VT, TOKEN_VN, TOKEN_MTLLIB, TOKEN_USEMT, TOKEN_FACE, NULL}
 
 /* Node used only for parse */
 typedef struct s_face_node {
@@ -130,7 +128,7 @@ enum e_material_token {
 #define TOKEN_MTL_D			"d"			/* Type: float Nb Value: 1 Description: Dissolve factor */
 #define TOKEN_MTL_ILLUM		"illum"		/* Type: int Nb Value: 1 Description: Illumination model */
 
-#define MATERIAL_TOKEN_ARRAY {TOKEN_COMMENT, TOKEN_MTL_NEWMTL, TOKEN_MTL_KA, TOKEN_MTL_KD, TOKEN_MTL_KS, TOKEN_MTL_NS, TOKEN_MTL_NI, TOKEN_MTL_D, TOKEN_MTL_ILLUM}
+#define MATERIAL_TOKEN_ARRAY {TOKEN_COMMENT, TOKEN_MTL_NEWMTL, TOKEN_MTL_KA, TOKEN_MTL_KD, TOKEN_MTL_KS, TOKEN_MTL_NS, TOKEN_MTL_NI, TOKEN_MTL_D, TOKEN_MTL_ILLUM, NULL}
 
 typedef struct s_material_file {
 	char			*newmtl;		/* The name of the material */

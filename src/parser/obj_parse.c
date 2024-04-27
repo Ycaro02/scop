@@ -149,8 +149,11 @@ t_obj_model *parse_obj_file(char *path)
 			if ((token = is_valid_token(valid_tokens, trim[0])) == 0) {
 				ft_printf_fd(2, RED"Error: Invalid token %s\n"RESET, trim[0]);
 				free_double_char(trim);
+				free_double_char(file);
+				free_obj_file(&obj);
 				return (NULL);
 			}
+			ft_printf_fd(1, YELLOW"\nLine %d:"RESET" "BLUE"|%s|"RESET, i, file[i]);
 			obj_line_by_token(&obj, &trim[1], token);
 			free_double_char(trim);
 		}

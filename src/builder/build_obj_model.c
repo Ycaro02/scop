@@ -121,6 +121,7 @@ t_obj_model *init_obj_model(t_obj_file *obj_file)
 	if (!triangle_lst) {
 		ft_printf_fd(2, RED"Error: Failed to convert quadra to triangle\n"RESET);
 		free_obj_file(obj_file);
+		free_obj_model(model);
 		return (NULL);
 	}
 
