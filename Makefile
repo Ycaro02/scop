@@ -8,7 +8,7 @@ CFLAGS			=	-Wall -Wextra -Werror -O3 -g
 ASCII_NAME		=	${NAME}
 
 
-OPENGL_LIB		= -lglfw -lGL -lm -L//usr/lib/x86_64-linux-gnu/
+OPENGL_LIB		= -lglfw -lGL -lm -Lrsc/lib_deps/
 
 MODEL_42		= rsc/model/42.obj
 VALGRIND_TEST	= valgrind --suppressions=rsc/vsupp/vsupp.supp --leak-check=full ./scop rsc/model/42.obj aa
