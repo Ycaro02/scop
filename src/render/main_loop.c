@@ -26,9 +26,23 @@ void handle_auto_rotate(t_obj_model *model)
 */
 void main_loop(t_obj_model *model, GLFWwindow *win) 
 {
+	static double lastTime = 0.0f; 
+	static int nbFrames = 0;
+
+	if (lastTime == 0.0f) {
+		lastTime = glfwGetTime();
+	}
     while (!glfwWindowShouldClose(win)) {
         /* clear gl render context*/
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+		double currentTime = glfwGetTime();
+    	nbFrames++;
+		if (currentTime - lastTime >= 1.0) { // Si plus d'une seconde s'est écoulée
+			ft_printf_fd(1, "%f ms/frame, %d FPS\n", (1000.0 / (double)nbFrames), nbFrames);
+        	nbFrames = 0;
+        	lastTime += 1.0;
+    	}
 
 		handle_auto_rotate(model);
 		update_camera(&model->cam, model->shader_id);

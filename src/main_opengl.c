@@ -57,8 +57,11 @@ int main(int argc, char **argv)
 	} 
 
 	brut_load_texture(texture_path, model);
-
 	set_shader_var_float(model->shader_id, "textureIntensity", model->tex_intensity);
+
+	/* Disable vsyns for avoid fps locking */
+	// glfwSwapInterval(0);
+
     main_loop(model, win);
 	glfw_destroy(win, model);
 	return (0);

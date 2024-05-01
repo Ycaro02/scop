@@ -129,7 +129,7 @@ void handle_input(t_obj_model *model)
 {
 	/* To store in context structure */
 	static u8		previous_state[GLFW_KEY_LAST] = {0};
-	t_key_action	key_actions[] = {
+	static t_key_action	key_actions[] = {
 		{GLFW_KEY_ESCAPE, act_escape, SINGLE_PRESS},
 		{GLFW_KEY_W, act_zoom, REPEAT},
 		{GLFW_KEY_S, act_unzoom, REPEAT},
@@ -150,7 +150,7 @@ void handle_input(t_obj_model *model)
 		{GLFW_KEY_Y, act_stop_start_z_rotation, SINGLE_PRESS},
 		{GLFW_KEY_N, act_switch_texture, SINGLE_PRESS},
 	};
-	u32 			max = (sizeof(key_actions) / sizeof(t_key_action));
+	u32 			max = 19;
 	s32				state = GLFW_RELEASE;
  	
 	for (u32 i = 0; i < max; i++) {
