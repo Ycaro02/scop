@@ -27,9 +27,11 @@ This project is a small program designed to display a 3D object, conceived with 
 ## Demonstration
 
 A video demonstration of the project can be found here
-With 42.obj:
+
+### With 42.obj:
 [![Youtube](https://img.youtube.com/vi/Oo1MYEXFtTk/0.jpg)](https://www.youtube.com/watch?v=Oo1MYEXFtTk)
-With teapot.obj:
+
+### With teapot.obj:
 [![Youtube](https://img.youtube.com/vi/zQAG4yaqct4/0.jpg)](https://www.youtube.com/watch?v=zQAG4yaqct4)
 
 ## Usage
