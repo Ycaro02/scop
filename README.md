@@ -26,7 +26,7 @@ This project is a small program designed to display a 3D object, conceived with 
 
 ## Demonstration
 
-A video demonstration of the project can be found [here](rsc/helper/Scop.mp4).
+A video demonstration of the project can be found [![Youtube](https://img.youtube.com/vi/Oo1MYEXFtTk/0.jpg)](https://www.youtube.com/watch?v=Oo1MYEXFtTk)
 
 ## Usage
 
