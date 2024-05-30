@@ -116,6 +116,35 @@ void act_stop_start_z_rotation(t_obj_model *model) {
 	reverse_flag(&model->status, STATUS_ROTATE_Z);
 }
 
+void straf_camera(t_camera* camera, float distance, s8 dir) {
+	vec3_f32 direction, right;
+
+	/* Compute direction vector */
+	vec3_sub(camera->target, camera->position, direction);
+	
+	/* Compute right vector and normalise it */
+	vec3_cross(direction, camera->up, right);
+	vec3_normalize(right);
+
+	/* Compute up movement vector, normalise and scale it */
+	vec3_scale(right, distance, right);
+
+	if (dir == DIR_LEFT) {
+		vec3_negate(right, right);
+	}
+	vec3_add(camera->position, right, camera->position); /* move up camera */
+	vec3_add(camera->target, right, camera->target); /* move up target */
+}
+
+void act_straf_right(t_obj_model *model) {
+	straf_camera(&model->cam, 0.1f, DIR_RIGHT);
+}
+
+/* Unzoom: A */
+void act_straf_left(t_obj_model *model) {
+	straf_camera(&model->cam, 0.1f, DIR_LEFT);
+}
+
 
 /**
  * @brief Set key callback for the window
@@ -135,6 +164,8 @@ void handle_input(t_obj_model *model)
 		{GLFW_KEY_S, act_unzoom, REPEAT},
 		{GLFW_KEY_A, act_rotate_camera_left, REPEAT},
 		{GLFW_KEY_D, act_rotate_camera_right, REPEAT},
+		{GLFW_KEY_Z, act_straf_right, REPEAT},
+		{GLFW_KEY_C, act_straf_left, REPEAT},
 		{GLFW_KEY_Q, act_up_camera, REPEAT},
 		{GLFW_KEY_E, act_down_camera, REPEAT},
 		{GLFW_KEY_ENTER, act_reset_camera, SINGLE_PRESS},
@@ -150,7 +181,7 @@ void handle_input(t_obj_model *model)
 		{GLFW_KEY_Y, act_stop_start_z_rotation, SINGLE_PRESS},
 		{GLFW_KEY_N, act_switch_texture, SINGLE_PRESS},
 	};
-	u32 			max = 19;
+	u32 			max = 21;
 	s32				state = GLFW_RELEASE;
  	
 	for (u32 i = 0; i < max; i++) {

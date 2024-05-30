@@ -11,7 +11,7 @@ ASCII_NAME		=	${NAME}
 OPENGL_LIB		= -lglfw -lGL -lm -Lrsc/lib_deps/
 
 MODEL_42		= rsc/model/42.obj
-VALGRIND_TEST	= valgrind --suppressions=rsc/vsupp/vsupp.supp --leak-check=full ./scop rsc/model/42.obj aa
+VALGRIND_TEST	= valgrind --suppressions=rsc/vsupp/42_vsupp.supp --leak-check=full ./scop rsc/model/42.obj aa
 
 ARGS			=	rsc/42.obj
 

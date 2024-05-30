@@ -21,6 +21,11 @@
 
 #define MODEL_PATH "rsc/model/"
 
+
+
+#define DIR_RIGHT 0
+#define DIR_LEFT 1
+
 /* Window size */
 #define SCREEN_WIDTH 1080
 #define SCREEN_HEIGHT 1080
